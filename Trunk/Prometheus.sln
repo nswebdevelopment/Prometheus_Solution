@@ -1,0 +1,127 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prometheus.DbAdapter", "Prometheus.DbAdapter\Prometheus.DbAdapter.csproj", "{20C84017-AF49-4FA1-8BDA-8E6F0035B73F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prometheus.Web", "Prometheus.Web\Prometheus.Web.csproj", "{0008D8A2-5252-413B-BD0E-35FCDAB2C537}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prometheus.BL", "Prometheus.BL\Prometheus.BL.csproj", "{4EB24AC9-2782-45C7-A99A-4F8E968FA2C8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{59F84108-7853-47B3-ABB5-F6470BD4606D} = {59F84108-7853-47B3-ABB5-F6470BD4606D}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prometheus.Model", "Prometheus.Model\Prometheus.Model.csproj", "{3DB58D5F-9B53-423F-8A8F-29EE4C1D1F93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prometheus.Common", "Prometheus.Common\Prometheus.Common.csproj", "{C4681974-F20B-4F33-8B61-56D8C79BB188}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prometheus.Media", "Prometheus.Media\Prometheus.Media.csproj", "{9F3D4B10-0010-46C1-8F77-D33BB7D2B0E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prometheus.Authorization", "Prometheus.Authorization\Prometheus.Authorization.csproj", "{96ECBCCA-77CB-4847-BB8F-36D4953116D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prometheus.Dal", "Prometheus.Dal\Prometheus.Dal.csproj", "{FA2E9A7B-399E-4A0C-9746-0D7A952E2193}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prometheus.Infrastructure", "Prometheus.Infrastructure\Prometheus.Infrastructure.csproj", "{E9A21BAE-2926-4536-BA4F-D9187EAEAA5A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prometheus.ExchangesApi", "Prometheus.ExchangesApi\Prometheus.ExchangesApi.csproj", "{6139F759-FBE2-4CF2-B2EF-7C26653B402B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prometheus.BlockchainAdapter", "Prometheus.BlockchainAdapter\Prometheus.BlockchainAdapter.csproj", "{59F84108-7853-47B3-ABB5-F6470BD4606D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{20C84017-AF49-4FA1-8BDA-8E6F0035B73F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20C84017-AF49-4FA1-8BDA-8E6F0035B73F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20C84017-AF49-4FA1-8BDA-8E6F0035B73F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20C84017-AF49-4FA1-8BDA-8E6F0035B73F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0008D8A2-5252-413B-BD0E-35FCDAB2C537}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0008D8A2-5252-413B-BD0E-35FCDAB2C537}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0008D8A2-5252-413B-BD0E-35FCDAB2C537}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0008D8A2-5252-413B-BD0E-35FCDAB2C537}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EB24AC9-2782-45C7-A99A-4F8E968FA2C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EB24AC9-2782-45C7-A99A-4F8E968FA2C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EB24AC9-2782-45C7-A99A-4F8E968FA2C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EB24AC9-2782-45C7-A99A-4F8E968FA2C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DB58D5F-9B53-423F-8A8F-29EE4C1D1F93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DB58D5F-9B53-423F-8A8F-29EE4C1D1F93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DB58D5F-9B53-423F-8A8F-29EE4C1D1F93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DB58D5F-9B53-423F-8A8F-29EE4C1D1F93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4681974-F20B-4F33-8B61-56D8C79BB188}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4681974-F20B-4F33-8B61-56D8C79BB188}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4681974-F20B-4F33-8B61-56D8C79BB188}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4681974-F20B-4F33-8B61-56D8C79BB188}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F3D4B10-0010-46C1-8F77-D33BB7D2B0E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F3D4B10-0010-46C1-8F77-D33BB7D2B0E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F3D4B10-0010-46C1-8F77-D33BB7D2B0E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F3D4B10-0010-46C1-8F77-D33BB7D2B0E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96ECBCCA-77CB-4847-BB8F-36D4953116D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96ECBCCA-77CB-4847-BB8F-36D4953116D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96ECBCCA-77CB-4847-BB8F-36D4953116D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96ECBCCA-77CB-4847-BB8F-36D4953116D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA2E9A7B-399E-4A0C-9746-0D7A952E2193}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA2E9A7B-399E-4A0C-9746-0D7A952E2193}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA2E9A7B-399E-4A0C-9746-0D7A952E2193}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA2E9A7B-399E-4A0C-9746-0D7A952E2193}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9A21BAE-2926-4536-BA4F-D9187EAEAA5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9A21BAE-2926-4536-BA4F-D9187EAEAA5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9A21BAE-2926-4536-BA4F-D9187EAEAA5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9A21BAE-2926-4536-BA4F-D9187EAEAA5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6139F759-FBE2-4CF2-B2EF-7C26653B402B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6139F759-FBE2-4CF2-B2EF-7C26653B402B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6139F759-FBE2-4CF2-B2EF-7C26653B402B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6139F759-FBE2-4CF2-B2EF-7C26653B402B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59F84108-7853-47B3-ABB5-F6470BD4606D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59F84108-7853-47B3-ABB5-F6470BD4606D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59F84108-7853-47B3-ABB5-F6470BD4606D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59F84108-7853-47B3-ABB5-F6470BD4606D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D0CFCFC1-DC05-4A29-92F2-BFAC14D6E767}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 12
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://nsdevelopment.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Prometheus.Authorization\\Prometheus.Authorization.csproj
+		SccProjectName1 = Prometheus.Authorization
+		SccLocalPath1 = Prometheus.Authorization
+		SccProjectUniqueName2 = Prometheus.BL\\Prometheus.BL.csproj
+		SccProjectName2 = Prometheus.BL
+		SccLocalPath2 = Prometheus.BL
+		SccProjectUniqueName3 = Prometheus.BlockchainAdapter\\Prometheus.BlockchainAdapter.csproj
+		SccProjectName3 = Prometheus.BlockchainAdapter
+		SccLocalPath3 = Prometheus.BlockchainAdapter
+		SccProjectUniqueName4 = Prometheus.Common\\Prometheus.Common.csproj
+		SccProjectName4 = Prometheus.Common
+		SccLocalPath4 = Prometheus.Common
+		SccProjectUniqueName5 = Prometheus.Dal\\Prometheus.Dal.csproj
+		SccProjectName5 = Prometheus.Dal
+		SccLocalPath5 = Prometheus.Dal
+		SccProjectUniqueName6 = Prometheus.DbAdapter\\Prometheus.DbAdapter.csproj
+		SccProjectName6 = Prometheus.DbAdapter
+		SccLocalPath6 = Prometheus.DbAdapter
+		SccProjectUniqueName7 = Prometheus.ExchangesApi\\Prometheus.ExchangesApi.csproj
+		SccProjectName7 = Prometheus.ExchangesApi
+		SccLocalPath7 = Prometheus.ExchangesApi
+		SccProjectUniqueName8 = Prometheus.Infrastructure\\Prometheus.Infrastructure.csproj
+		SccProjectName8 = Prometheus.Infrastructure
+		SccLocalPath8 = Prometheus.Infrastructure
+		SccProjectUniqueName9 = Prometheus.Media\\Prometheus.Media.csproj
+		SccProjectName9 = Prometheus.Media
+		SccLocalPath9 = Prometheus.Media
+		SccProjectUniqueName10 = Prometheus.Model\\Prometheus.Model.csproj
+		SccProjectName10 = Prometheus.Model
+		SccLocalPath10 = Prometheus.Model
+		SccProjectUniqueName11 = Prometheus.Web\\Prometheus.Web.csproj
+		SccProjectName11 = Prometheus.Web
+		SccLocalPath11 = Prometheus.Web
+	EndGlobalSection
+EndGlobal

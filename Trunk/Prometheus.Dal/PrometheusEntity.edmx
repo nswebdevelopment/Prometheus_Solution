@@ -1,0 +1,3137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Prometheus_EntityModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TransactionAccount" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="EnterpriseAdapterId" Type="bigint" Nullable="false" />
+          <Property Name="CryptoAdapterId" Type="bigint" Nullable="false" />
+          <Property Name="CreditAddress" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="DebitAddress" Type="nvarchar" MaxLength="200" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Adapter">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="DirectionId" Type="int" Nullable="false" />
+          <Property Name="UserProfileId" Type="bigint" Nullable="false" />
+          <Property Name="StatusId" Type="int" Nullable="false" />
+          <Property Name="AdapterTypeItemId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AdapterMapping">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="From" Type="int" Nullable="false" />
+          <Property Name="To" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AdapterType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="AdapterTypeItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="AdapterTypeId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AdapterTypeItemProperty">
+          <Key>
+            <PropertyRef Name="AdapterTypeItemId" />
+            <PropertyRef Name="PropertyId" />
+          </Key>
+          <Property Name="AdapterTypeItemId" Type="int" Nullable="false" />
+          <Property Name="PropertyId" Type="bigint" Nullable="false" />
+          <Property Name="DirectionId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Block">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BlockNumber" Type="bigint" Nullable="false" />
+          <Property Name="JobTimelineId" Type="bigint" Nullable="false" />
+          <Property Name="BlockTime" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="CreatedAt" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BlockTransaction">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BlockId" Type="bigint" Nullable="false" />
+          <Property Name="TxHash" Type="nvarchar" MaxLength="500" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BusinessAdapter">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Filename" Type="nvarchar" MaxLength="50" />
+          <Property Name="AdapterId" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BusinessFile">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JobTimelineId" Type="bigint" Nullable="false" />
+          <Property Name="File" Type="varbinary(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="15" />
+          <Property Name="Mobile" Type="nvarchar" MaxLength="15" />
+          <Property Name="ContactPerson" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="CryptoAdapter">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RpcAddr" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="RpcPort" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="AdapterId" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CryptoAdapterProperty">
+          <Key>
+            <PropertyRef Name="CryptoAdapterId" />
+            <PropertyRef Name="PropertyId" />
+          </Key>
+          <Property Name="CryptoAdapterId" Type="bigint" Nullable="false" />
+          <Property Name="PropertyId" Type="bigint" Nullable="false" />
+          <Property Name="Value" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DataType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Direction">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EnterpriseAdapter">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ServerIP" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Port" Type="int" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DatabaseName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="AdapterId" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EnterpriseAdapterProperty">
+          <Key>
+            <PropertyRef Name="EnterpriseAdapterId" />
+            <PropertyRef Name="PropertyId" />
+          </Key>
+          <Property Name="EnterpriseAdapterId" Type="bigint" Nullable="false" />
+          <Property Name="PropertyId" Type="bigint" Nullable="false" />
+          <Property Name="Value" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EnterpriseAdapterTable">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TableName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="EnterpriseAdapterId" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EnterpriseAdapterTableColumn">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EnterpriseAdapterTableId" Type="bigint" Nullable="false" />
+          <Property Name="ColumnName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="IsForeignKey" Type="bit" Nullable="false" />
+          <Property Name="DataTypeId" Type="int" Nullable="false" />
+          <Property Name="RelatedTableName" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsPrimaryKey" Type="bit" Nullable="false" />
+          <Property Name="ParentId" Type="bigint" />
+          <Property Name="PropertyNameId" Type="int" />
+        </EntityType>
+        <EntityType Name="Exchange">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="ImageUrl" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Country" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Type" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="StatusId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="JobDefinition">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="From" Type="bigint" Nullable="false" />
+          <Property Name="To" Type="bigint" Nullable="false" />
+          <Property Name="Retry" Type="bit" Nullable="false" />
+          <Property Name="NumberOfRetry" Type="int" Nullable="false" />
+          <Property Name="UserProfileId" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="JobDefinitionAdapterTypeItemProperty">
+          <Key>
+            <PropertyRef Name="AdapterTypeItemId" />
+            <PropertyRef Name="PropertyId" />
+          </Key>
+          <Property Name="AdapterTypeItemId" Type="int" Nullable="false" />
+          <Property Name="PropertyId" Type="bigint" Nullable="false" />
+          <Property Name="DirectionId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="JobDefinitionProperty">
+          <Key>
+            <PropertyRef Name="JobDefinitionId" />
+            <PropertyRef Name="PropertyId" />
+          </Key>
+          <Property Name="JobDefinitionId" Type="bigint" Nullable="false" />
+          <Property Name="PropertyId" Type="bigint" Nullable="false" />
+          <Property Name="Value" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="JobHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="JobTimelineId" Type="bigint" Nullable="false" />
+          <Property Name="UpdatedAt" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="JobStatusId" Type="int" Nullable="false" />
+          <Property Name="Message" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="JobStatus">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="JobTimeline">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ScheduleId" Type="bigint" Nullable="false" />
+          <Property Name="JobStatusId" Type="int" Nullable="false" />
+          <Property Name="StartTime" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="HangfireId" Type="nvarchar" MaxLength="50" />
+          <Property Name="NumberOfTransactions" Type="bigint" />
+        </EntityType>
+        <EntityType Name="Market">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ExchangeId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="StatusId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Notification">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Message" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="450" />
+          <Property Name="UserProfileId" Type="bigint" Nullable="false" />
+          <Property Name="StatusId" Type="int" Nullable="false" />
+          <Property Name="CreatedAt" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="UpdatedAt" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Property">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="PropertyTypeId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PropertyName">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PropertyType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Schedule">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="StartDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="EndDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="UserProfileId" Type="bigint" Nullable="false" />
+          <Property Name="JobDefinitionId" Type="bigint" Nullable="false" />
+          <Property Name="RecurrenceRule" Type="nvarchar" MaxLength="100" />
+          <Property Name="CreatedAt" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="Status">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StatusName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Symbol">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MarketId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="StatusId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Transaction">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TransactionId" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="AccountId" Type="bigint" Nullable="false" />
+          <Property Name="TransactionAmount" Type="decimal" Precision="20" Scale="6" Nullable="false" />
+          <Property Name="CreatedAt" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="UpdatedAt" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="TransactionHash" Type="nvarchar(max)" />
+          <Property Name="TransactionTypeId" Type="int" />
+          <Property Name="TransactionStatusId" Type="int" Nullable="false" />
+          <Property Name="JobTimelineId" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TransactionStatus">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="TransactionType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TransactionTypeAlias">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="TransactionTypeId" Type="int" Nullable="false" />
+          <Property Name="Alias" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="NormalizedAlias" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserProfile">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="RegistrationDate" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="CompanyId" Type="bigint" />
+        </EntityType>
+        <Association Name="FK__Adapter__Adapter__1699586C">
+          <End Role="AdapterTypeItem" Type="Self.AdapterTypeItem" Multiplicity="1" />
+          <End Role="Adapter" Type="Self.Adapter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AdapterTypeItem">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Adapter">
+              <PropertyRef Name="AdapterTypeItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Account_CryptoAdapter">
+          <End Role="CryptoAdapter" Type="Self.CryptoAdapter" Multiplicity="1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CryptoAdapter">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="CryptoAdapterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Account_EnterpriseAdapter">
+          <End Role="EnterpriseAdapter" Type="Self.EnterpriseAdapter" Multiplicity="1" />
+          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EnterpriseAdapter">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="EnterpriseAdapterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Adapter_Direction">
+          <End Role="Direction" Type="Self.Direction" Multiplicity="1" />
+          <End Role="Adapter" Type="Self.Adapter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Direction">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Adapter">
+              <PropertyRef Name="DirectionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Adapter_Status">
+          <End Role="Status" Type="Self.Status" Multiplicity="1" />
+          <End Role="Adapter" Type="Self.Adapter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Adapter">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Adapter_UserProfile">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1" />
+          <End Role="Adapter" Type="Self.Adapter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Adapter">
+              <PropertyRef Name="UserProfileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AdapterMapping_AdapterTypeItem">
+          <End Role="AdapterTypeItem" Type="Self.AdapterTypeItem" Multiplicity="1" />
+          <End Role="AdapterMapping" Type="Self.AdapterMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AdapterTypeItem">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AdapterMapping">
+              <PropertyRef Name="From" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AdapterMapping_AdapterTypeItem1">
+          <End Role="AdapterTypeItem" Type="Self.AdapterTypeItem" Multiplicity="1" />
+          <End Role="AdapterMapping" Type="Self.AdapterMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AdapterTypeItem">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AdapterMapping">
+              <PropertyRef Name="To" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AdapterTypeItem_AdapterType">
+          <End Role="AdapterType" Type="Self.AdapterType" Multiplicity="1" />
+          <End Role="AdapterTypeItem" Type="Self.AdapterTypeItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AdapterType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AdapterTypeItem">
+              <PropertyRef Name="AdapterTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AdapterTypeItemProperty_AdapterTypeItem">
+          <End Role="AdapterTypeItem" Type="Self.AdapterTypeItem" Multiplicity="1" />
+          <End Role="AdapterTypeItemProperty" Type="Self.AdapterTypeItemProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AdapterTypeItem">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AdapterTypeItemProperty">
+              <PropertyRef Name="AdapterTypeItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AdapterTypeItemProperty_Direction">
+          <End Role="Direction" Type="Self.Direction" Multiplicity="1" />
+          <End Role="AdapterTypeItemProperty" Type="Self.AdapterTypeItemProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Direction">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AdapterTypeItemProperty">
+              <PropertyRef Name="DirectionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AdapterTypeItemProperty_Property">
+          <End Role="Property" Type="Self.Property" Multiplicity="1" />
+          <End Role="AdapterTypeItemProperty" Type="Self.AdapterTypeItemProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Property">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AdapterTypeItemProperty">
+              <PropertyRef Name="PropertyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Block_JobTimeline">
+          <End Role="JobTimeline" Type="Self.JobTimeline" Multiplicity="1" />
+          <End Role="Block" Type="Self.Block" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobTimeline">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Block">
+              <PropertyRef Name="JobTimelineId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BlockTransaction_Block">
+          <End Role="Block" Type="Self.Block" Multiplicity="1" />
+          <End Role="BlockTransaction" Type="Self.BlockTransaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Block">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BlockTransaction">
+              <PropertyRef Name="BlockId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BusinessAdapter_Adapter">
+          <End Role="Adapter" Type="Self.Adapter" Multiplicity="1" />
+          <End Role="BusinessAdapter" Type="Self.BusinessAdapter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Adapter">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BusinessAdapter">
+              <PropertyRef Name="AdapterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BusinessFile_JobTimeline">
+          <End Role="JobTimeline" Type="Self.JobTimeline" Multiplicity="1" />
+          <End Role="BusinessFile" Type="Self.BusinessFile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobTimeline">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BusinessFile">
+              <PropertyRef Name="JobTimelineId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CryptoAdapter_Adapter">
+          <End Role="Adapter" Type="Self.Adapter" Multiplicity="1" />
+          <End Role="CryptoAdapter" Type="Self.CryptoAdapter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Adapter">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CryptoAdapter">
+              <PropertyRef Name="AdapterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CryptoAdapterProperty_CryptoAdapter">
+          <End Role="CryptoAdapter" Type="Self.CryptoAdapter" Multiplicity="1" />
+          <End Role="CryptoAdapterProperty" Type="Self.CryptoAdapterProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CryptoAdapter">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CryptoAdapterProperty">
+              <PropertyRef Name="CryptoAdapterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CryptoAdapterProperty_Property">
+          <End Role="Property" Type="Self.Property" Multiplicity="1" />
+          <End Role="CryptoAdapterProperty" Type="Self.CryptoAdapterProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Property">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CryptoAdapterProperty">
+              <PropertyRef Name="PropertyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EnterpriseAdapter_Adapter">
+          <End Role="Adapter" Type="Self.Adapter" Multiplicity="1" />
+          <End Role="EnterpriseAdapter" Type="Self.EnterpriseAdapter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Adapter">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EnterpriseAdapter">
+              <PropertyRef Name="AdapterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EnterpriseAdapterProperty_EnterpriseAdapter">
+          <End Role="EnterpriseAdapter" Type="Self.EnterpriseAdapter" Multiplicity="1" />
+          <End Role="EnterpriseAdapterProperty" Type="Self.EnterpriseAdapterProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EnterpriseAdapter">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EnterpriseAdapterProperty">
+              <PropertyRef Name="EnterpriseAdapterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EnterpriseAdapterProperty_Property">
+          <End Role="Property" Type="Self.Property" Multiplicity="1" />
+          <End Role="EnterpriseAdapterProperty" Type="Self.EnterpriseAdapterProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Property">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EnterpriseAdapterProperty">
+              <PropertyRef Name="PropertyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EnterpriseAdapterTable_EnterpriseAdapter">
+          <End Role="EnterpriseAdapter" Type="Self.EnterpriseAdapter" Multiplicity="1" />
+          <End Role="EnterpriseAdapterTable" Type="Self.EnterpriseAdapterTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EnterpriseAdapter">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EnterpriseAdapterTable">
+              <PropertyRef Name="EnterpriseAdapterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EnterpriseAdapterTableColumn_DataType">
+          <End Role="DataType" Type="Self.DataType" Multiplicity="1" />
+          <End Role="EnterpriseAdapterTableColumn" Type="Self.EnterpriseAdapterTableColumn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DataType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EnterpriseAdapterTableColumn">
+              <PropertyRef Name="DataTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EnterpriseAdapterTableColumn_EnterpriseAdapterTable">
+          <End Role="EnterpriseAdapterTable" Type="Self.EnterpriseAdapterTable" Multiplicity="1" />
+          <End Role="EnterpriseAdapterTableColumn" Type="Self.EnterpriseAdapterTableColumn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EnterpriseAdapterTable">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EnterpriseAdapterTableColumn">
+              <PropertyRef Name="EnterpriseAdapterTableId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EnterpriseAdapterTableColumn_EnterpriseAdapterTableColumn">
+          <End Role="EnterpriseAdapterTableColumn" Type="Self.EnterpriseAdapterTableColumn" Multiplicity="0..1" />
+          <End Role="EnterpriseAdapterTableColumn1" Type="Self.EnterpriseAdapterTableColumn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EnterpriseAdapterTableColumn">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EnterpriseAdapterTableColumn1">
+              <PropertyRef Name="ParentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EnterpriseAdapterTableColumn_PropertyName">
+          <End Role="PropertyName" Type="Self.PropertyName" Multiplicity="0..1" />
+          <End Role="EnterpriseAdapterTableColumn" Type="Self.EnterpriseAdapterTableColumn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PropertyName">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EnterpriseAdapterTableColumn">
+              <PropertyRef Name="PropertyNameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Exchange_Status">
+          <End Role="Status" Type="Self.Status" Multiplicity="1" />
+          <End Role="Exchange" Type="Self.Exchange" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Exchange">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobDefinition_Adapter">
+          <End Role="Adapter" Type="Self.Adapter" Multiplicity="1" />
+          <End Role="JobDefinition" Type="Self.JobDefinition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Adapter">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobDefinition">
+              <PropertyRef Name="From" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobDefinition_Adapter1">
+          <End Role="Adapter" Type="Self.Adapter" Multiplicity="1" />
+          <End Role="JobDefinition" Type="Self.JobDefinition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Adapter">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobDefinition">
+              <PropertyRef Name="To" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobDefinition_UserProfile">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1" />
+          <End Role="JobDefinition" Type="Self.JobDefinition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobDefinition">
+              <PropertyRef Name="UserProfileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobDefinitionAdapterTypeItemProperty_AdapterTypeItem">
+          <End Role="AdapterTypeItem" Type="Self.AdapterTypeItem" Multiplicity="1" />
+          <End Role="JobDefinitionAdapterTypeItemProperty" Type="Self.JobDefinitionAdapterTypeItemProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AdapterTypeItem">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobDefinitionAdapterTypeItemProperty">
+              <PropertyRef Name="AdapterTypeItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobDefinitionAdapterTypeItemProperty_Direction">
+          <End Role="Direction" Type="Self.Direction" Multiplicity="1" />
+          <End Role="JobDefinitionAdapterTypeItemProperty" Type="Self.JobDefinitionAdapterTypeItemProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Direction">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobDefinitionAdapterTypeItemProperty">
+              <PropertyRef Name="DirectionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobDefinitionAdapterTypeItemProperty_Property">
+          <End Role="Property" Type="Self.Property" Multiplicity="1" />
+          <End Role="JobDefinitionAdapterTypeItemProperty" Type="Self.JobDefinitionAdapterTypeItemProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Property">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobDefinitionAdapterTypeItemProperty">
+              <PropertyRef Name="PropertyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobDefinitionProperty_JobDefinition">
+          <End Role="JobDefinition" Type="Self.JobDefinition" Multiplicity="1" />
+          <End Role="JobDefinitionProperty" Type="Self.JobDefinitionProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobDefinition">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobDefinitionProperty">
+              <PropertyRef Name="JobDefinitionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobDefinitionProperty_Property">
+          <End Role="Property" Type="Self.Property" Multiplicity="1" />
+          <End Role="JobDefinitionProperty" Type="Self.JobDefinitionProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Property">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobDefinitionProperty">
+              <PropertyRef Name="PropertyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobHistory_JobStatus">
+          <End Role="JobStatus" Type="Self.JobStatus" Multiplicity="1" />
+          <End Role="JobHistory" Type="Self.JobHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobHistory">
+              <PropertyRef Name="JobStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobHistory_JobTimeline">
+          <End Role="JobTimeline" Type="Self.JobTimeline" Multiplicity="1" />
+          <End Role="JobHistory" Type="Self.JobHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobTimeline">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobHistory">
+              <PropertyRef Name="JobTimelineId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobTimeline_JobStatus">
+          <End Role="JobStatus" Type="Self.JobStatus" Multiplicity="1" />
+          <End Role="JobTimeline" Type="Self.JobTimeline" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobTimeline">
+              <PropertyRef Name="JobStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobTimeline_Schedule">
+          <End Role="Schedule" Type="Self.Schedule" Multiplicity="1" />
+          <End Role="JobTimeline" Type="Self.JobTimeline" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Schedule">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobTimeline">
+              <PropertyRef Name="ScheduleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Market_Exchange">
+          <End Role="Exchange" Type="Self.Exchange" Multiplicity="1" />
+          <End Role="Market" Type="Self.Market" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Exchange">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Market">
+              <PropertyRef Name="ExchangeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Market_Status">
+          <End Role="Status" Type="Self.Status" Multiplicity="1" />
+          <End Role="Market" Type="Self.Market" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Market">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Notification_Status">
+          <End Role="Status" Type="Self.Status" Multiplicity="1" />
+          <End Role="Notification" Type="Self.Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Notification_UserProfile">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1" />
+          <End Role="Notification" Type="Self.Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="UserProfileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Property_PropertyType">
+          <End Role="PropertyType" Type="Self.PropertyType" Multiplicity="1" />
+          <End Role="Property" Type="Self.Property" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PropertyType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Property">
+              <PropertyRef Name="PropertyTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Schedule_JobDefinition">
+          <End Role="JobDefinition" Type="Self.JobDefinition" Multiplicity="1" />
+          <End Role="Schedule" Type="Self.Schedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobDefinition">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Schedule">
+              <PropertyRef Name="JobDefinitionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Schedule_UserProfile">
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="1" />
+          <End Role="Schedule" Type="Self.Schedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Schedule">
+              <PropertyRef Name="UserProfileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Symbol_Market">
+          <End Role="Market" Type="Self.Market" Multiplicity="1" />
+          <End Role="Symbol" Type="Self.Symbol" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Market">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Symbol">
+              <PropertyRef Name="MarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Symbol_Status">
+          <End Role="Status" Type="Self.Status" Multiplicity="1" />
+          <End Role="Symbol" Type="Self.Symbol" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Symbol">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transaction_Account">
+          <End Role="Account" Type="Self.Account" Multiplicity="1" />
+          <End Role="Transaction" Type="Self.Transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transaction_JobTimeline">
+          <End Role="JobTimeline" Type="Self.JobTimeline" Multiplicity="1" />
+          <End Role="Transaction" Type="Self.Transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobTimeline">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="JobTimelineId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transaction_TransactionStatus">
+          <End Role="TransactionStatus" Type="Self.TransactionStatus" Multiplicity="1" />
+          <End Role="Transaction" Type="Self.Transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TransactionStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="TransactionStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transaction_TransactionType">
+          <End Role="TransactionType" Type="Self.TransactionType" Multiplicity="0..1" />
+          <End Role="Transaction" Type="Self.Transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TransactionType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="TransactionTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TransactionTypeAlias_TransactionType">
+          <End Role="TransactionType" Type="Self.TransactionType" Multiplicity="1" />
+          <End Role="TransactionTypeAlias" Type="Self.TransactionTypeAlias" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TransactionType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TransactionTypeAlias">
+              <PropertyRef Name="TransactionTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserProfile_Company">
+          <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
+          <End Role="UserProfile" Type="Self.UserProfile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserProfile">
+              <PropertyRef Name="CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Prometheus_EntityModelStoreContainer">
+          <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Adapter" EntityType="Self.Adapter" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AdapterMapping" EntityType="Self.AdapterMapping" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AdapterType" EntityType="Self.AdapterType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AdapterTypeItem" EntityType="Self.AdapterTypeItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AdapterTypeItemProperty" EntityType="Self.AdapterTypeItemProperty" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Block" EntityType="Self.Block" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BlockTransaction" EntityType="Self.BlockTransaction" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BusinessAdapter" EntityType="Self.BusinessAdapter" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BusinessFile" EntityType="Self.BusinessFile" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CryptoAdapter" EntityType="Self.CryptoAdapter" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CryptoAdapterProperty" EntityType="Self.CryptoAdapterProperty" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DataType" EntityType="Self.DataType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Direction" EntityType="Self.Direction" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EnterpriseAdapter" EntityType="Self.EnterpriseAdapter" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EnterpriseAdapterProperty" EntityType="Self.EnterpriseAdapterProperty" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EnterpriseAdapterTable" EntityType="Self.EnterpriseAdapterTable" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EnterpriseAdapterTableColumn" EntityType="Self.EnterpriseAdapterTableColumn" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Exchange" EntityType="Self.Exchange" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobDefinition" EntityType="Self.JobDefinition" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobDefinitionAdapterTypeItemProperty" EntityType="Self.JobDefinitionAdapterTypeItemProperty" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobDefinitionProperty" EntityType="Self.JobDefinitionProperty" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobHistory" EntityType="Self.JobHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobStatus" EntityType="Self.JobStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobTimeline" EntityType="Self.JobTimeline" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Market" EntityType="Self.Market" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Notification" EntityType="Self.Notification" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Property" EntityType="Self.Property" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PropertyName" EntityType="Self.PropertyName" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PropertyType" EntityType="Self.PropertyType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Schedule" EntityType="Self.Schedule" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Status" EntityType="Self.Status" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Symbol" EntityType="Self.Symbol" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Transaction" EntityType="Self.Transaction" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TransactionStatus" EntityType="Self.TransactionStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TransactionType" EntityType="Self.TransactionType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TransactionTypeAlias" EntityType="Self.TransactionTypeAlias" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserProfile" EntityType="Self.UserProfile" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Adapter__Adapter__1699586C" Association="Self.FK__Adapter__Adapter__1699586C">
+            <End Role="AdapterTypeItem" EntitySet="AdapterTypeItem" />
+            <End Role="Adapter" EntitySet="Adapter" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Account_CryptoAdapter" Association="Self.FK_Account_CryptoAdapter">
+            <End Role="CryptoAdapter" EntitySet="CryptoAdapter" />
+            <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Account_EnterpriseAdapter" Association="Self.FK_Account_EnterpriseAdapter">
+            <End Role="EnterpriseAdapter" EntitySet="EnterpriseAdapter" />
+            <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Adapter_Direction" Association="Self.FK_Adapter_Direction">
+            <End Role="Direction" EntitySet="Direction" />
+            <End Role="Adapter" EntitySet="Adapter" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Adapter_Status" Association="Self.FK_Adapter_Status">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Adapter" EntitySet="Adapter" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Adapter_UserProfile" Association="Self.FK_Adapter_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="Adapter" EntitySet="Adapter" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AdapterMapping_AdapterTypeItem" Association="Self.FK_AdapterMapping_AdapterTypeItem">
+            <End Role="AdapterTypeItem" EntitySet="AdapterTypeItem" />
+            <End Role="AdapterMapping" EntitySet="AdapterMapping" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AdapterMapping_AdapterTypeItem1" Association="Self.FK_AdapterMapping_AdapterTypeItem1">
+            <End Role="AdapterTypeItem" EntitySet="AdapterTypeItem" />
+            <End Role="AdapterMapping" EntitySet="AdapterMapping" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AdapterTypeItem_AdapterType" Association="Self.FK_AdapterTypeItem_AdapterType">
+            <End Role="AdapterType" EntitySet="AdapterType" />
+            <End Role="AdapterTypeItem" EntitySet="AdapterTypeItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AdapterTypeItemProperty_AdapterTypeItem" Association="Self.FK_AdapterTypeItemProperty_AdapterTypeItem">
+            <End Role="AdapterTypeItem" EntitySet="AdapterTypeItem" />
+            <End Role="AdapterTypeItemProperty" EntitySet="AdapterTypeItemProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AdapterTypeItemProperty_Direction" Association="Self.FK_AdapterTypeItemProperty_Direction">
+            <End Role="Direction" EntitySet="Direction" />
+            <End Role="AdapterTypeItemProperty" EntitySet="AdapterTypeItemProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AdapterTypeItemProperty_Property" Association="Self.FK_AdapterTypeItemProperty_Property">
+            <End Role="Property" EntitySet="Property" />
+            <End Role="AdapterTypeItemProperty" EntitySet="AdapterTypeItemProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Block_JobTimeline" Association="Self.FK_Block_JobTimeline">
+            <End Role="JobTimeline" EntitySet="JobTimeline" />
+            <End Role="Block" EntitySet="Block" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BlockTransaction_Block" Association="Self.FK_BlockTransaction_Block">
+            <End Role="Block" EntitySet="Block" />
+            <End Role="BlockTransaction" EntitySet="BlockTransaction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BusinessAdapter_Adapter" Association="Self.FK_BusinessAdapter_Adapter">
+            <End Role="Adapter" EntitySet="Adapter" />
+            <End Role="BusinessAdapter" EntitySet="BusinessAdapter" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BusinessFile_JobTimeline" Association="Self.FK_BusinessFile_JobTimeline">
+            <End Role="JobTimeline" EntitySet="JobTimeline" />
+            <End Role="BusinessFile" EntitySet="BusinessFile" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CryptoAdapter_Adapter" Association="Self.FK_CryptoAdapter_Adapter">
+            <End Role="Adapter" EntitySet="Adapter" />
+            <End Role="CryptoAdapter" EntitySet="CryptoAdapter" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CryptoAdapterProperty_CryptoAdapter" Association="Self.FK_CryptoAdapterProperty_CryptoAdapter">
+            <End Role="CryptoAdapter" EntitySet="CryptoAdapter" />
+            <End Role="CryptoAdapterProperty" EntitySet="CryptoAdapterProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CryptoAdapterProperty_Property" Association="Self.FK_CryptoAdapterProperty_Property">
+            <End Role="Property" EntitySet="Property" />
+            <End Role="CryptoAdapterProperty" EntitySet="CryptoAdapterProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EnterpriseAdapter_Adapter" Association="Self.FK_EnterpriseAdapter_Adapter">
+            <End Role="Adapter" EntitySet="Adapter" />
+            <End Role="EnterpriseAdapter" EntitySet="EnterpriseAdapter" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EnterpriseAdapterProperty_EnterpriseAdapter" Association="Self.FK_EnterpriseAdapterProperty_EnterpriseAdapter">
+            <End Role="EnterpriseAdapter" EntitySet="EnterpriseAdapter" />
+            <End Role="EnterpriseAdapterProperty" EntitySet="EnterpriseAdapterProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EnterpriseAdapterProperty_Property" Association="Self.FK_EnterpriseAdapterProperty_Property">
+            <End Role="Property" EntitySet="Property" />
+            <End Role="EnterpriseAdapterProperty" EntitySet="EnterpriseAdapterProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EnterpriseAdapterTable_EnterpriseAdapter" Association="Self.FK_EnterpriseAdapterTable_EnterpriseAdapter">
+            <End Role="EnterpriseAdapter" EntitySet="EnterpriseAdapter" />
+            <End Role="EnterpriseAdapterTable" EntitySet="EnterpriseAdapterTable" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EnterpriseAdapterTableColumn_DataType" Association="Self.FK_EnterpriseAdapterTableColumn_DataType">
+            <End Role="DataType" EntitySet="DataType" />
+            <End Role="EnterpriseAdapterTableColumn" EntitySet="EnterpriseAdapterTableColumn" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EnterpriseAdapterTableColumn_EnterpriseAdapterTable" Association="Self.FK_EnterpriseAdapterTableColumn_EnterpriseAdapterTable">
+            <End Role="EnterpriseAdapterTable" EntitySet="EnterpriseAdapterTable" />
+            <End Role="EnterpriseAdapterTableColumn" EntitySet="EnterpriseAdapterTableColumn" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EnterpriseAdapterTableColumn_EnterpriseAdapterTableColumn" Association="Self.FK_EnterpriseAdapterTableColumn_EnterpriseAdapterTableColumn">
+            <End Role="EnterpriseAdapterTableColumn" EntitySet="EnterpriseAdapterTableColumn" />
+            <End Role="EnterpriseAdapterTableColumn1" EntitySet="EnterpriseAdapterTableColumn" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EnterpriseAdapterTableColumn_PropertyName" Association="Self.FK_EnterpriseAdapterTableColumn_PropertyName">
+            <End Role="PropertyName" EntitySet="PropertyName" />
+            <End Role="EnterpriseAdapterTableColumn" EntitySet="EnterpriseAdapterTableColumn" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Exchange_Status" Association="Self.FK_Exchange_Status">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Exchange" EntitySet="Exchange" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobDefinition_Adapter" Association="Self.FK_JobDefinition_Adapter">
+            <End Role="Adapter" EntitySet="Adapter" />
+            <End Role="JobDefinition" EntitySet="JobDefinition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobDefinition_Adapter1" Association="Self.FK_JobDefinition_Adapter1">
+            <End Role="Adapter" EntitySet="Adapter" />
+            <End Role="JobDefinition" EntitySet="JobDefinition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobDefinition_UserProfile" Association="Self.FK_JobDefinition_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="JobDefinition" EntitySet="JobDefinition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobDefinitionAdapterTypeItemProperty_AdapterTypeItem" Association="Self.FK_JobDefinitionAdapterTypeItemProperty_AdapterTypeItem">
+            <End Role="AdapterTypeItem" EntitySet="AdapterTypeItem" />
+            <End Role="JobDefinitionAdapterTypeItemProperty" EntitySet="JobDefinitionAdapterTypeItemProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobDefinitionAdapterTypeItemProperty_Direction" Association="Self.FK_JobDefinitionAdapterTypeItemProperty_Direction">
+            <End Role="Direction" EntitySet="Direction" />
+            <End Role="JobDefinitionAdapterTypeItemProperty" EntitySet="JobDefinitionAdapterTypeItemProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobDefinitionAdapterTypeItemProperty_Property" Association="Self.FK_JobDefinitionAdapterTypeItemProperty_Property">
+            <End Role="Property" EntitySet="Property" />
+            <End Role="JobDefinitionAdapterTypeItemProperty" EntitySet="JobDefinitionAdapterTypeItemProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobDefinitionProperty_JobDefinition" Association="Self.FK_JobDefinitionProperty_JobDefinition">
+            <End Role="JobDefinition" EntitySet="JobDefinition" />
+            <End Role="JobDefinitionProperty" EntitySet="JobDefinitionProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobDefinitionProperty_Property" Association="Self.FK_JobDefinitionProperty_Property">
+            <End Role="Property" EntitySet="Property" />
+            <End Role="JobDefinitionProperty" EntitySet="JobDefinitionProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobHistory_JobStatus" Association="Self.FK_JobHistory_JobStatus">
+            <End Role="JobStatus" EntitySet="JobStatus" />
+            <End Role="JobHistory" EntitySet="JobHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobHistory_JobTimeline" Association="Self.FK_JobHistory_JobTimeline">
+            <End Role="JobTimeline" EntitySet="JobTimeline" />
+            <End Role="JobHistory" EntitySet="JobHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobTimeline_JobStatus" Association="Self.FK_JobTimeline_JobStatus">
+            <End Role="JobStatus" EntitySet="JobStatus" />
+            <End Role="JobTimeline" EntitySet="JobTimeline" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobTimeline_Schedule" Association="Self.FK_JobTimeline_Schedule">
+            <End Role="Schedule" EntitySet="Schedule" />
+            <End Role="JobTimeline" EntitySet="JobTimeline" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Market_Exchange" Association="Self.FK_Market_Exchange">
+            <End Role="Exchange" EntitySet="Exchange" />
+            <End Role="Market" EntitySet="Market" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Market_Status" Association="Self.FK_Market_Status">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Market" EntitySet="Market" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notification_Status" Association="Self.FK_Notification_Status">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Notification" EntitySet="Notification" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notification_UserProfile" Association="Self.FK_Notification_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="Notification" EntitySet="Notification" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Property_PropertyType" Association="Self.FK_Property_PropertyType">
+            <End Role="PropertyType" EntitySet="PropertyType" />
+            <End Role="Property" EntitySet="Property" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Schedule_JobDefinition" Association="Self.FK_Schedule_JobDefinition">
+            <End Role="JobDefinition" EntitySet="JobDefinition" />
+            <End Role="Schedule" EntitySet="Schedule" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Schedule_UserProfile" Association="Self.FK_Schedule_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="Schedule" EntitySet="Schedule" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Symbol_Market" Association="Self.FK_Symbol_Market">
+            <End Role="Market" EntitySet="Market" />
+            <End Role="Symbol" EntitySet="Symbol" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Symbol_Status" Association="Self.FK_Symbol_Status">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Symbol" EntitySet="Symbol" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transaction_Account" Association="Self.FK_Transaction_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Transaction" EntitySet="Transaction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transaction_JobTimeline" Association="Self.FK_Transaction_JobTimeline">
+            <End Role="JobTimeline" EntitySet="JobTimeline" />
+            <End Role="Transaction" EntitySet="Transaction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transaction_TransactionStatus" Association="Self.FK_Transaction_TransactionStatus">
+            <End Role="TransactionStatus" EntitySet="TransactionStatus" />
+            <End Role="Transaction" EntitySet="Transaction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transaction_TransactionType" Association="Self.FK_Transaction_TransactionType">
+            <End Role="TransactionType" EntitySet="TransactionType" />
+            <End Role="Transaction" EntitySet="Transaction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TransactionTypeAlias_TransactionType" Association="Self.FK_TransactionTypeAlias_TransactionType">
+            <End Role="TransactionType" EntitySet="TransactionType" />
+            <End Role="TransactionTypeAlias" EntitySet="TransactionTypeAlias" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserProfile_Company" Association="Self.FK_UserProfile_Company">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="UserProfile" EntitySet="UserProfile" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Prometheus_EntityModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="PrometheusEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Account" EntityType="Prometheus_EntityModel.Account" />
+          <EntitySet Name="Adapter" EntityType="Prometheus_EntityModel.Adapter" />
+          <EntitySet Name="AdapterMapping" EntityType="Prometheus_EntityModel.AdapterMapping" />
+          <EntitySet Name="AdapterType" EntityType="Prometheus_EntityModel.AdapterType" />
+          <EntitySet Name="AdapterTypeItem" EntityType="Prometheus_EntityModel.AdapterTypeItem" />
+          <EntitySet Name="AdapterTypeItemProperty" EntityType="Prometheus_EntityModel.AdapterTypeItemProperty" />
+          <EntitySet Name="Block" EntityType="Prometheus_EntityModel.Block" />
+          <EntitySet Name="BlockTransaction" EntityType="Prometheus_EntityModel.BlockTransaction" />
+          <EntitySet Name="BusinessAdapter" EntityType="Prometheus_EntityModel.BusinessAdapter" />
+          <EntitySet Name="BusinessFile" EntityType="Prometheus_EntityModel.BusinessFile" />
+          <EntitySet Name="Company" EntityType="Prometheus_EntityModel.Company" />
+          <EntitySet Name="CryptoAdapter" EntityType="Prometheus_EntityModel.CryptoAdapter" />
+          <EntitySet Name="CryptoAdapterProperty" EntityType="Prometheus_EntityModel.CryptoAdapterProperty" />
+          <EntitySet Name="DataType" EntityType="Prometheus_EntityModel.DataType" />
+          <EntitySet Name="Direction" EntityType="Prometheus_EntityModel.Direction" />
+          <EntitySet Name="EnterpriseAdapter" EntityType="Prometheus_EntityModel.EnterpriseAdapter" />
+          <EntitySet Name="EnterpriseAdapterProperty" EntityType="Prometheus_EntityModel.EnterpriseAdapterProperty" />
+          <EntitySet Name="EnterpriseAdapterTable" EntityType="Prometheus_EntityModel.EnterpriseAdapterTable" />
+          <EntitySet Name="EnterpriseAdapterTableColumn" EntityType="Prometheus_EntityModel.EnterpriseAdapterTableColumn" />
+          <EntitySet Name="Exchange" EntityType="Prometheus_EntityModel.Exchange" />
+          <EntitySet Name="JobDefinition" EntityType="Prometheus_EntityModel.JobDefinition" />
+          <EntitySet Name="JobDefinitionAdapterTypeItemProperty" EntityType="Prometheus_EntityModel.JobDefinitionAdapterTypeItemProperty" />
+          <EntitySet Name="JobDefinitionProperty" EntityType="Prometheus_EntityModel.JobDefinitionProperty" />
+          <EntitySet Name="JobHistory" EntityType="Prometheus_EntityModel.JobHistory" />
+          <EntitySet Name="JobStatus" EntityType="Prometheus_EntityModel.JobStatus" />
+          <EntitySet Name="JobTimeline" EntityType="Prometheus_EntityModel.JobTimeline" />
+          <EntitySet Name="Market" EntityType="Prometheus_EntityModel.Market" />
+          <EntitySet Name="Notification" EntityType="Prometheus_EntityModel.Notification" />
+          <EntitySet Name="Property" EntityType="Prometheus_EntityModel.Property" />
+          <EntitySet Name="PropertyName" EntityType="Prometheus_EntityModel.PropertyName" />
+          <EntitySet Name="PropertyType" EntityType="Prometheus_EntityModel.PropertyType" />
+          <EntitySet Name="Schedule" EntityType="Prometheus_EntityModel.Schedule" />
+          <EntitySet Name="Status" EntityType="Prometheus_EntityModel.Status" />
+          <EntitySet Name="Symbol" EntityType="Prometheus_EntityModel.Symbol" />
+          <EntitySet Name="Transaction" EntityType="Prometheus_EntityModel.Transaction" />
+          <EntitySet Name="TransactionStatus" EntityType="Prometheus_EntityModel.TransactionStatus" />
+          <EntitySet Name="TransactionType" EntityType="Prometheus_EntityModel.TransactionType" />
+          <EntitySet Name="TransactionTypeAlias" EntityType="Prometheus_EntityModel.TransactionTypeAlias" />
+          <EntitySet Name="UserProfile" EntityType="Prometheus_EntityModel.UserProfile" />
+          <AssociationSet Name="FK_Account_CryptoAdapter" Association="Prometheus_EntityModel.FK_Account_CryptoAdapter">
+            <End Role="CryptoAdapter" EntitySet="CryptoAdapter" />
+            <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Account_EnterpriseAdapter" Association="Prometheus_EntityModel.FK_Account_EnterpriseAdapter">
+            <End Role="EnterpriseAdapter" EntitySet="EnterpriseAdapter" />
+            <End Role="Account" EntitySet="Account" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transaction_Account" Association="Prometheus_EntityModel.FK_Transaction_Account">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Transaction" EntitySet="Transaction" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Adapter__Adapter__1699586C" Association="Prometheus_EntityModel.FK__Adapter__Adapter__1699586C">
+            <End Role="AdapterTypeItem" EntitySet="AdapterTypeItem" />
+            <End Role="Adapter" EntitySet="Adapter" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Adapter_Direction" Association="Prometheus_EntityModel.FK_Adapter_Direction">
+            <End Role="Direction" EntitySet="Direction" />
+            <End Role="Adapter" EntitySet="Adapter" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Adapter_Status" Association="Prometheus_EntityModel.FK_Adapter_Status">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Adapter" EntitySet="Adapter" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Adapter_UserProfile" Association="Prometheus_EntityModel.FK_Adapter_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="Adapter" EntitySet="Adapter" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BusinessAdapter_Adapter" Association="Prometheus_EntityModel.FK_BusinessAdapter_Adapter">
+            <End Role="Adapter" EntitySet="Adapter" />
+            <End Role="BusinessAdapter" EntitySet="BusinessAdapter" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CryptoAdapter_Adapter" Association="Prometheus_EntityModel.FK_CryptoAdapter_Adapter">
+            <End Role="Adapter" EntitySet="Adapter" />
+            <End Role="CryptoAdapter" EntitySet="CryptoAdapter" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EnterpriseAdapter_Adapter" Association="Prometheus_EntityModel.FK_EnterpriseAdapter_Adapter">
+            <End Role="Adapter" EntitySet="Adapter" />
+            <End Role="EnterpriseAdapter" EntitySet="EnterpriseAdapter" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobDefinition_Adapter" Association="Prometheus_EntityModel.FK_JobDefinition_Adapter">
+            <End Role="Adapter" EntitySet="Adapter" />
+            <End Role="JobDefinition" EntitySet="JobDefinition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobDefinition_Adapter1" Association="Prometheus_EntityModel.FK_JobDefinition_Adapter1">
+            <End Role="Adapter" EntitySet="Adapter" />
+            <End Role="JobDefinition" EntitySet="JobDefinition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AdapterMapping_AdapterTypeItem" Association="Prometheus_EntityModel.FK_AdapterMapping_AdapterTypeItem">
+            <End Role="AdapterTypeItem" EntitySet="AdapterTypeItem" />
+            <End Role="AdapterMapping" EntitySet="AdapterMapping" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AdapterMapping_AdapterTypeItem1" Association="Prometheus_EntityModel.FK_AdapterMapping_AdapterTypeItem1">
+            <End Role="AdapterTypeItem" EntitySet="AdapterTypeItem" />
+            <End Role="AdapterMapping" EntitySet="AdapterMapping" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AdapterTypeItem_AdapterType" Association="Prometheus_EntityModel.FK_AdapterTypeItem_AdapterType">
+            <End Role="AdapterType" EntitySet="AdapterType" />
+            <End Role="AdapterTypeItem" EntitySet="AdapterTypeItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AdapterTypeItemProperty_AdapterTypeItem" Association="Prometheus_EntityModel.FK_AdapterTypeItemProperty_AdapterTypeItem">
+            <End Role="AdapterTypeItem" EntitySet="AdapterTypeItem" />
+            <End Role="AdapterTypeItemProperty" EntitySet="AdapterTypeItemProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobDefinitionAdapterTypeItemProperty_AdapterTypeItem" Association="Prometheus_EntityModel.FK_JobDefinitionAdapterTypeItemProperty_AdapterTypeItem">
+            <End Role="AdapterTypeItem" EntitySet="AdapterTypeItem" />
+            <End Role="JobDefinitionAdapterTypeItemProperty" EntitySet="JobDefinitionAdapterTypeItemProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AdapterTypeItemProperty_Direction" Association="Prometheus_EntityModel.FK_AdapterTypeItemProperty_Direction">
+            <End Role="Direction" EntitySet="Direction" />
+            <End Role="AdapterTypeItemProperty" EntitySet="AdapterTypeItemProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AdapterTypeItemProperty_Property" Association="Prometheus_EntityModel.FK_AdapterTypeItemProperty_Property">
+            <End Role="Property" EntitySet="Property" />
+            <End Role="AdapterTypeItemProperty" EntitySet="AdapterTypeItemProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Block_JobTimeline" Association="Prometheus_EntityModel.FK_Block_JobTimeline">
+            <End Role="JobTimeline" EntitySet="JobTimeline" />
+            <End Role="Block" EntitySet="Block" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BlockTransaction_Block" Association="Prometheus_EntityModel.FK_BlockTransaction_Block">
+            <End Role="Block" EntitySet="Block" />
+            <End Role="BlockTransaction" EntitySet="BlockTransaction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BusinessFile_JobTimeline" Association="Prometheus_EntityModel.FK_BusinessFile_JobTimeline">
+            <End Role="JobTimeline" EntitySet="JobTimeline" />
+            <End Role="BusinessFile" EntitySet="BusinessFile" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserProfile_Company" Association="Prometheus_EntityModel.FK_UserProfile_Company">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="UserProfile" EntitySet="UserProfile" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CryptoAdapterProperty_CryptoAdapter" Association="Prometheus_EntityModel.FK_CryptoAdapterProperty_CryptoAdapter">
+            <End Role="CryptoAdapter" EntitySet="CryptoAdapter" />
+            <End Role="CryptoAdapterProperty" EntitySet="CryptoAdapterProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CryptoAdapterProperty_Property" Association="Prometheus_EntityModel.FK_CryptoAdapterProperty_Property">
+            <End Role="Property" EntitySet="Property" />
+            <End Role="CryptoAdapterProperty" EntitySet="CryptoAdapterProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EnterpriseAdapterTableColumn_DataType" Association="Prometheus_EntityModel.FK_EnterpriseAdapterTableColumn_DataType">
+            <End Role="DataType" EntitySet="DataType" />
+            <End Role="EnterpriseAdapterTableColumn" EntitySet="EnterpriseAdapterTableColumn" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobDefinitionAdapterTypeItemProperty_Direction" Association="Prometheus_EntityModel.FK_JobDefinitionAdapterTypeItemProperty_Direction">
+            <End Role="Direction" EntitySet="Direction" />
+            <End Role="JobDefinitionAdapterTypeItemProperty" EntitySet="JobDefinitionAdapterTypeItemProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EnterpriseAdapterProperty_EnterpriseAdapter" Association="Prometheus_EntityModel.FK_EnterpriseAdapterProperty_EnterpriseAdapter">
+            <End Role="EnterpriseAdapter" EntitySet="EnterpriseAdapter" />
+            <End Role="EnterpriseAdapterProperty" EntitySet="EnterpriseAdapterProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EnterpriseAdapterTable_EnterpriseAdapter" Association="Prometheus_EntityModel.FK_EnterpriseAdapterTable_EnterpriseAdapter">
+            <End Role="EnterpriseAdapter" EntitySet="EnterpriseAdapter" />
+            <End Role="EnterpriseAdapterTable" EntitySet="EnterpriseAdapterTable" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EnterpriseAdapterProperty_Property" Association="Prometheus_EntityModel.FK_EnterpriseAdapterProperty_Property">
+            <End Role="Property" EntitySet="Property" />
+            <End Role="EnterpriseAdapterProperty" EntitySet="EnterpriseAdapterProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EnterpriseAdapterTableColumn_EnterpriseAdapterTable" Association="Prometheus_EntityModel.FK_EnterpriseAdapterTableColumn_EnterpriseAdapterTable">
+            <End Role="EnterpriseAdapterTable" EntitySet="EnterpriseAdapterTable" />
+            <End Role="EnterpriseAdapterTableColumn" EntitySet="EnterpriseAdapterTableColumn" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EnterpriseAdapterTableColumn_EnterpriseAdapterTableColumn" Association="Prometheus_EntityModel.FK_EnterpriseAdapterTableColumn_EnterpriseAdapterTableColumn">
+            <End Role="EnterpriseAdapterTableColumn" EntitySet="EnterpriseAdapterTableColumn" />
+            <End Role="EnterpriseAdapterTableColumn1" EntitySet="EnterpriseAdapterTableColumn" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EnterpriseAdapterTableColumn_PropertyName" Association="Prometheus_EntityModel.FK_EnterpriseAdapterTableColumn_PropertyName">
+            <End Role="PropertyName" EntitySet="PropertyName" />
+            <End Role="EnterpriseAdapterTableColumn" EntitySet="EnterpriseAdapterTableColumn" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Exchange_Status" Association="Prometheus_EntityModel.FK_Exchange_Status">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Exchange" EntitySet="Exchange" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Market_Exchange" Association="Prometheus_EntityModel.FK_Market_Exchange">
+            <End Role="Exchange" EntitySet="Exchange" />
+            <End Role="Market" EntitySet="Market" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobDefinition_UserProfile" Association="Prometheus_EntityModel.FK_JobDefinition_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="JobDefinition" EntitySet="JobDefinition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobDefinitionProperty_JobDefinition" Association="Prometheus_EntityModel.FK_JobDefinitionProperty_JobDefinition">
+            <End Role="JobDefinition" EntitySet="JobDefinition" />
+            <End Role="JobDefinitionProperty" EntitySet="JobDefinitionProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Schedule_JobDefinition" Association="Prometheus_EntityModel.FK_Schedule_JobDefinition">
+            <End Role="JobDefinition" EntitySet="JobDefinition" />
+            <End Role="Schedule" EntitySet="Schedule" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobDefinitionAdapterTypeItemProperty_Property" Association="Prometheus_EntityModel.FK_JobDefinitionAdapterTypeItemProperty_Property">
+            <End Role="Property" EntitySet="Property" />
+            <End Role="JobDefinitionAdapterTypeItemProperty" EntitySet="JobDefinitionAdapterTypeItemProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobDefinitionProperty_Property" Association="Prometheus_EntityModel.FK_JobDefinitionProperty_Property">
+            <End Role="Property" EntitySet="Property" />
+            <End Role="JobDefinitionProperty" EntitySet="JobDefinitionProperty" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobHistory_JobStatus" Association="Prometheus_EntityModel.FK_JobHistory_JobStatus">
+            <End Role="JobStatus" EntitySet="JobStatus" />
+            <End Role="JobHistory" EntitySet="JobHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobHistory_JobTimeline" Association="Prometheus_EntityModel.FK_JobHistory_JobTimeline">
+            <End Role="JobTimeline" EntitySet="JobTimeline" />
+            <End Role="JobHistory" EntitySet="JobHistory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobTimeline_JobStatus" Association="Prometheus_EntityModel.FK_JobTimeline_JobStatus">
+            <End Role="JobStatus" EntitySet="JobStatus" />
+            <End Role="JobTimeline" EntitySet="JobTimeline" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JobTimeline_Schedule" Association="Prometheus_EntityModel.FK_JobTimeline_Schedule">
+            <End Role="Schedule" EntitySet="Schedule" />
+            <End Role="JobTimeline" EntitySet="JobTimeline" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transaction_JobTimeline" Association="Prometheus_EntityModel.FK_Transaction_JobTimeline">
+            <End Role="JobTimeline" EntitySet="JobTimeline" />
+            <End Role="Transaction" EntitySet="Transaction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Market_Status" Association="Prometheus_EntityModel.FK_Market_Status">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Market" EntitySet="Market" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Symbol_Market" Association="Prometheus_EntityModel.FK_Symbol_Market">
+            <End Role="Market" EntitySet="Market" />
+            <End Role="Symbol" EntitySet="Symbol" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notification_Status" Association="Prometheus_EntityModel.FK_Notification_Status">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Notification" EntitySet="Notification" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notification_UserProfile" Association="Prometheus_EntityModel.FK_Notification_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="Notification" EntitySet="Notification" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Property_PropertyType" Association="Prometheus_EntityModel.FK_Property_PropertyType">
+            <End Role="PropertyType" EntitySet="PropertyType" />
+            <End Role="Property" EntitySet="Property" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Schedule_UserProfile" Association="Prometheus_EntityModel.FK_Schedule_UserProfile">
+            <End Role="UserProfile" EntitySet="UserProfile" />
+            <End Role="Schedule" EntitySet="Schedule" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Symbol_Status" Association="Prometheus_EntityModel.FK_Symbol_Status">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Symbol" EntitySet="Symbol" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transaction_TransactionStatus" Association="Prometheus_EntityModel.FK_Transaction_TransactionStatus">
+            <End Role="TransactionStatus" EntitySet="TransactionStatus" />
+            <End Role="Transaction" EntitySet="Transaction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transaction_TransactionType" Association="Prometheus_EntityModel.FK_Transaction_TransactionType">
+            <End Role="TransactionType" EntitySet="TransactionType" />
+            <End Role="Transaction" EntitySet="Transaction" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TransactionTypeAlias_TransactionType" Association="Prometheus_EntityModel.FK_TransactionTypeAlias_TransactionType">
+            <End Role="TransactionType" EntitySet="TransactionType" />
+            <End Role="TransactionTypeAlias" EntitySet="TransactionTypeAlias" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TransactionAccount" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="EnterpriseAdapterId" Type="Int64" Nullable="false" />
+          <Property Name="CryptoAdapterId" Type="Int64" Nullable="false" />
+          <Property Name="CreditAddress" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DebitAddress" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CryptoAdapter" Relationship="Prometheus_EntityModel.FK_Account_CryptoAdapter" FromRole="Account" ToRole="CryptoAdapter" />
+          <NavigationProperty Name="EnterpriseAdapter" Relationship="Prometheus_EntityModel.FK_Account_EnterpriseAdapter" FromRole="Account" ToRole="EnterpriseAdapter" />
+          <NavigationProperty Name="Transaction" Relationship="Prometheus_EntityModel.FK_Transaction_Account" FromRole="Account" ToRole="Transaction" />
+        </EntityType>
+        <EntityType Name="Adapter">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DirectionId" Type="Int32" Nullable="false" />
+          <Property Name="UserProfileId" Type="Int64" Nullable="false" />
+          <Property Name="StatusId" Type="Int32" Nullable="false" />
+          <Property Name="AdapterTypeItemId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AdapterTypeItem" Relationship="Prometheus_EntityModel.FK__Adapter__Adapter__1699586C" FromRole="Adapter" ToRole="AdapterTypeItem" />
+          <NavigationProperty Name="Direction" Relationship="Prometheus_EntityModel.FK_Adapter_Direction" FromRole="Adapter" ToRole="Direction" />
+          <NavigationProperty Name="Status" Relationship="Prometheus_EntityModel.FK_Adapter_Status" FromRole="Adapter" ToRole="Status" />
+          <NavigationProperty Name="UserProfile" Relationship="Prometheus_EntityModel.FK_Adapter_UserProfile" FromRole="Adapter" ToRole="UserProfile" />
+          <NavigationProperty Name="BusinessAdapter" Relationship="Prometheus_EntityModel.FK_BusinessAdapter_Adapter" FromRole="Adapter" ToRole="BusinessAdapter" />
+          <NavigationProperty Name="CryptoAdapter" Relationship="Prometheus_EntityModel.FK_CryptoAdapter_Adapter" FromRole="Adapter" ToRole="CryptoAdapter" />
+          <NavigationProperty Name="EnterpriseAdapter" Relationship="Prometheus_EntityModel.FK_EnterpriseAdapter_Adapter" FromRole="Adapter" ToRole="EnterpriseAdapter" />
+          <NavigationProperty Name="JobDefinition" Relationship="Prometheus_EntityModel.FK_JobDefinition_Adapter" FromRole="Adapter" ToRole="JobDefinition" />
+          <NavigationProperty Name="JobDefinition1" Relationship="Prometheus_EntityModel.FK_JobDefinition_Adapter1" FromRole="Adapter" ToRole="JobDefinition" />
+        </EntityType>
+        <EntityType Name="AdapterMapping">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="From" Type="Int32" Nullable="false" />
+          <Property Name="To" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AdapterTypeItem" Relationship="Prometheus_EntityModel.FK_AdapterMapping_AdapterTypeItem" FromRole="AdapterMapping" ToRole="AdapterTypeItem" />
+          <NavigationProperty Name="AdapterTypeItem1" Relationship="Prometheus_EntityModel.FK_AdapterMapping_AdapterTypeItem1" FromRole="AdapterMapping" ToRole="AdapterTypeItem" />
+        </EntityType>
+        <EntityType Name="AdapterType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AdapterTypeItem" Relationship="Prometheus_EntityModel.FK_AdapterTypeItem_AdapterType" FromRole="AdapterType" ToRole="AdapterTypeItem" />
+        </EntityType>
+        <EntityType Name="AdapterTypeItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AdapterTypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Adapter" Relationship="Prometheus_EntityModel.FK__Adapter__Adapter__1699586C" FromRole="AdapterTypeItem" ToRole="Adapter" />
+          <NavigationProperty Name="AdapterMapping" Relationship="Prometheus_EntityModel.FK_AdapterMapping_AdapterTypeItem" FromRole="AdapterTypeItem" ToRole="AdapterMapping" />
+          <NavigationProperty Name="AdapterMapping1" Relationship="Prometheus_EntityModel.FK_AdapterMapping_AdapterTypeItem1" FromRole="AdapterTypeItem" ToRole="AdapterMapping" />
+          <NavigationProperty Name="AdapterType" Relationship="Prometheus_EntityModel.FK_AdapterTypeItem_AdapterType" FromRole="AdapterTypeItem" ToRole="AdapterType" />
+          <NavigationProperty Name="AdapterTypeItemProperty" Relationship="Prometheus_EntityModel.FK_AdapterTypeItemProperty_AdapterTypeItem" FromRole="AdapterTypeItem" ToRole="AdapterTypeItemProperty" />
+          <NavigationProperty Name="JobDefinitionAdapterTypeItemProperty" Relationship="Prometheus_EntityModel.FK_JobDefinitionAdapterTypeItemProperty_AdapterTypeItem" FromRole="AdapterTypeItem" ToRole="JobDefinitionAdapterTypeItemProperty" />
+        </EntityType>
+        <EntityType Name="AdapterTypeItemProperty">
+          <Key>
+            <PropertyRef Name="AdapterTypeItemId" />
+            <PropertyRef Name="PropertyId" />
+          </Key>
+          <Property Name="AdapterTypeItemId" Type="Int32" Nullable="false" />
+          <Property Name="PropertyId" Type="Int64" Nullable="false" />
+          <Property Name="DirectionId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AdapterTypeItem" Relationship="Prometheus_EntityModel.FK_AdapterTypeItemProperty_AdapterTypeItem" FromRole="AdapterTypeItemProperty" ToRole="AdapterTypeItem" />
+          <NavigationProperty Name="Direction" Relationship="Prometheus_EntityModel.FK_AdapterTypeItemProperty_Direction" FromRole="AdapterTypeItemProperty" ToRole="Direction" />
+          <NavigationProperty Name="Property" Relationship="Prometheus_EntityModel.FK_AdapterTypeItemProperty_Property" FromRole="AdapterTypeItemProperty" ToRole="Property" />
+        </EntityType>
+        <EntityType Name="Block">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BlockNumber" Type="Int64" Nullable="false" />
+          <Property Name="JobTimelineId" Type="Int64" Nullable="false" />
+          <Property Name="BlockTime" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="JobTimeline" Relationship="Prometheus_EntityModel.FK_Block_JobTimeline" FromRole="Block" ToRole="JobTimeline" />
+          <NavigationProperty Name="BlockTransaction" Relationship="Prometheus_EntityModel.FK_BlockTransaction_Block" FromRole="Block" ToRole="BlockTransaction" />
+        </EntityType>
+        <EntityType Name="BlockTransaction">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BlockId" Type="Int64" Nullable="false" />
+          <Property Name="TxHash" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Block" Relationship="Prometheus_EntityModel.FK_BlockTransaction_Block" FromRole="BlockTransaction" ToRole="Block" />
+        </EntityType>
+        <EntityType Name="BusinessAdapter">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Filename" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AdapterId" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Adapter" Relationship="Prometheus_EntityModel.FK_BusinessAdapter_Adapter" FromRole="BusinessAdapter" ToRole="Adapter" />
+        </EntityType>
+        <EntityType Name="BusinessFile">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JobTimelineId" Type="Int64" Nullable="false" />
+          <Property Name="File" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="JobTimeline" Relationship="Prometheus_EntityModel.FK_BusinessFile_JobTimeline" FromRole="BusinessFile" ToRole="JobTimeline" />
+        </EntityType>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Mobile" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="ContactPerson" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserProfile" Relationship="Prometheus_EntityModel.FK_UserProfile_Company" FromRole="Company" ToRole="UserProfile" />
+        </EntityType>
+        <EntityType Name="CryptoAdapter">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RpcAddr" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RpcPort" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AdapterId" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Account" Relationship="Prometheus_EntityModel.FK_Account_CryptoAdapter" FromRole="CryptoAdapter" ToRole="Account" />
+          <NavigationProperty Name="Adapter" Relationship="Prometheus_EntityModel.FK_CryptoAdapter_Adapter" FromRole="CryptoAdapter" ToRole="Adapter" />
+          <NavigationProperty Name="CryptoAdapterProperty" Relationship="Prometheus_EntityModel.FK_CryptoAdapterProperty_CryptoAdapter" FromRole="CryptoAdapter" ToRole="CryptoAdapterProperty" />
+        </EntityType>
+        <EntityType Name="CryptoAdapterProperty">
+          <Key>
+            <PropertyRef Name="CryptoAdapterId" />
+            <PropertyRef Name="PropertyId" />
+          </Key>
+          <Property Name="CryptoAdapterId" Type="Int64" Nullable="false" />
+          <Property Name="PropertyId" Type="Int64" Nullable="false" />
+          <Property Name="Value" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CryptoAdapter" Relationship="Prometheus_EntityModel.FK_CryptoAdapterProperty_CryptoAdapter" FromRole="CryptoAdapterProperty" ToRole="CryptoAdapter" />
+          <NavigationProperty Name="Property" Relationship="Prometheus_EntityModel.FK_CryptoAdapterProperty_Property" FromRole="CryptoAdapterProperty" ToRole="Property" />
+        </EntityType>
+        <EntityType Name="DataType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="EnterpriseAdapterTableColumn" Relationship="Prometheus_EntityModel.FK_EnterpriseAdapterTableColumn_DataType" FromRole="DataType" ToRole="EnterpriseAdapterTableColumn" />
+        </EntityType>
+        <EntityType Name="Direction">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Adapter" Relationship="Prometheus_EntityModel.FK_Adapter_Direction" FromRole="Direction" ToRole="Adapter" />
+          <NavigationProperty Name="AdapterTypeItemProperty" Relationship="Prometheus_EntityModel.FK_AdapterTypeItemProperty_Direction" FromRole="Direction" ToRole="AdapterTypeItemProperty" />
+          <NavigationProperty Name="JobDefinitionAdapterTypeItemProperty" Relationship="Prometheus_EntityModel.FK_JobDefinitionAdapterTypeItemProperty_Direction" FromRole="Direction" ToRole="JobDefinitionAdapterTypeItemProperty" />
+        </EntityType>
+        <EntityType Name="EnterpriseAdapter">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ServerIP" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Port" Type="Int32" Nullable="false" />
+          <Property Name="Username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DatabaseName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AdapterId" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Account" Relationship="Prometheus_EntityModel.FK_Account_EnterpriseAdapter" FromRole="EnterpriseAdapter" ToRole="Account" />
+          <NavigationProperty Name="Adapter" Relationship="Prometheus_EntityModel.FK_EnterpriseAdapter_Adapter" FromRole="EnterpriseAdapter" ToRole="Adapter" />
+          <NavigationProperty Name="EnterpriseAdapterProperty" Relationship="Prometheus_EntityModel.FK_EnterpriseAdapterProperty_EnterpriseAdapter" FromRole="EnterpriseAdapter" ToRole="EnterpriseAdapterProperty" />
+          <NavigationProperty Name="EnterpriseAdapterTable" Relationship="Prometheus_EntityModel.FK_EnterpriseAdapterTable_EnterpriseAdapter" FromRole="EnterpriseAdapter" ToRole="EnterpriseAdapterTable" />
+        </EntityType>
+        <EntityType Name="EnterpriseAdapterProperty">
+          <Key>
+            <PropertyRef Name="EnterpriseAdapterId" />
+            <PropertyRef Name="PropertyId" />
+          </Key>
+          <Property Name="EnterpriseAdapterId" Type="Int64" Nullable="false" />
+          <Property Name="PropertyId" Type="Int64" Nullable="false" />
+          <Property Name="Value" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="EnterpriseAdapter" Relationship="Prometheus_EntityModel.FK_EnterpriseAdapterProperty_EnterpriseAdapter" FromRole="EnterpriseAdapterProperty" ToRole="EnterpriseAdapter" />
+          <NavigationProperty Name="Property" Relationship="Prometheus_EntityModel.FK_EnterpriseAdapterProperty_Property" FromRole="EnterpriseAdapterProperty" ToRole="Property" />
+        </EntityType>
+        <EntityType Name="EnterpriseAdapterTable">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TableName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="EnterpriseAdapterId" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="EnterpriseAdapter" Relationship="Prometheus_EntityModel.FK_EnterpriseAdapterTable_EnterpriseAdapter" FromRole="EnterpriseAdapterTable" ToRole="EnterpriseAdapter" />
+          <NavigationProperty Name="EnterpriseAdapterTableColumn" Relationship="Prometheus_EntityModel.FK_EnterpriseAdapterTableColumn_EnterpriseAdapterTable" FromRole="EnterpriseAdapterTable" ToRole="EnterpriseAdapterTableColumn" />
+        </EntityType>
+        <EntityType Name="EnterpriseAdapterTableColumn">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EnterpriseAdapterTableId" Type="Int64" Nullable="false" />
+          <Property Name="ColumnName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsForeignKey" Type="Boolean" Nullable="false" />
+          <Property Name="DataTypeId" Type="Int32" Nullable="false" />
+          <Property Name="RelatedTableName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsPrimaryKey" Type="Boolean" Nullable="false" />
+          <Property Name="ParentId" Type="Int64" />
+          <Property Name="PropertyNameId" Type="Int32" />
+          <NavigationProperty Name="DataType" Relationship="Prometheus_EntityModel.FK_EnterpriseAdapterTableColumn_DataType" FromRole="EnterpriseAdapterTableColumn" ToRole="DataType" />
+          <NavigationProperty Name="EnterpriseAdapterTable" Relationship="Prometheus_EntityModel.FK_EnterpriseAdapterTableColumn_EnterpriseAdapterTable" FromRole="EnterpriseAdapterTableColumn" ToRole="EnterpriseAdapterTable" />
+          <NavigationProperty Name="EnterpriseAdapterTableColumn1" Relationship="Prometheus_EntityModel.FK_EnterpriseAdapterTableColumn_EnterpriseAdapterTableColumn" FromRole="EnterpriseAdapterTableColumn" ToRole="EnterpriseAdapterTableColumn1" />
+          <NavigationProperty Name="EnterpriseAdapterTableColumn2" Relationship="Prometheus_EntityModel.FK_EnterpriseAdapterTableColumn_EnterpriseAdapterTableColumn" FromRole="EnterpriseAdapterTableColumn1" ToRole="EnterpriseAdapterTableColumn" />
+          <NavigationProperty Name="PropertyName" Relationship="Prometheus_EntityModel.FK_EnterpriseAdapterTableColumn_PropertyName" FromRole="EnterpriseAdapterTableColumn" ToRole="PropertyName" />
+        </EntityType>
+        <EntityType Name="Exchange">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ImageUrl" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StatusId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Status" Relationship="Prometheus_EntityModel.FK_Exchange_Status" FromRole="Exchange" ToRole="Status" />
+          <NavigationProperty Name="Market" Relationship="Prometheus_EntityModel.FK_Market_Exchange" FromRole="Exchange" ToRole="Market" />
+        </EntityType>
+        <EntityType Name="JobDefinition">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="From" Type="Int64" Nullable="false" />
+          <Property Name="To" Type="Int64" Nullable="false" />
+          <Property Name="Retry" Type="Boolean" Nullable="false" />
+          <Property Name="NumberOfRetry" Type="Int32" Nullable="false" />
+          <Property Name="UserProfileId" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Adapter" Relationship="Prometheus_EntityModel.FK_JobDefinition_Adapter" FromRole="JobDefinition" ToRole="Adapter" />
+          <NavigationProperty Name="Adapter1" Relationship="Prometheus_EntityModel.FK_JobDefinition_Adapter1" FromRole="JobDefinition" ToRole="Adapter" />
+          <NavigationProperty Name="UserProfile" Relationship="Prometheus_EntityModel.FK_JobDefinition_UserProfile" FromRole="JobDefinition" ToRole="UserProfile" />
+          <NavigationProperty Name="JobDefinitionProperty" Relationship="Prometheus_EntityModel.FK_JobDefinitionProperty_JobDefinition" FromRole="JobDefinition" ToRole="JobDefinitionProperty" />
+          <NavigationProperty Name="Schedule" Relationship="Prometheus_EntityModel.FK_Schedule_JobDefinition" FromRole="JobDefinition" ToRole="Schedule" />
+        </EntityType>
+        <EntityType Name="JobDefinitionAdapterTypeItemProperty">
+          <Key>
+            <PropertyRef Name="AdapterTypeItemId" />
+            <PropertyRef Name="PropertyId" />
+          </Key>
+          <Property Name="AdapterTypeItemId" Type="Int32" Nullable="false" />
+          <Property Name="PropertyId" Type="Int64" Nullable="false" />
+          <Property Name="DirectionId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AdapterTypeItem" Relationship="Prometheus_EntityModel.FK_JobDefinitionAdapterTypeItemProperty_AdapterTypeItem" FromRole="JobDefinitionAdapterTypeItemProperty" ToRole="AdapterTypeItem" />
+          <NavigationProperty Name="Direction" Relationship="Prometheus_EntityModel.FK_JobDefinitionAdapterTypeItemProperty_Direction" FromRole="JobDefinitionAdapterTypeItemProperty" ToRole="Direction" />
+          <NavigationProperty Name="Property" Relationship="Prometheus_EntityModel.FK_JobDefinitionAdapterTypeItemProperty_Property" FromRole="JobDefinitionAdapterTypeItemProperty" ToRole="Property" />
+        </EntityType>
+        <EntityType Name="JobDefinitionProperty">
+          <Key>
+            <PropertyRef Name="JobDefinitionId" />
+            <PropertyRef Name="PropertyId" />
+          </Key>
+          <Property Name="JobDefinitionId" Type="Int64" Nullable="false" />
+          <Property Name="PropertyId" Type="Int64" Nullable="false" />
+          <Property Name="Value" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="JobDefinition" Relationship="Prometheus_EntityModel.FK_JobDefinitionProperty_JobDefinition" FromRole="JobDefinitionProperty" ToRole="JobDefinition" />
+          <NavigationProperty Name="Property" Relationship="Prometheus_EntityModel.FK_JobDefinitionProperty_Property" FromRole="JobDefinitionProperty" ToRole="Property" />
+        </EntityType>
+        <EntityType Name="JobHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="JobTimelineId" Type="Int64" Nullable="false" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="JobStatusId" Type="Int32" Nullable="false" />
+          <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="JobStatus" Relationship="Prometheus_EntityModel.FK_JobHistory_JobStatus" FromRole="JobHistory" ToRole="JobStatus" />
+          <NavigationProperty Name="JobTimeline" Relationship="Prometheus_EntityModel.FK_JobHistory_JobTimeline" FromRole="JobHistory" ToRole="JobTimeline" />
+        </EntityType>
+        <EntityType Name="JobStatus">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="JobHistory" Relationship="Prometheus_EntityModel.FK_JobHistory_JobStatus" FromRole="JobStatus" ToRole="JobHistory" />
+          <NavigationProperty Name="JobTimeline" Relationship="Prometheus_EntityModel.FK_JobTimeline_JobStatus" FromRole="JobStatus" ToRole="JobTimeline" />
+        </EntityType>
+        <EntityType Name="JobTimeline">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ScheduleId" Type="Int64" Nullable="false" />
+          <Property Name="JobStatusId" Type="Int32" Nullable="false" />
+          <Property Name="StartTime" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="HangfireId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NumberOfTransactions" Type="Int64" />
+          <NavigationProperty Name="Block" Relationship="Prometheus_EntityModel.FK_Block_JobTimeline" FromRole="JobTimeline" ToRole="Block" />
+          <NavigationProperty Name="BusinessFile" Relationship="Prometheus_EntityModel.FK_BusinessFile_JobTimeline" FromRole="JobTimeline" ToRole="BusinessFile" />
+          <NavigationProperty Name="JobHistory" Relationship="Prometheus_EntityModel.FK_JobHistory_JobTimeline" FromRole="JobTimeline" ToRole="JobHistory" />
+          <NavigationProperty Name="JobStatus" Relationship="Prometheus_EntityModel.FK_JobTimeline_JobStatus" FromRole="JobTimeline" ToRole="JobStatus" />
+          <NavigationProperty Name="Schedule" Relationship="Prometheus_EntityModel.FK_JobTimeline_Schedule" FromRole="JobTimeline" ToRole="Schedule" />
+          <NavigationProperty Name="Transaction" Relationship="Prometheus_EntityModel.FK_Transaction_JobTimeline" FromRole="JobTimeline" ToRole="Transaction" />
+        </EntityType>
+        <EntityType Name="Market">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ExchangeId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="StatusId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Exchange" Relationship="Prometheus_EntityModel.FK_Market_Exchange" FromRole="Market" ToRole="Exchange" />
+          <NavigationProperty Name="Status" Relationship="Prometheus_EntityModel.FK_Market_Status" FromRole="Market" ToRole="Status" />
+          <NavigationProperty Name="Symbol" Relationship="Prometheus_EntityModel.FK_Symbol_Market" FromRole="Market" ToRole="Symbol" />
+        </EntityType>
+        <EntityType Name="Notification">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Message" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UserId" Type="String" MaxLength="450" FixedLength="false" Unicode="true" />
+          <Property Name="UserProfileId" Type="Int64" Nullable="false" />
+          <Property Name="StatusId" Type="Int32" Nullable="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="Status" Relationship="Prometheus_EntityModel.FK_Notification_Status" FromRole="Notification" ToRole="Status" />
+          <NavigationProperty Name="UserProfile" Relationship="Prometheus_EntityModel.FK_Notification_UserProfile" FromRole="Notification" ToRole="UserProfile" />
+        </EntityType>
+        <EntityType Name="Property">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PropertyTypeId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AdapterTypeItemProperty" Relationship="Prometheus_EntityModel.FK_AdapterTypeItemProperty_Property" FromRole="Property" ToRole="AdapterTypeItemProperty" />
+          <NavigationProperty Name="CryptoAdapterProperty" Relationship="Prometheus_EntityModel.FK_CryptoAdapterProperty_Property" FromRole="Property" ToRole="CryptoAdapterProperty" />
+          <NavigationProperty Name="EnterpriseAdapterProperty" Relationship="Prometheus_EntityModel.FK_EnterpriseAdapterProperty_Property" FromRole="Property" ToRole="EnterpriseAdapterProperty" />
+          <NavigationProperty Name="JobDefinitionAdapterTypeItemProperty" Relationship="Prometheus_EntityModel.FK_JobDefinitionAdapterTypeItemProperty_Property" FromRole="Property" ToRole="JobDefinitionAdapterTypeItemProperty" />
+          <NavigationProperty Name="JobDefinitionProperty" Relationship="Prometheus_EntityModel.FK_JobDefinitionProperty_Property" FromRole="Property" ToRole="JobDefinitionProperty" />
+          <NavigationProperty Name="PropertyType" Relationship="Prometheus_EntityModel.FK_Property_PropertyType" FromRole="Property" ToRole="PropertyType" />
+        </EntityType>
+        <EntityType Name="PropertyName">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="EnterpriseAdapterTableColumn" Relationship="Prometheus_EntityModel.FK_EnterpriseAdapterTableColumn_PropertyName" FromRole="PropertyName" ToRole="EnterpriseAdapterTableColumn" />
+        </EntityType>
+        <EntityType Name="PropertyType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Property" Relationship="Prometheus_EntityModel.FK_Property_PropertyType" FromRole="PropertyType" ToRole="Property" />
+        </EntityType>
+        <EntityType Name="Schedule">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="UserProfileId" Type="Int64" Nullable="false" />
+          <Property Name="JobDefinitionId" Type="Int64" Nullable="false" />
+          <Property Name="RecurrenceRule" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="JobDefinition" Relationship="Prometheus_EntityModel.FK_Schedule_JobDefinition" FromRole="Schedule" ToRole="JobDefinition" />
+          <NavigationProperty Name="JobTimeline" Relationship="Prometheus_EntityModel.FK_JobTimeline_Schedule" FromRole="Schedule" ToRole="JobTimeline" />
+          <NavigationProperty Name="UserProfile" Relationship="Prometheus_EntityModel.FK_Schedule_UserProfile" FromRole="Schedule" ToRole="UserProfile" />
+        </EntityType>
+        <EntityType Name="Status">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StatusName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Adapter" Relationship="Prometheus_EntityModel.FK_Adapter_Status" FromRole="Status" ToRole="Adapter" />
+          <NavigationProperty Name="Exchange" Relationship="Prometheus_EntityModel.FK_Exchange_Status" FromRole="Status" ToRole="Exchange" />
+          <NavigationProperty Name="Market" Relationship="Prometheus_EntityModel.FK_Market_Status" FromRole="Status" ToRole="Market" />
+          <NavigationProperty Name="Notification" Relationship="Prometheus_EntityModel.FK_Notification_Status" FromRole="Status" ToRole="Notification" />
+          <NavigationProperty Name="Symbol" Relationship="Prometheus_EntityModel.FK_Symbol_Status" FromRole="Status" ToRole="Symbol" />
+        </EntityType>
+        <EntityType Name="Symbol">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MarketId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="StatusId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Market" Relationship="Prometheus_EntityModel.FK_Symbol_Market" FromRole="Symbol" ToRole="Market" />
+          <NavigationProperty Name="Status" Relationship="Prometheus_EntityModel.FK_Symbol_Status" FromRole="Symbol" ToRole="Status" />
+        </EntityType>
+        <EntityType Name="Transaction">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TransactionId" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="AccountId" Type="Int64" Nullable="false" />
+          <Property Name="TransactionAmount" Type="Decimal" Nullable="false" Precision="20" Scale="6" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="UpdatedAt" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="TransactionHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TransactionTypeId" Type="Int32" />
+          <Property Name="TransactionStatusId" Type="Int32" Nullable="false" />
+          <Property Name="JobTimelineId" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Account" Relationship="Prometheus_EntityModel.FK_Transaction_Account" FromRole="Transaction" ToRole="Account" />
+          <NavigationProperty Name="JobTimeline" Relationship="Prometheus_EntityModel.FK_Transaction_JobTimeline" FromRole="Transaction" ToRole="JobTimeline" />
+          <NavigationProperty Name="TransactionStatus" Relationship="Prometheus_EntityModel.FK_Transaction_TransactionStatus" FromRole="Transaction" ToRole="TransactionStatus" />
+          <NavigationProperty Name="TransactionType" Relationship="Prometheus_EntityModel.FK_Transaction_TransactionType" FromRole="Transaction" ToRole="TransactionType" />
+        </EntityType>
+        <EntityType Name="TransactionStatus">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Transaction" Relationship="Prometheus_EntityModel.FK_Transaction_TransactionStatus" FromRole="TransactionStatus" ToRole="Transaction" />
+        </EntityType>
+        <EntityType Name="TransactionType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Transaction" Relationship="Prometheus_EntityModel.FK_Transaction_TransactionType" FromRole="TransactionType" ToRole="Transaction" />
+          <NavigationProperty Name="TransactionTypeAlias" Relationship="Prometheus_EntityModel.FK_TransactionTypeAlias_TransactionType" FromRole="TransactionType" ToRole="TransactionTypeAlias" />
+        </EntityType>
+        <EntityType Name="TransactionTypeAlias">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="TransactionTypeId" Type="Int32" Nullable="false" />
+          <Property Name="Alias" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NormalizedAlias" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="TransactionType" Relationship="Prometheus_EntityModel.FK_TransactionTypeAlias_TransactionType" FromRole="TransactionTypeAlias" ToRole="TransactionType" />
+        </EntityType>
+        <EntityType Name="UserProfile">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RegistrationDate" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="CompanyId" Type="Int64" />
+          <NavigationProperty Name="Adapter" Relationship="Prometheus_EntityModel.FK_Adapter_UserProfile" FromRole="UserProfile" ToRole="Adapter" />
+          <NavigationProperty Name="Company" Relationship="Prometheus_EntityModel.FK_UserProfile_Company" FromRole="UserProfile" ToRole="Company" />
+          <NavigationProperty Name="JobDefinition" Relationship="Prometheus_EntityModel.FK_JobDefinition_UserProfile" FromRole="UserProfile" ToRole="JobDefinition" />
+          <NavigationProperty Name="Notification" Relationship="Prometheus_EntityModel.FK_Notification_UserProfile" FromRole="UserProfile" ToRole="Notification" />
+          <NavigationProperty Name="Schedule" Relationship="Prometheus_EntityModel.FK_Schedule_UserProfile" FromRole="UserProfile" ToRole="Schedule" />
+        </EntityType>
+        <Association Name="FK_Account_CryptoAdapter">
+          <End Type="Prometheus_EntityModel.CryptoAdapter" Role="CryptoAdapter" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.Account" Role="Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CryptoAdapter">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="CryptoAdapterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Account_EnterpriseAdapter">
+          <End Type="Prometheus_EntityModel.EnterpriseAdapter" Role="EnterpriseAdapter" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.Account" Role="Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EnterpriseAdapter">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="EnterpriseAdapterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transaction_Account">
+          <End Type="Prometheus_EntityModel.Account" Role="Account" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.Transaction" Role="Transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Adapter__Adapter__1699586C">
+          <End Type="Prometheus_EntityModel.AdapterTypeItem" Role="AdapterTypeItem" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.Adapter" Role="Adapter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AdapterTypeItem">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Adapter">
+              <PropertyRef Name="AdapterTypeItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Adapter_Direction">
+          <End Type="Prometheus_EntityModel.Direction" Role="Direction" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.Adapter" Role="Adapter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Direction">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Adapter">
+              <PropertyRef Name="DirectionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Adapter_Status">
+          <End Type="Prometheus_EntityModel.Status" Role="Status" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.Adapter" Role="Adapter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Adapter">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Adapter_UserProfile">
+          <End Type="Prometheus_EntityModel.UserProfile" Role="UserProfile" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.Adapter" Role="Adapter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Adapter">
+              <PropertyRef Name="UserProfileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BusinessAdapter_Adapter">
+          <End Type="Prometheus_EntityModel.Adapter" Role="Adapter" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.BusinessAdapter" Role="BusinessAdapter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Adapter">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BusinessAdapter">
+              <PropertyRef Name="AdapterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CryptoAdapter_Adapter">
+          <End Type="Prometheus_EntityModel.Adapter" Role="Adapter" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.CryptoAdapter" Role="CryptoAdapter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Adapter">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CryptoAdapter">
+              <PropertyRef Name="AdapterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EnterpriseAdapter_Adapter">
+          <End Type="Prometheus_EntityModel.Adapter" Role="Adapter" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.EnterpriseAdapter" Role="EnterpriseAdapter" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Adapter">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EnterpriseAdapter">
+              <PropertyRef Name="AdapterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobDefinition_Adapter">
+          <End Type="Prometheus_EntityModel.Adapter" Role="Adapter" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.JobDefinition" Role="JobDefinition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Adapter">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobDefinition">
+              <PropertyRef Name="From" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobDefinition_Adapter1">
+          <End Type="Prometheus_EntityModel.Adapter" Role="Adapter" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.JobDefinition" Role="JobDefinition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Adapter">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobDefinition">
+              <PropertyRef Name="To" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AdapterMapping_AdapterTypeItem">
+          <End Type="Prometheus_EntityModel.AdapterTypeItem" Role="AdapterTypeItem" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.AdapterMapping" Role="AdapterMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AdapterTypeItem">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AdapterMapping">
+              <PropertyRef Name="From" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AdapterMapping_AdapterTypeItem1">
+          <End Type="Prometheus_EntityModel.AdapterTypeItem" Role="AdapterTypeItem" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.AdapterMapping" Role="AdapterMapping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AdapterTypeItem">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AdapterMapping">
+              <PropertyRef Name="To" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AdapterTypeItem_AdapterType">
+          <End Type="Prometheus_EntityModel.AdapterType" Role="AdapterType" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.AdapterTypeItem" Role="AdapterTypeItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AdapterType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AdapterTypeItem">
+              <PropertyRef Name="AdapterTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AdapterTypeItemProperty_AdapterTypeItem">
+          <End Type="Prometheus_EntityModel.AdapterTypeItem" Role="AdapterTypeItem" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.AdapterTypeItemProperty" Role="AdapterTypeItemProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AdapterTypeItem">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AdapterTypeItemProperty">
+              <PropertyRef Name="AdapterTypeItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobDefinitionAdapterTypeItemProperty_AdapterTypeItem">
+          <End Type="Prometheus_EntityModel.AdapterTypeItem" Role="AdapterTypeItem" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.JobDefinitionAdapterTypeItemProperty" Role="JobDefinitionAdapterTypeItemProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AdapterTypeItem">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobDefinitionAdapterTypeItemProperty">
+              <PropertyRef Name="AdapterTypeItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AdapterTypeItemProperty_Direction">
+          <End Type="Prometheus_EntityModel.Direction" Role="Direction" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.AdapterTypeItemProperty" Role="AdapterTypeItemProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Direction">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AdapterTypeItemProperty">
+              <PropertyRef Name="DirectionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AdapterTypeItemProperty_Property">
+          <End Type="Prometheus_EntityModel.Property" Role="Property" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.AdapterTypeItemProperty" Role="AdapterTypeItemProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Property">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AdapterTypeItemProperty">
+              <PropertyRef Name="PropertyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Block_JobTimeline">
+          <End Type="Prometheus_EntityModel.JobTimeline" Role="JobTimeline" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.Block" Role="Block" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobTimeline">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Block">
+              <PropertyRef Name="JobTimelineId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BlockTransaction_Block">
+          <End Type="Prometheus_EntityModel.Block" Role="Block" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.BlockTransaction" Role="BlockTransaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Block">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BlockTransaction">
+              <PropertyRef Name="BlockId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BusinessFile_JobTimeline">
+          <End Type="Prometheus_EntityModel.JobTimeline" Role="JobTimeline" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.BusinessFile" Role="BusinessFile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobTimeline">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BusinessFile">
+              <PropertyRef Name="JobTimelineId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserProfile_Company">
+          <End Type="Prometheus_EntityModel.Company" Role="Company" Multiplicity="0..1" />
+          <End Type="Prometheus_EntityModel.UserProfile" Role="UserProfile" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserProfile">
+              <PropertyRef Name="CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CryptoAdapterProperty_CryptoAdapter">
+          <End Type="Prometheus_EntityModel.CryptoAdapter" Role="CryptoAdapter" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.CryptoAdapterProperty" Role="CryptoAdapterProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CryptoAdapter">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CryptoAdapterProperty">
+              <PropertyRef Name="CryptoAdapterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CryptoAdapterProperty_Property">
+          <End Type="Prometheus_EntityModel.Property" Role="Property" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.CryptoAdapterProperty" Role="CryptoAdapterProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Property">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CryptoAdapterProperty">
+              <PropertyRef Name="PropertyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EnterpriseAdapterTableColumn_DataType">
+          <End Type="Prometheus_EntityModel.DataType" Role="DataType" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.EnterpriseAdapterTableColumn" Role="EnterpriseAdapterTableColumn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DataType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EnterpriseAdapterTableColumn">
+              <PropertyRef Name="DataTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobDefinitionAdapterTypeItemProperty_Direction">
+          <End Type="Prometheus_EntityModel.Direction" Role="Direction" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.JobDefinitionAdapterTypeItemProperty" Role="JobDefinitionAdapterTypeItemProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Direction">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobDefinitionAdapterTypeItemProperty">
+              <PropertyRef Name="DirectionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EnterpriseAdapterProperty_EnterpriseAdapter">
+          <End Type="Prometheus_EntityModel.EnterpriseAdapter" Role="EnterpriseAdapter" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.EnterpriseAdapterProperty" Role="EnterpriseAdapterProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EnterpriseAdapter">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EnterpriseAdapterProperty">
+              <PropertyRef Name="EnterpriseAdapterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EnterpriseAdapterTable_EnterpriseAdapter">
+          <End Type="Prometheus_EntityModel.EnterpriseAdapter" Role="EnterpriseAdapter" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.EnterpriseAdapterTable" Role="EnterpriseAdapterTable" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EnterpriseAdapter">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EnterpriseAdapterTable">
+              <PropertyRef Name="EnterpriseAdapterId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EnterpriseAdapterProperty_Property">
+          <End Type="Prometheus_EntityModel.Property" Role="Property" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.EnterpriseAdapterProperty" Role="EnterpriseAdapterProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Property">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EnterpriseAdapterProperty">
+              <PropertyRef Name="PropertyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EnterpriseAdapterTableColumn_EnterpriseAdapterTable">
+          <End Type="Prometheus_EntityModel.EnterpriseAdapterTable" Role="EnterpriseAdapterTable" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.EnterpriseAdapterTableColumn" Role="EnterpriseAdapterTableColumn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EnterpriseAdapterTable">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EnterpriseAdapterTableColumn">
+              <PropertyRef Name="EnterpriseAdapterTableId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EnterpriseAdapterTableColumn_EnterpriseAdapterTableColumn">
+          <End Type="Prometheus_EntityModel.EnterpriseAdapterTableColumn" Role="EnterpriseAdapterTableColumn" Multiplicity="0..1" />
+          <End Type="Prometheus_EntityModel.EnterpriseAdapterTableColumn" Role="EnterpriseAdapterTableColumn1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EnterpriseAdapterTableColumn">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EnterpriseAdapterTableColumn1">
+              <PropertyRef Name="ParentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EnterpriseAdapterTableColumn_PropertyName">
+          <End Type="Prometheus_EntityModel.PropertyName" Role="PropertyName" Multiplicity="0..1" />
+          <End Type="Prometheus_EntityModel.EnterpriseAdapterTableColumn" Role="EnterpriseAdapterTableColumn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PropertyName">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EnterpriseAdapterTableColumn">
+              <PropertyRef Name="PropertyNameId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Exchange_Status">
+          <End Type="Prometheus_EntityModel.Status" Role="Status" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.Exchange" Role="Exchange" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Exchange">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Market_Exchange">
+          <End Type="Prometheus_EntityModel.Exchange" Role="Exchange" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.Market" Role="Market" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Exchange">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Market">
+              <PropertyRef Name="ExchangeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobDefinition_UserProfile">
+          <End Type="Prometheus_EntityModel.UserProfile" Role="UserProfile" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.JobDefinition" Role="JobDefinition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobDefinition">
+              <PropertyRef Name="UserProfileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobDefinitionProperty_JobDefinition">
+          <End Type="Prometheus_EntityModel.JobDefinition" Role="JobDefinition" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.JobDefinitionProperty" Role="JobDefinitionProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobDefinition">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobDefinitionProperty">
+              <PropertyRef Name="JobDefinitionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Schedule_JobDefinition">
+          <End Type="Prometheus_EntityModel.JobDefinition" Role="JobDefinition" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.Schedule" Role="Schedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobDefinition">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Schedule">
+              <PropertyRef Name="JobDefinitionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobDefinitionAdapterTypeItemProperty_Property">
+          <End Type="Prometheus_EntityModel.Property" Role="Property" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.JobDefinitionAdapterTypeItemProperty" Role="JobDefinitionAdapterTypeItemProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Property">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobDefinitionAdapterTypeItemProperty">
+              <PropertyRef Name="PropertyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobDefinitionProperty_Property">
+          <End Type="Prometheus_EntityModel.Property" Role="Property" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.JobDefinitionProperty" Role="JobDefinitionProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Property">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobDefinitionProperty">
+              <PropertyRef Name="PropertyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobHistory_JobStatus">
+          <End Type="Prometheus_EntityModel.JobStatus" Role="JobStatus" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.JobHistory" Role="JobHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobHistory">
+              <PropertyRef Name="JobStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobHistory_JobTimeline">
+          <End Type="Prometheus_EntityModel.JobTimeline" Role="JobTimeline" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.JobHistory" Role="JobHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobTimeline">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobHistory">
+              <PropertyRef Name="JobTimelineId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobTimeline_JobStatus">
+          <End Type="Prometheus_EntityModel.JobStatus" Role="JobStatus" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.JobTimeline" Role="JobTimeline" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobTimeline">
+              <PropertyRef Name="JobStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JobTimeline_Schedule">
+          <End Type="Prometheus_EntityModel.Schedule" Role="Schedule" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.JobTimeline" Role="JobTimeline" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Schedule">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="JobTimeline">
+              <PropertyRef Name="ScheduleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transaction_JobTimeline">
+          <End Type="Prometheus_EntityModel.JobTimeline" Role="JobTimeline" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.Transaction" Role="Transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobTimeline">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="JobTimelineId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Market_Status">
+          <End Type="Prometheus_EntityModel.Status" Role="Status" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.Market" Role="Market" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Market">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Symbol_Market">
+          <End Type="Prometheus_EntityModel.Market" Role="Market" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.Symbol" Role="Symbol" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Market">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Symbol">
+              <PropertyRef Name="MarketId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Notification_Status">
+          <End Type="Prometheus_EntityModel.Status" Role="Status" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.Notification" Role="Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Notification_UserProfile">
+          <End Type="Prometheus_EntityModel.UserProfile" Role="UserProfile" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.Notification" Role="Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="UserProfileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Property_PropertyType">
+          <End Type="Prometheus_EntityModel.PropertyType" Role="PropertyType" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.Property" Role="Property" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PropertyType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Property">
+              <PropertyRef Name="PropertyTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Schedule_UserProfile">
+          <End Type="Prometheus_EntityModel.UserProfile" Role="UserProfile" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.Schedule" Role="Schedule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserProfile">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Schedule">
+              <PropertyRef Name="UserProfileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Symbol_Status">
+          <End Type="Prometheus_EntityModel.Status" Role="Status" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.Symbol" Role="Symbol" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Symbol">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transaction_TransactionStatus">
+          <End Type="Prometheus_EntityModel.TransactionStatus" Role="TransactionStatus" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.Transaction" Role="Transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TransactionStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="TransactionStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transaction_TransactionType">
+          <End Type="Prometheus_EntityModel.TransactionType" Role="TransactionType" Multiplicity="0..1" />
+          <End Type="Prometheus_EntityModel.Transaction" Role="Transaction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TransactionType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="TransactionTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TransactionTypeAlias_TransactionType">
+          <End Type="Prometheus_EntityModel.TransactionType" Role="TransactionType" Multiplicity="1" />
+          <End Type="Prometheus_EntityModel.TransactionTypeAlias" Role="TransactionTypeAlias" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TransactionType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TransactionTypeAlias">
+              <PropertyRef Name="TransactionTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Prometheus_EntityModelStoreContainer" CdmEntityContainer="PrometheusEntities">
+          <EntitySetMapping Name="Account">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.Account">
+              <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="DebitAddress" ColumnName="DebitAddress" />
+                <ScalarProperty Name="CreditAddress" ColumnName="CreditAddress" />
+                <ScalarProperty Name="CryptoAdapterId" ColumnName="CryptoAdapterId" />
+                <ScalarProperty Name="EnterpriseAdapterId" ColumnName="EnterpriseAdapterId" />
+                <ScalarProperty Name="TransactionAccount" ColumnName="TransactionAccount" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Adapter">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.Adapter">
+              <MappingFragment StoreEntitySet="Adapter">
+                <ScalarProperty Name="AdapterTypeItemId" ColumnName="AdapterTypeItemId" />
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+                <ScalarProperty Name="UserProfileId" ColumnName="UserProfileId" />
+                <ScalarProperty Name="DirectionId" ColumnName="DirectionId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AdapterMapping">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.AdapterMapping">
+              <MappingFragment StoreEntitySet="AdapterMapping">
+                <ScalarProperty Name="To" ColumnName="To" />
+                <ScalarProperty Name="From" ColumnName="From" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AdapterType">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.AdapterType">
+              <MappingFragment StoreEntitySet="AdapterType">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AdapterTypeItem">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.AdapterTypeItem">
+              <MappingFragment StoreEntitySet="AdapterTypeItem">
+                <ScalarProperty Name="AdapterTypeId" ColumnName="AdapterTypeId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AdapterTypeItemProperty">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.AdapterTypeItemProperty">
+              <MappingFragment StoreEntitySet="AdapterTypeItemProperty">
+                <ScalarProperty Name="DirectionId" ColumnName="DirectionId" />
+                <ScalarProperty Name="PropertyId" ColumnName="PropertyId" />
+                <ScalarProperty Name="AdapterTypeItemId" ColumnName="AdapterTypeItemId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Block">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.Block">
+              <MappingFragment StoreEntitySet="Block">
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="BlockTime" ColumnName="BlockTime" />
+                <ScalarProperty Name="JobTimelineId" ColumnName="JobTimelineId" />
+                <ScalarProperty Name="BlockNumber" ColumnName="BlockNumber" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BlockTransaction">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.BlockTransaction">
+              <MappingFragment StoreEntitySet="BlockTransaction">
+                <ScalarProperty Name="TxHash" ColumnName="TxHash" />
+                <ScalarProperty Name="BlockId" ColumnName="BlockId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BusinessAdapter">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.BusinessAdapter">
+              <MappingFragment StoreEntitySet="BusinessAdapter">
+                <ScalarProperty Name="AdapterId" ColumnName="AdapterId" />
+                <ScalarProperty Name="Filename" ColumnName="Filename" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BusinessFile">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.BusinessFile">
+              <MappingFragment StoreEntitySet="BusinessFile">
+                <ScalarProperty Name="File" ColumnName="File" />
+                <ScalarProperty Name="JobTimelineId" ColumnName="JobTimelineId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Company">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.Company">
+              <MappingFragment StoreEntitySet="Company">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="ContactPerson" ColumnName="ContactPerson" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CryptoAdapter">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.CryptoAdapter">
+              <MappingFragment StoreEntitySet="CryptoAdapter">
+                <ScalarProperty Name="AdapterId" ColumnName="AdapterId" />
+                <ScalarProperty Name="RpcPort" ColumnName="RpcPort" />
+                <ScalarProperty Name="RpcAddr" ColumnName="RpcAddr" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CryptoAdapterProperty">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.CryptoAdapterProperty">
+              <MappingFragment StoreEntitySet="CryptoAdapterProperty">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="PropertyId" ColumnName="PropertyId" />
+                <ScalarProperty Name="CryptoAdapterId" ColumnName="CryptoAdapterId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DataType">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.DataType">
+              <MappingFragment StoreEntitySet="DataType">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Direction">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.Direction">
+              <MappingFragment StoreEntitySet="Direction">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EnterpriseAdapter">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.EnterpriseAdapter">
+              <MappingFragment StoreEntitySet="EnterpriseAdapter">
+                <ScalarProperty Name="AdapterId" ColumnName="AdapterId" />
+                <ScalarProperty Name="DatabaseName" ColumnName="DatabaseName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Port" ColumnName="Port" />
+                <ScalarProperty Name="ServerIP" ColumnName="ServerIP" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EnterpriseAdapterProperty">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.EnterpriseAdapterProperty">
+              <MappingFragment StoreEntitySet="EnterpriseAdapterProperty">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="PropertyId" ColumnName="PropertyId" />
+                <ScalarProperty Name="EnterpriseAdapterId" ColumnName="EnterpriseAdapterId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EnterpriseAdapterTable">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.EnterpriseAdapterTable">
+              <MappingFragment StoreEntitySet="EnterpriseAdapterTable">
+                <ScalarProperty Name="EnterpriseAdapterId" ColumnName="EnterpriseAdapterId" />
+                <ScalarProperty Name="TableName" ColumnName="TableName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EnterpriseAdapterTableColumn">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.EnterpriseAdapterTableColumn">
+              <MappingFragment StoreEntitySet="EnterpriseAdapterTableColumn">
+                <ScalarProperty Name="PropertyNameId" ColumnName="PropertyNameId" />
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+                <ScalarProperty Name="IsPrimaryKey" ColumnName="IsPrimaryKey" />
+                <ScalarProperty Name="RelatedTableName" ColumnName="RelatedTableName" />
+                <ScalarProperty Name="DataTypeId" ColumnName="DataTypeId" />
+                <ScalarProperty Name="IsForeignKey" ColumnName="IsForeignKey" />
+                <ScalarProperty Name="ColumnName" ColumnName="ColumnName" />
+                <ScalarProperty Name="EnterpriseAdapterTableId" ColumnName="EnterpriseAdapterTableId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Exchange">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.Exchange">
+              <MappingFragment StoreEntitySet="Exchange">
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="ImageUrl" ColumnName="ImageUrl" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobDefinition">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.JobDefinition">
+              <MappingFragment StoreEntitySet="JobDefinition">
+                <ScalarProperty Name="UserProfileId" ColumnName="UserProfileId" />
+                <ScalarProperty Name="NumberOfRetry" ColumnName="NumberOfRetry" />
+                <ScalarProperty Name="Retry" ColumnName="Retry" />
+                <ScalarProperty Name="To" ColumnName="To" />
+                <ScalarProperty Name="From" ColumnName="From" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobDefinitionAdapterTypeItemProperty">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.JobDefinitionAdapterTypeItemProperty">
+              <MappingFragment StoreEntitySet="JobDefinitionAdapterTypeItemProperty">
+                <ScalarProperty Name="DirectionId" ColumnName="DirectionId" />
+                <ScalarProperty Name="PropertyId" ColumnName="PropertyId" />
+                <ScalarProperty Name="AdapterTypeItemId" ColumnName="AdapterTypeItemId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobDefinitionProperty">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.JobDefinitionProperty">
+              <MappingFragment StoreEntitySet="JobDefinitionProperty">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="PropertyId" ColumnName="PropertyId" />
+                <ScalarProperty Name="JobDefinitionId" ColumnName="JobDefinitionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobHistory">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.JobHistory">
+              <MappingFragment StoreEntitySet="JobHistory">
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="JobStatusId" ColumnName="JobStatusId" />
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="JobTimelineId" ColumnName="JobTimelineId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobStatus">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.JobStatus">
+              <MappingFragment StoreEntitySet="JobStatus">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobTimeline">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.JobTimeline">
+              <MappingFragment StoreEntitySet="JobTimeline">
+                <ScalarProperty Name="NumberOfTransactions" ColumnName="NumberOfTransactions" />
+                <ScalarProperty Name="HangfireId" ColumnName="HangfireId" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="JobStatusId" ColumnName="JobStatusId" />
+                <ScalarProperty Name="ScheduleId" ColumnName="ScheduleId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Market">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.Market">
+              <MappingFragment StoreEntitySet="Market">
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ExchangeId" ColumnName="ExchangeId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Notification">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.Notification">
+              <MappingFragment StoreEntitySet="Notification">
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+                <ScalarProperty Name="UserProfileId" ColumnName="UserProfileId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Property">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.Property">
+              <MappingFragment StoreEntitySet="Property">
+                <ScalarProperty Name="PropertyTypeId" ColumnName="PropertyTypeId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PropertyName">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.PropertyName">
+              <MappingFragment StoreEntitySet="PropertyName">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PropertyType">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.PropertyType">
+              <MappingFragment StoreEntitySet="PropertyType">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Schedule">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.Schedule">
+              <MappingFragment StoreEntitySet="Schedule">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="RecurrenceRule" ColumnName="RecurrenceRule" />
+                <ScalarProperty Name="JobDefinitionId" ColumnName="JobDefinitionId" />
+                <ScalarProperty Name="UserProfileId" ColumnName="UserProfileId" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Status">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.Status">
+              <MappingFragment StoreEntitySet="Status">
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Symbol">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.Symbol">
+              <MappingFragment StoreEntitySet="Symbol">
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="MarketId" ColumnName="MarketId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Transaction">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.Transaction">
+              <MappingFragment StoreEntitySet="Transaction">
+                <ScalarProperty Name="JobTimelineId" ColumnName="JobTimelineId" />
+                <ScalarProperty Name="TransactionStatusId" ColumnName="TransactionStatusId" />
+                <ScalarProperty Name="TransactionTypeId" ColumnName="TransactionTypeId" />
+                <ScalarProperty Name="TransactionHash" ColumnName="TransactionHash" />
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="TransactionAmount" ColumnName="TransactionAmount" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TransactionStatus">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.TransactionStatus">
+              <MappingFragment StoreEntitySet="TransactionStatus">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TransactionType">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.TransactionType">
+              <MappingFragment StoreEntitySet="TransactionType">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TransactionTypeAlias">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.TransactionTypeAlias">
+              <MappingFragment StoreEntitySet="TransactionTypeAlias">
+                <ScalarProperty Name="NormalizedAlias" ColumnName="NormalizedAlias" />
+                <ScalarProperty Name="Alias" ColumnName="Alias" />
+                <ScalarProperty Name="TransactionTypeId" ColumnName="TransactionTypeId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserProfile">
+            <EntityTypeMapping TypeName="Prometheus_EntityModel.UserProfile">
+              <MappingFragment StoreEntitySet="UserProfile">
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="RegistrationDate" ColumnName="RegistrationDate" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

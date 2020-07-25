@@ -1,0 +1,51 @@
+﻿@model IEnumerable<RssMediaModel>
+
+<style>
+    .loader {
+        position: relative;
+    }
+
+        .loader::after {
+            background-color: #272c33;
+            content: "Chart is loading...";
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+</style>
+
+
+<div class="col-lg-6">
+    <div class="card">
+        <div id="mediabody" class="card-body">
+            <h4 class="mb-3">Media</h4>
+            <canvas id="MediaCanvas"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="col-lg-6">
+    <div class="card">
+        <div id="socialmediabody" class="card-body">
+            <h4 class="mb-3">Social Media</h4>
+            <canvas id="SocialMediaCanvas"></canvas>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/assets/js/chartjs.min.js"></script>
+@section Scripts{
+    <script>
+        var labels = @Json.Serialize(Enum.GetNames(typeof(Cryptocurrency)));
+        handlemediaCharts(labels);
+
+    </script>
+}
+

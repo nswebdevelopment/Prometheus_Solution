@@ -1,0 +1,341 @@
+﻿@model Prometheus.Model.Models.ScheduleModel.ScheduleModel
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Job Schedule </h4>
+            <button type="button" class="close" onclick="CloseEditScheduleModal()">&times;</button>
+        </div>
+
+        <div class="modal-body">
+            <form class="form-horizontal" id="formEditSchedule">
+                <div class="form-horizontal">
+
+                    <input asp-for="Id" id="scheduleId" type="hidden" />
+                    <input asp-for="JobId" id="jobId" type="hidden" />
+                    <input asp-for="RecurrenceRule" id="recurrenceRule" type="hidden" />
+                    <input asp-for="JobsExecuted" id="jobsExecuted" type="hidden" />
+
+
+
+                    <div class="row form-group">
+                        <label for="title" class="control-label col-md-3">Title</label>
+                        <div class="col-md-9">
+                            <input type="text" id="title" asp-for="Title" name="Title" class="form-control">
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <label for="select" class="control-label col-md-3 pr-0">Job Definition</label>
+                        <div class="col-md-9">
+                            <select name="JobDefinitionId" id="jobDefinitionId" class="form-control" asp-for="JobDefinitionId" asp-items="@(new SelectList(Model.JobDefinitions, "Id", "Name"))">
+                                <option value="">Choose</option>
+                            </select>
+                            <span asp-validation-for="JobDefinitionId" class="text-danger"></span>
+                        </div>
+                    </div>
+
+
+                    <div class="row form-group">
+
+                        <label for="startDate" class="control-label col-md-3">Start Date</label>
+
+                        <div class="col-md-9">
+                            <input type="datetime-local" id="startDate" name="StartDate" class="form-control">
+                            <p id="dateTimeValidation" class="text-danger"></p>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+
+                        <label for="description" class="control-label col-md-3">Description</label>
+
+                        <div class="col-md-9">
+                            <textarea id="description" asp-for="Description" name="Description" class="form-control"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+
+                        <label for="repeat" class="control-label col-md-3">Repeat</label>
+
+                        <div class="col-md-9">
+                            <label class="switch switch-text switch-primary">
+                                <input id="repeat" type="checkbox" class="switch-input" name="Repeat" onchange="Recurrent()">
+                                <span data-on="On" data-off="Off" class="switch-label"></span>
+                                <span class="switch-handle">
+                                </span>
+                            </label>
+                        </div>
+
+                    </div>
+
+
+                    <div id="recurrenceDiv" style="display:none;">
+                        <div class="row form-group">
+                            <div id="frequencyDiv" class="col-md-9 offset-md-3">
+                                <label class="radio-inline pr-2"><input type="radio" name="frequency" value="DAILY" id="dailyBtn" class="pr-1" checked>Daily</label>
+                                <label class="radio-inline pr-1"><input type="radio" name="frequency" value="WEEKLY" id="weeklyBtn">Weekly</label>
+                                <label class="radio-inline pr-1"><input type="radio" name="frequency" value="MONTHLY" id="monthlyBtn">Monthly</label>
+                                <label class="radio-inline pr-1"><input type="radio" name="frequency" value="YEARLY" id="yearlyBtn">Yearly</label>
+                            </div>
+                        </div>
+
+                        <div id="intervalDiv" class="col-md-9 offset-md-3 p-0">
+                            <div id="DAILYDiv" style="display:block;" class="interval">
+                                <div class="row form-group">
+
+                                    <label for="text-input" class="control-label col-md-3 ml-2">Every</label>
+
+                                    <div class="col-md-7 form-inline">
+                                        <input type="number" name="dayInterval" id="dayInterval" value="1" min="1" class="form-control col-md-4"><span class="col-md-3">day(s)</span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div id="WEEKLYDiv" style="display:none;" class="interval">
+                                <div class="row form-group">
+
+                                    <label for="text-input" class="control-label col-md-3 ml-2">Every</label>
+
+                                    <div class="col-md-7 form-inline">
+                                        <input type="number" name="weekInterval" id="weekInterval"  value="1" min="1" class="form-control col-md-4"><span class="col-md-3">week(s)</span>
+                                    </div>
+
+                                </div>
+                                <div class="container">
+                                    <label class="checkbox-inline pr-1"><input type="checkbox" name="checkDay" id="SU" value="SU" checked> Su</label>
+                                    <label class="checkbox-inline pr-1"><input type="checkbox" name="checkDay" id="MO" value="MO"> Mo</label>
+                                    <label class="checkbox-inline pr-1"><input type="checkbox" name="checkDay" id="TU" value="TU"> Tu</label>
+                                    <label class="checkbox-inline pr-1"><input type="checkbox" name="checkDay" id="WE" value="WE"> We</label>
+                                    <label class="checkbox-inline pr-1"><input type="checkbox" name="checkDay" id="TH" value="TH"> Th</label>
+                                    <label class="checkbox-inline pr-1"><input type="checkbox" name="checkDay" id="FR" value="FR"> Fr</label>
+                                    <label class="checkbox-inline pr-1"><input type="checkbox" name="checkDay" id="SA" value="SA"> Sa</label>
+                                    <p id="dayCheckedValidation" class="text-danger"></p>
+                                </div>
+                            </div>
+
+                            <div id="MONTHLYDiv" style="display:none;" class="interval">
+                                <div class="row form-group">
+
+                                    <label for="text-input" class="control-label col-md-3 ml-2">Every</label>
+
+                                    <div class="col-md-7 form-inline">
+                                        <input type="number" name="monthInterval" id="monthInterval" value="1" min="1" class="form-control col-md-4"><span class="col-md-3">month(s)</span>
+                                    </div>
+
+                                </div>
+
+                                <div class="row form-group">
+
+                                    <label for="text-input" class="control-label col-md-3 ml-2">On day</label>
+
+                                    <div class="col-md-7">
+                                        <input type="number" name="onDayMonth" id="onDayMonth" value="1" min="1" max="31" class="form-control col-md-4">
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div id="YEARLYDiv" style="display:none;" class="interval">
+                                <div class="row form-group">
+                                    <label for="text-input" class="control-label col-md-3 ml-2">Every</label>
+
+                                    <div class="col-md-7 form-inline">
+                                        <input type="number" name="yearInterval" id="yearInterval"  value="1" min="1" class="form-control col-md-4"><span class="col-md-3">year(s)</span>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+
+                                    <label for="monthSelect" class="control-label col-md-3 ml-2">On</label>
+                                    <div class="col-md-5 pr-0">
+                                        <select class="form-control" name="onMonthYear" id="monthSelect">
+                                            <option value="1">January</option>
+                                            <option value="2">February</option>
+                                            <option value="3">March</option>
+                                            <option value="4">April</option>
+                                            <option value="5">May</option>
+                                            <option value="6">June</option>
+                                            <option value="7">July</option>
+                                            <option value="8">August</option>
+                                            <option value="9">September</option>
+                                            <option value="10">October</option>
+                                            <option value="11">November</option>
+                                            <option value="12">December</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="number" name="onDayYear" id="onDayYear" value="1" min="1" max="31" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="endRepeatDiv" class="mt-2">
+                                <div class="row form-group">
+
+                                    <label for="text-input" class="control-label col-md-3 ml-2 pr-0">End repeat after</label>
+
+                                    <div class="col-md-7 form-inline">
+                                        <input id="endRepeat" type="number" name="ocurrences" value="1" min="1" class="form-control col-md-4"><span class="col-md-3">ocurrence(s)</span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+
+
+        <div class="modal-footer">
+            <div class="form-group col-md-12">
+
+                <button type="button" id="btnDone" class="btn btn-primary btn-sm mr-1" onclick="EditValidation()">
+                    <i class="fa fa-dot-circle-o"></i> Update
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="CloseEditScheduleModal()">Close</button>
+                <button type="button" id="btnDeleteSchedule" class="btn btn-danger btn-sm mr-1 float-right" onclick="DeleteSchedule()" title="Delete all ocurrences of this schedule" style="display: none;">
+                    <i class="fa fa-trash"></i> Delete All
+                </button>
+                <button type="button" class="btn btn-danger btn-sm mr-1 float-right" onclick="DeleteJob()" title="Delete just this ocurrence">
+                    <i class="fa fa-trash"></i> Delete Job
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("_ValidationScriptsPartial");
+
+<script>
+    jQuery(document).ready(function () {
+        var recurrenceRule = jQuery('#recurrenceRule').val();
+        if (recurrenceRule != "") {
+            jQuery("#DAILYDiv").hide();
+            jQuery("#dailyBtn").prop('checked', false);
+            jQuery("#SU").prop('checked', false);
+            jQuery("#btnDeleteSchedule").show();
+            jQuery("#repeat").prop('checked', true);
+            jQuery("#recurrenceDiv").show();
+            
+            var interval = recurrenceRule.substring(recurrenceRule.lastIndexOf("INTERVAL=") + 9, recurrenceRule.lastIndexOf(";"));
+
+            if (recurrenceRule.includes('DAILY')) {
+                jQuery("#dailyBtn").prop('checked', true);
+                jQuery("#DAILYDiv").show();
+                jQuery("#dayInterval").val(interval);
+            }
+            else if (recurrenceRule.includes('WEEKLY')) {
+                jQuery("#weeklyBtn").prop('checked', true);
+                jQuery("#WEEKLYDiv").show();
+
+                jQuery("#weekInterval").val(interval);
+
+                var byDay = recurrenceRule.substring(recurrenceRule.lastIndexOf("BYDAY=") + 6);
+                var days = byDay.substring(0, byDay.indexOf(";"));
+                var daysOfWeek = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"];
+
+                for (var i = 0; i < daysOfWeek.length; i++) {
+                    if (days.includes(daysOfWeek[i])) {
+                        jQuery("#" + daysOfWeek[i]).prop('checked', true)
+                    }
+                }
+            }
+            else if (recurrenceRule.includes('MONTHLY')) {
+                jQuery("#monthlyBtn").prop('checked', true);
+                jQuery("#MONTHLYDiv").show();
+
+                jQuery("#monthInterval").val(interval);
+                var byMonthDay = recurrenceRule.substring(recurrenceRule.lastIndexOf("BYMONTHDAY=") + 11);
+                var monthDay = byMonthDay.substring(0, byMonthDay.indexOf(";"));
+
+                jQuery("#onDayMonth").val(monthDay);
+
+            }
+            else if (recurrenceRule.includes('YEARLY')) {
+                jQuery("#yearlyBtn").prop('checked', true);
+                jQuery("#YEARLYDiv").show();
+
+                jQuery("#yearInterval").val(interval);
+
+                var byMonthDay = recurrenceRule.substring(recurrenceRule.lastIndexOf("BYMONTHDAY=") + 11);
+                var monthDay = byMonthDay.substring(0, byMonthDay.indexOf(";"));
+                jQuery("#onDayYear").val(monthDay);
+
+                var byMonth = recurrenceRule.substring(recurrenceRule.lastIndexOf("BYMONTH=") + 8);
+                var month = byMonth.substring(0, byMonth.indexOf(";"));
+                jQuery("#monthSelect").val(month);
+            }
+
+            
+            var endRepeat = recurrenceRule.split("COUNT=").pop();
+            jQuery("#endRepeat").val(endRepeat);
+        }
+        
+        if (jQuery("#jobsExecuted").val() == "True") {
+            jQuery("#formEditSchedule :input").prop("disabled", true);
+            jQuery("#btnDone").hide();
+        }
+
+    });
+
+    function Recurrent() {
+        var is = document.getElementById("repeat").checked;
+        if (is) {
+            jQuery("#recurrenceDiv").show();
+        }
+        else {
+            jQuery("#recurrenceDiv").hide();
+        }
+    };
+
+    jQuery("input[name='frequency']").click(function () {
+        var currentFreq = jQuery(this).val();
+
+        jQuery("div.interval").hide();
+        jQuery("#" + currentFreq + "Div").show();
+    });
+
+
+    jQuery("#startDate").change(function () {
+        var selectedDateTime = new Date(jQuery("#startDate").val()).getTime();
+        var currentDateTime = new Date().getTime();
+
+        if (selectedDateTime <= currentDateTime) {
+            jQuery("#dateTimeValidation").html("Jobs cannot be scheduled in the past.");
+            return;
+        }
+        else {
+            jQuery("#dateTimeValidation").html("");
+        }
+    });
+
+    jQuery(".checkbox-inline").change(function () {
+        var checkedDays = jQuery('input[name="checkDay"]:checked').map(function () {
+            return this.value;
+        }).get();
+
+        if (checkedDays.length == 0) {
+            jQuery("#dayCheckedValidation").html("At least one day of the week must be selected.");
+
+        }
+        else {
+            jQuery("#dayCheckedValidation").html("");
+        }
+    })
+    
+    function CloseEditScheduleModal() {
+        jQuery("#editScheduleModal").modal("hide");
+        jQuery("#editScheduleContainer").html("");
+    }
+    
+</script>

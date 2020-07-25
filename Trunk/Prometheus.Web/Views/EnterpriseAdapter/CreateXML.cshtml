@@ -1,0 +1,158 @@
+﻿
+<div class="content mt-3">
+    <div class="col-sm-12 mb-4">
+        <h5>
+            Create XML file for enterprise adapter, then upload it
+        </h5>
+    </div>
+
+    <div class="col-sm-12">
+
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" id="file" name="file" accept=".xml" />
+            <br />
+            <button type="button" class="btn btn-primary btn-sm mt-2" onclick="validate()">
+                <i class="fa fa-upload"></i> Upload
+            </button>
+        </form>
+    </div>
+
+    <div class="col-md-12 mt-5" style="overflow-x:auto;">
+        <div class="card">
+            <div class="card-header" id="headingOne" style="background-color:#f1f2f7">
+                <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        XML Example
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+
+                <code style="color:#4C0000;">
+
+                    <pre>
+    
+   <b style="color:black">IF ENTERPRISE ADAPTER IS USED AS SOURCE (TO READ DATA FROM DATABASE):</b>
+
+    &lt;prometheus&gt;
+        &lt;adapter&gt;<b style="color:black">{MSSQL/MySQL/Oracle}</b>&lt;/adapter&gt;
+        &lt;ipaddress&gt;<b style="color:black">{IP address of your server}</b>&lt;/ipaddress&gt;
+        &lt;port&gt;<b style="color:black">{Port of your server}</b>&lt;/port&gt;
+        &lt;database&gt;<b style="color:black">{Database name}</b>&lt;/database&gt;
+        &lt;username&gt;<b style="color:black">{Username for that database}</b>&lt;/username&gt;
+        &lt;password&gt;<b style="color:black">{Password for that database}</b>&lt;/password&gt;
+        &lt;direction&gt;<b style="color:black">{Source}</b>&lt;/direction&gt;
+        &lt;transactionTable&gt;
+            &lt;tableName&gt;<b style="color:black">{Table name}</b>&lt;/name&gt;
+            &lt;columns&gt;
+                &lt;column property="<b style="color:black">{transactionId/transactionAccount/transactionAmount/transactionType}</b>" PK="<b style="color:black">{true/false}</b>" FK="false"&gt;<b style="color:black">{Column name}</b>&lt;/column&gt;
+                &lt;column property="<b style="color:black">{transactionId/transactionAccount/transactionAmount/transactionType}</b>" PK="<b style="color:black">{true/false}</b>" FK="false"&gt;<b style="color:black">{Column name}</b>&lt;/column&gt;
+                &lt;column property="<b style="color:black">{transactionId/transactionAccount/transactionAmount/transactionType}</b>" PK="<b style="color:black">{true/false}</b>" FK="false"&gt;<b style="color:black">{Column name}</b>&lt;/column&gt;
+                &lt;column property="" PK="false" FK="true"&gt;
+                    &lt;columnName&gt;<b style="color:black">{Column name}</b>&lt;/columnName&gt;
+                    &lt;relatedTableName&gt;<b style="color:black">{Table name}</b>&lt;/relatedTableName&gt;
+                    &lt;primaryKey property=""&gt;<b style="color:black">{Column name}</b>&lt;/primaryKey&gt;
+                    &lt;descriptionColumn property="<b style="color:black">{transactionId/transactionAccount/TransactionAmount/TransactionType}</b>"&gt;<b style="color:black">{Column name}</b>&lt;/descriptionColumn&gt;
+                &lt;/column&gt;
+            &lt;/columns&gt;
+        &lt;/transactionTable&gt;
+    &lt;/prometheus&gt;
+
+
+   <b style="color:black">IF ENTERPRISE ADAPTER IS USED AS DESTINATION (TO WRITE DATA INTO DATABASE):</b>
+
+    &lt;prometheus&gt;
+        &lt;adapter&gt;<b style="color:black">{MSSQL/MySQL/Oracle}</b>&lt;/adapter&gt;
+        &lt;ipaddress&gt;<b style="color:black">{IP address of your server}</b>&lt;/ipaddress&gt;
+        &lt;port&gt;<b style="color:black">{Port of your server}</b>&lt;/port&gt;
+        &lt;database&gt;<b style="color:black">{Database name}</b>&lt;/database&gt;
+        &lt;username&gt;<b style="color:black">{Username for that database}</b>&lt;/username&gt;
+        &lt;password&gt;<b style="color:black">{Password for that database}</b>&lt;/password&gt;
+        &lt;direction&gt;<b style="color:black">{Destination}</b>&lt;/direction&gt;
+        &lt;tableNamePrefix&gt;<b style="color:black">{Prefix you want to see in front of table names that we create}</b>&lt;/tableNamePrefix&gt;
+    &lt;/prometheus&gt;
+</pre>
+
+                </code>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+
+    <script>
+
+    jQuery(document).ready(function () {
+
+        jQuery("#example").click(function () {
+            jQuery("#xmlExample").toggle();
+        });
+    });
+
+    function validate() {
+
+        var file = jQuery("#file").get(0).files;
+
+        if (file.length == 0) {
+            bootbox.alert("Please select a file to upload.")
+        }
+        else {
+            var fileName = file[0].name;
+            var fileExtension = fileName.split('.').pop();
+
+            if (fileExtension != "xml") {
+                bootbox.alert("Please upload .xml files only.");
+            }
+            else {
+                load(file);
+            }
+        }
+    }
+
+    function load(file) {
+
+        var data = new FormData();
+        data.append(file[0].name, file[0]);
+
+        var dialog = bootbox.dialog({
+            message: '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading ...</div>',
+            closeButton: false
+        })
+
+        setTimeout(function () {
+            jQuery.ajax({
+                type: "POST",
+                url: '@Url.Action("CreateXMLPost", "EnterpriseAdapter")',
+                contentType: false,
+                processData: false,
+                data: data,
+                success: function (response) {
+                    dialog.modal('hide');
+
+                    bootbox.alert(response.message, function () {
+                        dialog.modal('hide');
+
+                        if (response.status == 0) {
+                            window.location.replace('@Url.Action("Index", "EnterpriseAdapter")')
+                        }
+                    })
+                },
+                error: function () {
+                    dialog.modal('hide');
+                    bootbox.alert("There was a problem uploading the file. Check the data you entered.", function () {
+                        dialog.modal('hide');
+                    })
+                }
+            })
+        }, 500)
+    }
+
+    </script>
+
+}
+
+

@@ -1,0 +1,141 @@
+﻿@using Prometheus.Model.Models.EnterpriseAdapterModel
+
+@model EnterpriseAdapterModel
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Enterprise Adapter Details</h4>
+            <button type="button" class="close" onclick="closeEnterpriseAdapterModal()">&times;</button>
+        </div>
+
+        <div class="modal-body">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.EnterpriseAdapter)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.EnterpriseAdapter)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.ServerIP)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.ServerIP)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Port)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Port)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Username)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Username)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Password)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Password)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.DatabaseName)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.DatabaseName)
+                </dd>
+
+                @switch (Model.Direction)
+                {
+                    case DirectionEnum.Source:
+                        if (Model.ParentTable != null)
+                        {
+                            <dt>
+                                @Html.DisplayNameFor(model => model.ParentTable)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.ParentTable)
+                            </dd>
+                        }
+                        @foreach (var item in Model.Properties.First().SourceProperties)
+                        {
+                            <dt>
+                                @Html.DisplayFor(model => item.Name)
+                            </dt>
+
+                            if (item.Value == String.Empty)
+                            {
+                                <dd>
+                                    &nbsp;
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd>
+                                    @Html.DisplayFor(model => item.Value)
+                                </dd>
+                            }
+                        }
+
+                        break;
+                    case DirectionEnum.Destination:
+                        @foreach (var item in Model.Properties.First().DestinationProperties)
+                        {
+                            <dt>
+                                @Html.DisplayFor(model => item.Name)
+                            </dt>
+
+                            if (item.Value == String.Empty)
+                            {
+                                <dd>
+                                    &nbsp;
+                                </dd>
+                            }
+                            else
+                            {
+                                <dd>
+                                    @Html.DisplayFor(model => item.Value)
+                                </dd>
+                            }
+                        }
+                        break;
+                }
+
+            </dl>
+
+        </div>
+        <div class="modal-footer">
+            <div class="form-group col-md-12">
+                <a class="btn btn-primary btn-sm" href="@Url.Action("Edit", "EnterpriseAdapter", new { id = Model.Id })">
+                    <i class="fa fa-edit fa-lg"></i> Edit
+                </a>
+                <button type="button" class="btn btn-primary btn-sm" onclick="closeEnterpriseAdapterModal()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function closeEnterpriseAdapterModal() {
+        jQuery("#enterpriseAdapterDetailsModal").modal("hide");
+        jQuery("#enterpriseAdapterDetailsContainer").html("");
+    }
+
+</script>
+

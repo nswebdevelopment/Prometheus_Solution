@@ -1,0 +1,44 @@
+﻿@using Prometheus.Model.Models.ExchangesModel
+
+@model BasicInfoModel
+<div class="col-lg-12 col-md-6">
+    <section class="card">
+        <div class="twt-feed blue-bg">
+            <div class="corner-ribon black-ribon">
+                <a href="@Url.Action(Model.Name.ToLowerInvariant(), "exchanges")" title="More Info">
+                    <i class="fa fa-info-circle"></i>
+                </a>
+            </div>
+            @*<div class="fa fa-twitter wtt-mark"></div>*@
+            <div class="media">
+                <a href="@Url.Action(Model.Name.ToLowerInvariant(), "exchanges")" title="More Info">
+                    <img class="align-self-center mr-3" style="width:85px; height:85px;" alt="" src="@Model.ImageUrl">
+                </a>
+                <div class="media-body">
+                    <h2 class="text-white display-6">@Model.Name</h2>
+                    <p class="text-light">Exchange</p>
+                </div>
+            </div>
+
+        </div>
+        <div class="weather-category twt-category">
+            <ul>
+                <li class="active">
+                    <h5>@Model.Type</h5>
+                    Type
+                </li>
+                <li>
+                    <h5>@Model.Country</h5>
+                    Country
+                </li>
+                <li>
+                    <h5>@Model.PairsCount</h5>
+                    Currency Pairs
+                </li>
+            </ul>
+        </div>
+        <div class="twt-write col-sm-12">
+            <p>@Model.Description</p>
+        </div>
+    </section>
+</div>

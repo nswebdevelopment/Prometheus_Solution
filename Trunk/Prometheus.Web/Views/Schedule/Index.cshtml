@@ -1,0 +1,317 @@
+﻿@section Styles{
+    <link href="~/css/fullcalendar.css" rel="stylesheet" />
+
+    <style>
+        .fc-view-container {
+            background-color: white;
+        }
+    </style>
+}
+
+<div style="text-align:center;">
+    <div id="calendar" style="max-width: 95%; margin:auto;">
+    </div>
+</div>
+
+<div class="modal fade" id="createScheduleModal" tabindex="-1" role="dialog" aria-labelledby="CreateScheduleModal" aria-hidden="true" data-backdrop="static">
+    <div id="createScheduleContainer">
+    </div>
+</div>
+
+<div class="modal fade" id="editScheduleModal" tabindex="-1" role="dialog" aria-labelledby="EditScheduleModal" aria-hidden="true" data-backdrop="static">
+    <div id="editScheduleContainer">
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/js/moment.js"></script>
+    <script src="~/js/fullcalendar.js"></script>
+
+    <script>
+
+        jQuery(function () {
+            jQuery('#calendar').fullCalendar({
+                height: 700,
+                themeSystem: 'bootstrap4',
+                timezone: 'local',
+                eventMouseover: function (event, jsEvent, view) {
+                    jsEvent.target.style.cursor = 'pointer';
+                },
+                eventStartEditable: false,
+                eventLimit: true,
+                events: function (start, end, timezone, callback) {
+                    jQuery.ajax({
+                        url: "@Url.Action("Get", "Schedule")",
+                        type: 'GET',
+                        data: { startDate: start.toISOString(), endDate: end.toISOString() },
+                        dataType: 'JSON',
+                        success: function (result) {
+                            var events = [];
+                            if (!!result) {
+                                jQuery.map(result, function (r) {
+                                    events.push({
+                                        title: r.title,
+                                        start: r.startDate,
+                                        id: r.id,
+                                        jobId: r.jobId,
+                                    });
+                                });
+                            }
+                            callback(events);
+                        },
+                        error: function () {
+                            bootbox.alert("Loading jobs failed. Please try again.")
+                        }
+                    })
+                },
+                eventColor: '#007bff',
+                timeFormat: 'H:mm',
+                dayClick: function (date, jsEvent, view) {
+
+                    var dateClicked = date._d;
+                    var dateCurrent = new Date();
+                    if (dateClicked.setUTCHours(23, 59) < dateCurrent.getTime()) {
+                        bootbox.alert("Jobs cannot be scheduled in the past.");
+                    }
+                    else {
+                        jQuery.get('@Url.Action("Create", "Schedule")', function (model) {
+                            jQuery('#createScheduleContainer').html(model);
+                            jQuery('#createScheduleModal').modal("show");
+                            jQuery('#startDate').val(date._d.toISOString().slice(0, -1));
+                        });
+                    }
+                },
+                eventClick: function (event, element, view) {
+                    var id = event.id;
+                    var jobId = event.jobId;
+                    jQuery.get('@Url.Action("GetScheduleById", "Schedule")', { scheduleId: id, jobId: jobId }, function (model) {
+                        if (model == "") {
+                            bootbox.alert("Something went wrong. Please try again.")
+                        }
+                        else {
+                            var startOffset = (new Date(event.start._d)).getTimezoneOffset() * 60000;
+                            var localISOTime = new Date(event.start._d - startOffset).toISOString().slice(0, -1);
+
+                            jQuery('#editScheduleContainer').html(model);
+                            jQuery('#editScheduleModal').modal("show");
+                            jQuery('#startDate').val(localISOTime);
+                        }
+                    })
+                }
+            })
+        });
+
+        //create schedule
+        function CreateValidation() {
+            var selectedDateTime = new Date(jQuery("#startDate").val()).getTime();
+            var currentDateTime = new Date().getTime();
+
+            var isRecurrent = document.getElementById("repeat").checked;
+            var formData = jQuery('#formCreateSchedule').serializeArray();
+            var frequency = "";
+            var checkedValuesValidation = [];
+
+            if (isRecurrent) {
+                frequency = formData.find(frequency => frequency.name === 'frequency').value;
+                checkedValuesValidation = jQuery('input[name="checkDay"]:checked').map(function () {
+                    return this.value;
+                }).get();
+            }
+
+            var valid = jQuery("#formCreateSchedule").valid();
+
+            if (!valid || selectedDateTime < currentDateTime || (checkedValuesValidation.length == 0 && frequency == "WEEKLY")) {
+                return;
+            }
+            else {
+                if (isRecurrent) {
+                    var recurrenceRuleString = CreateRecurrenceRule(formData);
+                }
+
+                var model = {
+                    JobDefinitionId: jQuery("#jobDefinitionId").val(),
+                    Title: jQuery("#title").val(),
+                    Description: jQuery("#description").val(),
+                    StartDate: new Date(jQuery("#startDate").val()).toUTCString(),
+                    RecurrenceRule: recurrenceRuleString
+                };
+
+                jQuery.ajax({
+                    url: '@Url.Action("Post", "Schedule")',
+                    datatype: 'json',
+                    type: 'post',
+                    data: model,
+                    success: function (result) {
+                        jQuery('#createScheduleModal').modal('hide');
+                        jQuery('#createScheduleContainer').html("");
+
+                        bootbox.alert(result.message, function () {
+                            if (result.status == 0) {
+                                window.location.replace('@Url.Action("Index", "Schedule")');
+                            }
+                        })
+                    },
+                    error: function () {
+                        jQuery('#createScheduleModal').modal('hide');
+                        jQuery('#createScheduleContainer').html("");
+                        bootbox.alert("Something went wrong. Please try again.");
+                    }
+                });
+            }
+        }
+
+        //delete schedule/job
+        function DeleteSchedule() {
+            var scheduleId = jQuery("#scheduleId").val();
+            jQuery.ajax({
+                        url: '@Url.Action("DeleteSchedule", "Schedule")',
+                datatype: 'json',
+                type: 'post',
+                data: { id: scheduleId },
+                success: function (result) {
+                    jQuery("#editScheduleModal").modal("hide");
+                    jQuery("#editScheduleContainer").html("");
+                    bootbox.alert(result, function () {
+                        window.location.replace('@Url.Action("Index", "Schedule")');
+                    })
+                },
+                error: function () {
+                    jQuery("#editScheduleModal").modal("hide");
+                    jQuery("#editScheduleContainer").html("");
+                    bootbox.alert("Something went wrong. Please try again.");
+                }
+            });
+        }
+
+        function DeleteJob() {
+            var jobId = jQuery("#jobId").val();
+            jQuery.ajax({
+                url: '@Url.Action("DeleteJob", "Schedule")',
+                datatype: 'json',
+                type: 'post',
+                data: { id: jobId },
+                success: function (result) {
+                    jQuery("#editScheduleModal").modal("hide");
+                    jQuery("#editScheduleContainer").html("");
+
+                    bootbox.alert(result.message, function () {
+                        if (result.status == 0) {
+                            window.location.replace('@Url.Action("Index", "Schedule")');
+                        }
+                    })
+                },
+                error: function () {
+                    jQuery("#editScheduleModal").modal("hide");
+                    jQuery("#editScheduleContainer").html("");
+                    bootbox.alert("Something went wrong. Please try again.");
+                }
+            });
+        }
+
+        //edit schedule
+         function EditValidation() {
+            var selectedDateTime = new Date(jQuery("#startDate").val()).getTime();
+            var currentDateTime = new Date().getTime();
+
+            var isRecurrent = document.getElementById("repeat").checked;
+            var formData = jQuery('#formEditSchedule').serializeArray();
+            var frequency = "";
+            var checkedValuesValidation = [];
+
+             if (isRecurrent) {
+                frequency = formData.find(frequency => frequency.name === 'frequency').value;
+                checkedValuesValidation = jQuery('input[name="checkDay"]:checked').map(function () {
+                    return this.value;
+                }).get();
+            }
+
+            var valid = jQuery("#formEditSchedule").valid();
+
+            if (!valid || selectedDateTime < currentDateTime || (checkedValuesValidation.length == 0 && frequency == "WEEKLY")) {
+                return;
+            }
+            else {
+                if (isRecurrent) {
+                    var recurrenceRuleString = CreateRecurrenceRule(formData);
+                }
+
+                var model = {
+                    Id: jQuery("#scheduleId").val(),
+                    JobDefinitionId: jQuery("#jobDefinitionId").val(),
+                    Title: jQuery("#title").val(),
+                    Description: jQuery("#description").val(),
+                    StartDate: new Date(jQuery("#startDate").val()).toUTCString(),
+                    RecurrenceRule: recurrenceRuleString
+                };
+
+                jQuery.ajax({
+                    url: '@Url.Action("Put", "Schedule")',
+                    datatype: 'json',
+                    type: 'post',
+                    data: model,
+                    success: function (result) {
+                        jQuery('#editScheduleModal').modal('hide');
+                        jQuery('#editScheduleContainer').html("");
+
+                        bootbox.alert(result.message, function () {
+                            if (result.status == 0) {
+                                window.location.replace('@Url.Action("Index", "Schedule")');
+                            }
+                        })
+                    },
+                    error: function () {
+                        jQuery("#editScheduleModal").modal("hide");
+                        jQuery("#editScheduleContainer").html("");
+                        bootbox.alert("Something went wrong. Please try again.");
+                    }
+                });
+            }
+        }
+
+        //helper
+        function CreateRecurrenceRule(formData) {
+            var freq = formData.find(frequency => frequency.name === 'frequency').value;
+            var count = formData.find(ocurrences => ocurrences.name === 'ocurrences').value;
+            var interval = "";
+            var extra = "";
+
+            if (freq == "DAILY") {
+                interval = formData.find(interval => interval.name === 'dayInterval').value;
+            }
+            else if (freq == "WEEKLY") {
+                interval = formData.find(interval => interval.name === 'weekInterval').value;
+                var checkedValues = jQuery('input[name="checkDay"]:checked').map(function () {
+                    return this.value;
+                }).get();
+
+                var days = "";
+                for (var i = 0; i < checkedValues.length; i++) {
+                    if (i != 0) {
+                        days = days + ",";
+                    }
+                    days = days + checkedValues[i];
+                }
+                extra = "BYDAY=" + days + ";";
+            }
+            else if (freq == "MONTHLY") {
+                interval = formData.find(interval => interval.name === 'monthInterval').value;
+
+                var dayMonth = formData.find(interval => interval.name === 'onDayMonth').value;
+                extra = "BYMONTHDAY=" + dayMonth + ";";
+            }
+            else {
+                interval = formData.find(interval => interval.name === 'yearInterval').value;
+
+                var monthYear = formData.find(interval => interval.name === 'onMonthYear').value;
+                var dayYear = formData.find(interval => interval.name === 'onDayYear').value;
+                extra = "BYMONTHDAY=" + dayYear + ";" + "BYMONTH=" + monthYear + ";";
+            }
+
+            var string = "FREQ=" + freq + ";" + extra + "INTERVAL=" + interval + ";" + "COUNT=" + count;
+            return string;
+        }
+
+    </script>
+
+}

@@ -1,0 +1,153 @@
+﻿@using Prometheus.Model.Models.ExchangesModel
+
+@model ExtendedInfoModel
+<style>
+    .rounded-circle {
+        border-radius: unset !important;
+    }
+</style>
+
+<div class="col-md-12">
+    <aside class="profile-nav alt">
+        <section class="card">
+            <div class="card-header user-header alt bg-dark">
+                <div class="media">
+                    <a href="#">
+                        <img class="align-self-center rounded-circle mr-3" style="width:85px; height:85px;" alt="" src="@Model.ImageUrl">
+                    </a>
+                    <div class="media-body">
+                        <h2 class="text-light display-6">@Model.Name</h2>
+                        <p>Exchange</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body card-block">
+                <div class="row exchange_body">
+                    <div class="col-sm-2">
+                        <p>Markets:</p>
+                        <div id="availible_markets"></div>
+                    </div>
+                    <div class="default-tab col-sm-10">
+                        <nav>
+                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#overview" role="tab" aria-controls="nav-home" aria-selected="true">Overview</a>
+                                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#trades" role="tab" aria-controls="nav-profile" aria-selected="false">Recent Trades</a>
+                            </div>
+                        </nav>
+                        <div class="tab-content pl-3 pt-2" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div id="dataGridHolder">
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="trades" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                Soon...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </aside>
+</div>
+
+
+<script>
+    var availibleMarkets = null;
+    var selectedMarket = "";
+    var selectedExchange = @Html.Raw(Json.Serialize(Model.Name));
+
+    //datasource for dataGrid
+    var marketOverviewDataSource = new DevExpress.data.AspNet.createStore({
+        key: "symbol",
+        loadUrl: "@Url.Action("Overview", "Exchange")",
+        onBeforeSend: function (operation, ajaxSettings) {
+            return FormatDataBeforeAjaxRequest(operation, ajaxSettings);
+        }
+    });
+    function FormatDataBeforeAjaxRequest(operation, ajaxSettings) {
+        if (operation === "load") {
+            ajaxSettings.data = {
+                exchangeName: selectedExchange,
+                market: selectedMarket
+            }
+            return ajaxSettings;
+        }
+    }
+
+    jQuery(function () {
+        PopulateInitialDataSourceFromModel();
+
+        var marketList = jQuery("#availible_markets").dxList({
+            items: availibleMarkets,
+            selectionMode: 'single',
+            onSelectionChanged: function (e) {
+                selectedMarket = e.addedItems[0];
+                ReloadOverviewGridDataSource();
+            }
+        }).dxList("instance");
+
+        GenerateMarketOverviewDataGrid("dataGridHolder")
+    });
+
+    function PopulateInitialDataSourceFromModel() {
+        availibleMarkets = @Html.Raw(Json.Serialize(Model.Markets));
+    }
+
+    function GenerateMarketOverviewDataGrid(tabContentId) {
+        var overviewDataGrid = jQuery("#" + tabContentId)
+        jQuery(overviewDataGrid).dxDataGrid({
+            dataSource: marketOverviewDataSource,
+            columns: [
+                {
+                    dataField: "symbol",
+                    width: "100",
+                },
+                {
+                    dataField: "price"
+                },
+                {
+                    dataField: "bid"
+                },
+                {
+                    dataField: "ask"
+                },
+                {
+                    label: "vol.ts",
+                    dataField: "volume.timestamp"
+                },
+                {
+                    label: "vol.ps",
+                    dataField: "volume.priceSymbol"
+                },
+                {
+                    label: "vol.pa",
+                    dataField: "volume.priceAmount"
+                },
+                {
+                    label: "vol.qs",
+                    dataField: "volume.quantitySymbol"
+                },
+                {
+                    label: "vol.qa",
+                    dataField: "volume.quantityAmount"
+                }
+            ],
+            paging: {
+                pageSize: 10
+            },
+            loadPanel: {
+                enabled: true
+            },
+            showRowLines: true,
+            showBorders: true
+        }).dxDataGrid("instance");
+    }
+
+    function ReloadOverviewGridDataSource() {
+        var dataGridInstance = jQuery("#dataGridHolder").dxDataGrid("instance")
+        var dataSource = dataGridInstance.getDataSource();
+        dataSource.reload();
+        //or
+        //dataGridInstance.refresh()
+    }
+</script>

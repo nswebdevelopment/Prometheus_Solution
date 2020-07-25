@@ -1,0 +1,138 @@
+﻿@using Prometheus.Model.Models.EnterpriseAdapterModel
+
+@model IEnumerable<EnterpriseAdapterModel>
+@{
+    int counter = 0;
+}
+
+@section Styles{
+
+    <link href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+}
+
+<div class="content mt-3">
+    <div class="animated fadeIn">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong class="card-title">Enterprise Adapter</strong>
+                        <a asp-controller="EnterpriseAdapter" asp-action="Create" title="Add enterprise adapter (Form)"> &nbsp;<i class="fa fa-plus-square-o fa-lg"></i></a>
+                        <a asp-controller="EnterpriseAdapter" asp-action="CreateXML" title="Add enterprise adapter (XML)"> &nbsp;<i class="fa fa-file-code-o"></i></a>
+                    </div>
+                    <div class="card-body">
+                        <div style="overflow-x:auto;">
+                            <table id="enterpriseAdaptersTable" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr role="row">
+                                        <th style="text-align:center">#</th>
+                                        <th>Name</th>
+                                        <th>Adapter Type</th>
+                                        <th>Direction</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr role="row" class="odd">
+                                            <td class="sorting_1" style="text-align:center">@(counter += 1)</td>
+                                            <td>
+                                                <a href="#" onclick="enterpriseAdapterDetails(@item.Id)" title="Details">
+                                                    @item.Name
+                                                </a>
+                                            </td>
+                                            <td>@item.EnterpriseAdapter</td>
+                                            <td>@item.Direction.ToString()</td>
+                                            <td>
+                                                <a href="#" onclick="enterpriseAdapterDetails(@item.Id)" title="Details">
+                                                    <i class="fa fa-info-circle fa-lg"></i>
+                                                </a>
+                                                &nbsp;
+                                                <a href="@Url.Action("Edit", "EnterpriseAdapter", new { id = item.Id })" title="Edit">
+                                                    <i class="fa fa-pencil fa-lg"></i>
+                                                </a>
+                                                &nbsp;
+                                                <a href="#" onclick="confirmDelete(@item.Id)" title="Delete">
+                                                    <i class="fa fa-trash fa-lg"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div><!-- .animated -->
+</div>
+
+
+<div class="modal fade" id="enterpriseAdapterDetailsModal" tabindex="-1" role="dialog" aria-labelledby="enterpriseAdapterDetailsModal" aria-hidden="true" data-backdrop="static">
+    <div id="enterpriseAdapterDetailsContainer">
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        jQuery(document).ready(function () {
+            jQuery("#enterpriseAdaptersTable").dataTable({
+                "ordering": false
+            });
+        });
+
+        function confirmDelete(entAdapterId) {
+
+            var confirmedBootbox = bootbox.confirm("Are you sure you want to delete this enterprise adapter?", function (result) {
+
+                if (result) {
+
+                    var id = entAdapterId;
+
+                    jQuery.ajax({
+                        type: "POST",
+                        url: '@Url.Action("Delete", "EnterpriseAdapter")',
+                        data: { enterpriseAdapterId: id },
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.message != null) {
+
+                                bootbox.alert(response.message);
+                            }
+                            else {
+                                window.location.replace('@Url.Action("Index", "EnterpriseAdapter")');
+                            }
+                        },
+                        error: function () {
+                            bootbox.alert("Something went wrong. Please try again later.")
+                        }
+                    });
+                }
+            })
+        }
+
+        function enterpriseAdapterDetails(Id) {
+
+            jQuery.ajax({
+                type: "GET",
+                url: '@Url.Action("Details", "EnterpriseAdapter")',
+                data: { Id: Id },
+                success: function (model) {
+
+                    jQuery('#enterpriseAdapterDetailsContainer').html(model);
+                    jQuery('#enterpriseAdapterDetailsModal').modal("show");
+                }
+            });
+        };
+
+    </script>
+}

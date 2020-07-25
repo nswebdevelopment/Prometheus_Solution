@@ -1,0 +1,57 @@
+﻿@using Prometheus.Model.Models.ExchangesModel
+
+@model List<BasicInfoModel>
+@{
+    ViewData["Title"] = "Exchanges";
+
+    var CryptoExchanges = Model.Where(w => w.Type == "Multiple Cryptos");
+    var BtcLtcEth = Model.Where(w => w.Type == "BTC ETH LTC");
+    var BtcOnly = Model.Where(w => w.Type == "BTC Only");
+}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>Exchanges</h4>
+            </div>
+            <div class="card-body">
+                <div class="default-tab">
+                    <nav>
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#all" role="tab" aria-controls="nav-home" aria-selected="true">Overview</a>
+                            <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#crypto" role="tab" aria-controls="nav-profile" aria-selected="false">Crypto Exchanges</a>
+                            <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#btcltceth" role="tab" aria-controls="nav-contact" aria-selected="false">Btc and LTC/ETH</a>
+                            <a class="nav-item nav-link" id="nav-btcOnly-tab" data-toggle="tab" href="#btconly" role="tab" aria-controls="nav-contact" aria-selected="false">BTC only</a>
+                        </div>
+                    </nav>
+                    <div class="tab-content pl-3 pt-2" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="nav-home-tab">
+                            @foreach (var exchange in Model)
+                            {
+                                @Html.Partial("Exchange/_ExchangeProfile", exchange)
+                            }
+                        </div>
+                        <div class="tab-pane fade" id="crypto" role="tabpanel" aria-labelledby="nav-profile-tab">
+                            @foreach (var exchange in CryptoExchanges)
+                            {
+                                @Html.Partial("Exchange/_ExchangeProfile", exchange)
+                            }
+                        </div>
+                        <div class="tab-pane fade" id="btcltceth" role="tabpanel" aria-labelledby="nav-contact-tab">
+                            @foreach (var exchange in BtcLtcEth)
+                            {
+                                @Html.Partial("Exchange/_ExchangeProfile", exchange)
+                            }
+                        </div>
+                        <div class="tab-pane fade" id="btconly" role="tabpanel" aria-labelledby="nav-contact-tab">
+                            @foreach (var exchange in BtcOnly)
+                            {
+                                @Html.Partial("Exchange/_ExchangeProfile", exchange)
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

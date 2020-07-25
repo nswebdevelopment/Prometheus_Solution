@@ -1,0 +1,73 @@
+﻿@model BusinessAdapterModel
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Business Adapter Details</h4>
+            <button type="button" class="close" onclick="closeBusinessAdapterModal()">&times;</button>
+        </div>
+
+        <div class="modal-body">
+            <dl class="dl-horizontal">
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Direction)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Direction)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.BusinessAdapterType)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.BusinessAdapterType)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.FileName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.FileName)
+                </dd>
+
+
+            </dl>
+
+        </div>
+        <div class="modal-footer">
+            <div class="form-group col-md-12">
+                <button type="button" class="btn btn-primary btn-sm" onclick="editBusinessAdapterFromDetails(@Model.Id)" title="Edit business adapter">
+                    <i class="fa fa-edit fa-lg"></i> Edit
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="closeBusinessAdapterModal()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function closeBusinessAdapterModal() {
+        jQuery("#businessAdapterDetailsModal").modal("hide");
+        jQuery("#businessAdapterDetailsContainer").html("");
+    }
+
+    //body class="modal-open" dissapear after closing businessAdapterDetailsModal (refactor!)
+    function editBusinessAdapterFromDetails(Id) {
+        closeBusinessAdapterModal();
+        editBusinessAdapter(Id);
+
+    }
+
+</script>

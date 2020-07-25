@@ -1,0 +1,118 @@
+﻿@section Styles{
+    <link href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <style>
+        .btnEnvironment {
+            border: none;
+            outline: none;
+            padding: 12px 16px;
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
+
+            .btn:hover {
+                background-color: #ddd;
+            }
+
+            .btn.active {
+                background-color: #666;
+                color: white;
+            }
+    </style>
+}
+
+<div class="content mt-3">
+    <div class="animated fadeIn">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-inline-block mt-2"><strong class="card-title">Job History</strong></div>
+                        <button class="btn btn-sm float-right mr-1 active btnEnvironment" onclick="viewGrouped()" id="btnViewGrouped"><i class="fa fa-th-list"></i> Grouped</button>
+                        <button class="btn btn-sm float-right mr-1 btnEnvironment" onclick="viewAll()" id="btnViewAll"><i class="fa fa-bars"></i> All</button>
+                    </div>
+
+                    @*two different views*@
+                    <div id="viewGrouped"></div>
+                    <div id="viewAll"></div>
+
+                </div>
+            </div>
+
+        </div>
+    </div><!-- .animated -->
+</div><!-- .content -->
+
+
+
+@section Scripts{
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        jQuery(document).ready(viewGrouped());
+        
+        function viewAll() {
+            jQuery("#btnViewAll").addClass("active");
+            jQuery("#btnViewGrouped").removeClass("active");
+            jQuery("#viewGrouped").html("");
+
+            jQuery.ajax({
+                url: '@Url.Action("ViewAll", "JobHistory")',
+                datatype: 'json',
+                type: 'get',
+                success: function (model) {
+                    jQuery("#viewAll").html(model);
+                },
+                error: function () {
+                    bootbox.alert("Something went wrong. Please try again.");
+                }
+            })
+        }
+        
+        function viewGrouped() {
+            jQuery("#btnViewGrouped").addClass("active");
+            jQuery("#btnViewAll").removeClass("active");
+            jQuery("#viewAll").html("");
+
+            jQuery.ajax({
+                url: '@Url.Action("ViewGrouped", "JobHistory")',
+                datatype: 'json',
+                type: 'get',
+                success: function (model) {
+                    jQuery("#viewGrouped").html(model);
+
+                },
+                error: function () {
+                    bootbox.alert("Something went wrong. Please try again.");
+                }
+            })
+        }
+
+        function CollapseHistory(Id) {
+
+            jQuery("#arrow-" + Id).toggleClass('fa-chevron-right fa-chevron-down');
+            jQuery("#arrow-" + Id).toggleClass('text-dark text-primary');
+
+            if (jQuery("#" + Id).html() == "") {
+                jQuery.ajax({
+                    url: '@Url.Action("HistoryDetails", "JobHistory")',
+                    datatype: 'json',
+                    type: 'get',
+                    data: { Id: Id },
+                    success: function (model) {
+                        jQuery("#" + Id).html(model);
+                        jQuery("#" + Id).slideDown();
+                    },
+                    error: function () {
+                        bootbox.alert("Something went wrong. Please try again.");
+                    }
+                })
+            }
+            else {
+                jQuery("#" + Id).slideToggle();
+            }
+        }
+
+    </script>
+} 

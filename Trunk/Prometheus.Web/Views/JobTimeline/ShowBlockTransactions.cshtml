@@ -1,0 +1,60 @@
+﻿@model List<BlockTransactionViewModel>
+
+@{
+    int counter = 0;
+}
+
+@section Styles{
+    <link href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+}
+
+<div class="content mt-3">
+    <div class="animated fadeIn">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong class="card-title">Transactions</strong>
+                    </div>
+                    <div class="card-body">
+                        <table id="transactionsTable" class="table table-striped table-bordered">
+                            <thead>
+                                <tr role="row">
+                                    <th>#</th>
+                                    <th>Block Number</th>
+                                    <th>Transaction Hash</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr role="row" class="odd">
+                                        <td style="text-align:center">@(counter += 1)</td>
+                                        <td>@item.BlockNumber</td>
+                                        <td>@item.TransactionHash</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        jQuery(document).ready(function () {
+            jQuery("#transactionsTable").dataTable({
+                "ordering": false
+            });
+        });
+
+    </script>
+}

@@ -1,0 +1,24 @@
+﻿<body class="bg-white">
+    <div class="sufee-login d-flex align-content-center flex-wrap">
+        <div class="container">
+            <div class="login-content">
+                <div class="login-form">
+                    <div class="sufee-alert alert with-close alert-primary alert-dismissible fade show">
+                        <span class="badge badge-pill badge-primary">Success</span>
+                        Thank you for confirming your email.
+                        <button class="close" aria-label="Close" type="button" data-dismiss="alert">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <form method="get" asp-controller="Account" asp-action="Login">
+                        <button type="submit" class="btn btn-success btn-flat m-b-30 m-t-30">Sign in</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

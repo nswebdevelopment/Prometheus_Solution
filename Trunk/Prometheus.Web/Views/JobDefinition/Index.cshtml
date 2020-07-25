@@ -1,0 +1,290 @@
+﻿@model IEnumerable<JobDefinitionModel>
+
+@{
+    int counter = 0;
+}
+
+@section Styles{
+
+    <link href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+}
+
+<div class="content mt-3">
+    <div class="animated fadeIn">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong class="card-title">Job definition</strong>
+                        &nbsp;
+                        <a href="#" onclick="createJobDefinition()" title="Add job definition">
+                            <i class="fa fa-plus-square fa-lg"></i>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div style="overflow-x:auto;">
+
+                            <table id="jobDefinitionTable" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr role="row">
+                                        <th style="text-align:center">#</th>
+                                        <th>Name</th>
+                                        <th>Retry</th>
+                                        <th>Number of retry</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr role="row" class="odd">
+                                            <td class="sorting_1" style="text-align:center">@(counter += 1)</td>
+                                            <td>
+                                                <a href="#" onclick="jobDefinitonDetails(@item.Id)" title="Details">
+                                                    @item.Name
+                                                </a>
+                                            </td>
+                                            <td style="text-align:center">
+                                                @if (item.Retry)
+                                                {
+                                                    <i class="fa fa-check-circle"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="fa fa-times-circle"></i>
+                                                }
+                                            </td>
+                                            <td>@item.NumberOfRetry</td>
+                                            <td>
+                                                <a href="#" onclick="jobDefinitonDetails(@item.Id)" title="Details">
+                                                    <i class="fa fa-info-circle fa-lg"></i>
+                                                </a>
+                                                &nbsp;
+                                                <a href="#" onclick="editJobDefinition(@item.Id)" title="Edit">
+                                                    <i class="fa fa-pencil fa-lg"></i>
+                                                </a>
+                                                &nbsp;
+                                                <a href="#" onclick="confirmDelete(@item.Id)" title="Delete">
+                                                    <i class="fa fa-trash fa-lg"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div><!-- .animated -->
+</div><!-- .content -->
+<!--modals-->
+<div class="modal fade" id="createJobModal" tabindex="-1" role="dialog" aria-labelledby="CreateJobModal" aria-hidden="true" data-backdrop="static">
+    <div id="createJobContainer">
+    </div>
+</div>
+
+<div class="modal fade" id="editJobModal" tabindex="-1" role="dialog" aria-labelledby="EditJobModal" aria-hidden="true" data-backdrop="static">
+    <div id="editJobContainer">
+    </div>
+</div>
+
+<div class="modal fade" id="jobDetailsModal" tabindex="-1" role="dialog" aria-labelledby="JobDetailsModal" aria-hidden="true" data-backdrop="static">
+    <div id="jobDetailsContainer">
+    </div>
+</div>
+
+@section Scripts{
+
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+
+    <script type="text/javascript">
+
+        //create job
+        function createJobDefinition() {
+
+            jQuery.get('@Url.Action("Create", "JobDefinition")', function (model) {
+                jQuery('#createJobContainer').html(model);
+                jQuery('#createJobModal').modal("show");
+            })
+        }
+
+        function createValidation() {
+
+            var valid = jQuery("#formCreateJob").valid();
+
+            if (!valid || jQuery("#selectTo").val() == "" || jQuery("#selectFrom").val() == "") {
+                return;
+            }
+            else {
+
+                var retry = false;
+                if (jQuery('#retry').is(":checked")) {
+                    retry = true;
+                }
+
+                var properties = jQuery("#fromPropertiesForm").serializeArray().concat(jQuery("#toPropertiesForm").serializeArray());
+
+                var model = {
+                    Name: jQuery("#name").val(),
+                    Retry: retry,
+                    NumberOfRetry: jQuery("#numberOfRetry").val(),
+                    From: jQuery("#selectFrom").val(),
+                    To: jQuery("#selectTo").val(),
+                    PropertiesGet: properties,
+                };
+
+                jQuery.ajax({
+                    url: '@Url.Action("Create", "JobDefinition")',
+                    datatype: 'json',
+                    type: 'POST',
+                    data: model,
+                    success: function (response) {
+
+                        jQuery('#createJobModal').modal('hide');
+                        jQuery('#createJobContainer').html("");
+
+                        bootbox.alert(response.message, function () {
+                            window.location.replace('@Url.Action("Index", "JobDefinition")');
+                        })
+                    },
+                    error: function () {
+                        bootbox.alert("Something went wrong. Please try again.");
+                    }
+                })
+            }
+        }
+
+        // edit job
+        function editJobDefinition(Id) {
+
+            jQuery.ajax({
+                type: 'GET',
+                url: '@Url.Action("Edit", "JobDefinition")',
+                data: { Id: Id },
+                success: function (model) {
+
+                    jQuery('#editJobContainer').html(model);
+                    jQuery('#editJobModal').modal("show");
+                    var isChecked = document.getElementById("retry").checked;
+
+                    if (isChecked) {
+                        jQuery("#numberOfRetryDiv").show();
+                    }
+
+                    if (!isChecked) {
+                        jQuery("#numberOfRetry").val(1);
+                    }
+                }
+            })
+        }
+
+        function editValidation() {
+
+            var valid = jQuery("#formEditJob").valid();
+
+            if (!valid) {
+                return;
+            }
+            else {
+                var retry = false;
+                if (jQuery('#retry').is(":checked")) {
+                    retry = true;
+                }
+
+                var model = {
+                    Id: jQuery("#Id").val(),
+                    Name: jQuery("#name").val(),
+                    Retry: retry,
+                    NumberOfRetry: jQuery("#numberOfRetry").val(),
+                    PropertiesGet: jQuery("#propertiesForm").serializeArray()
+                };
+
+                jQuery.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Edit", "JobDefinition")',
+                    data: model,
+                    success: function (response) {
+
+                        jQuery('#editJobModal').modal('hide');
+                        jQuery('#editJobContainer').html("");
+
+                        bootbox.alert(response.message, function () {
+                            window.location.replace('@Url.Action("Index", "JobDefinition")');
+                        })
+                    },
+                    error: function () {
+                        bootbox.alert("Something went wrong. Please try again.");
+                    }
+                })
+            }
+        }
+
+        //job details
+        function jobDefinitonDetails(Id) {
+
+            jQuery.ajax({
+                type: 'GET',
+                url: '@Url.Action("Details", "JobDefinition")',
+                data: { Id: Id },
+                success: function (model) {
+                    jQuery('#jobDetailsContainer').html(model);
+                    jQuery('#jobDetailsModal').modal("show");
+                }
+            })
+        }
+
+        //delete job
+        function confirmDelete(jobDefId) {
+
+            var confirmedBootbox = bootbox.confirm("Are you sure you want to delete this job definition?", function (result) {
+
+                if (result) {
+                    var id = jobDefId;
+
+                    jQuery.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("Delete", "JobDefinition")',
+                        data: { jobDefinitionId: id },
+                        dataType: 'json',
+                        success: function (response) {
+
+                            if (response.message != null) {
+                                bootbox.alert(response.message);
+                            } else {
+                                window.location.replace('@Url.Action("Index", "JobDefinition")');
+                            }
+                        },
+                        error: function () {
+                            bootbox.alert("Something went wrong. Please try again later.")
+                        }
+                    })
+                }
+            })
+        }
+
+
+        //data tables
+        jQuery('#jobDefinitionTable').dataTable({
+            "ordering": false
+        });
+
+        //helper
+        function checkedRetry() {
+            var is = document.getElementById("retry").checked;
+            if (is) {
+                jQuery("#numberOfRetryDiv").show();
+            } else {
+                jQuery("#numberOfRetryDiv").hide();
+            }
+        }
+    </script>
+}
+
+
+

@@ -1,0 +1,148 @@
+﻿@using Prometheus.Model.Models.AuthorizationModel
+@model RegisterModel
+
+<body class="bg-white">
+    <div class="sufee-login d-flex align-content-center flex-wrap">
+        <div class="container">
+            <div class="login-content">
+                <div class="login-logo">
+                    <h3>Register</h3>
+                </div>
+                <div class="login-form">
+                    <form id="registrationForm" method="post">
+                        <fieldset id="personalInfo">
+                            <h4 style="text-align:left; margin-bottom:20px;">Personal info</h4>
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="FirstName">First Name</label>
+                                <input asp-for="FirstName" class="form-control" placeholder="FirstName">
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="LastName">LastName</label>
+                                <input asp-for="LastName" class="form-control" placeholder="SurName">
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Email">Email address</label>
+                                <input asp-for="Email" type="email" class="form-control" placeholder="Email">
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Password">Password</label>
+                                <input asp-for="Password" type="password" class="form-control" placeholder="Password">
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ConfirmPassword">Confirm Password</label>
+                                <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Password">
+                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            </div>
+                            <button type="button" id="next" class="btn btn-primary btn-flat m-b-30 m-t-30">Next</button>
+                        </fieldset>
+
+
+                        <fieldset id="companyInfo" style="display:none">
+                            <h4 style="text-align:left; margin-bottom:20px;">Company info</h4>
+                            <div class="form-group">
+                                <label asp-for="CompanyName">Name</label>
+                                <input asp-for="CompanyName" class="form-control" placeholder="Company Name">
+                                <span asp-validation-for="CompanyName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="CompanyAddress">Address</label>
+                                <input asp-for="CompanyAddress" class="form-control" placeholder="Company Address">
+                                <span asp-validation-for="CompanyAddress" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="CompanyEmail">Email</label>
+                                <input asp-for="CompanyEmail" class="form-control" placeholder="Email">
+                                <span asp-validation-for="CompanyEmail" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="CompanyContactPerson">Contact person</label>
+                                <input asp-for="CompanyContactPerson" class="form-control" placeholder="Contact person" />
+                                <span asp-validation-for="CompanyContactPerson" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="CompanyPhone">Phone</label>
+                                <input asp-for="CompanyPhone" class="form-control" placeholder="Phone Number">
+                                <span asp-validation-for="CompanyPhone" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="CompanyMobile">Mobile</label>
+                                <input asp-for="CompanyMobile" class="form-control" placeholder="Mobile Name">
+                                <span asp-validation-for="CompanyMobile" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Descrition">Description</label>
+                                <input asp-for="Descrition" class="form-control" placeholder="Description" />
+                                <span asp-validation-for="Descrition" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" id="register" class="btn btn-primary btn-flat m-1">Register</button>
+                                <button type="button" id="previous" class="btn btn-primary btn-flat m-1">Previous</button>
+                                <button type="submit" class="btn btn-outline-primary m-1" formnovalidate="formnovalidate">Register without company info</button>
+                            </div>
+
+                        </fieldset>
+
+                        <div class="register-link m-t-15 text-center">
+                            <p>Already have account ? <a asp-controller="Account" asp-action="Login"> Sign in</a></p>
+                        </div>
+
+                        @*<div class="checkbox">
+                                <label>
+                                    <input type="checkbox"> Agree the terms and policy
+                                </label>
+                            </div>*@
+                        @*<button type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30">Register</button>*@
+                        @*<div class="social-login-content">
+                                <div class="social-button">
+                                    <button type="button" class="btn social facebook btn-flat btn-addon mb-3"><i class="ti-facebook"></i>Register with facebook</button>
+                                    <button type="button" class="btn social twitter btn-flat btn-addon mt-2"><i class="ti-twitter"></i>Register with twitter</button>
+                                </div>
+                            </div>*@
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+@section Scripts {
+
+    @*@await Html.PartialAsync("_ValidationScriptsPartial")*@
+
+    <script src="~/assets/js/vendor/jquery-2.1.4.min.js"></script>
+    <script src="~/assets/js/popper.min.js"></script>
+    <script src="~/assets/js/plugins.js"></script>
+    <script src="~/assets/js/main.js"></script>
+    <script src="~/lib/jquery-mask-plugin/src/jquery.mask.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+    <script>
+
+        jQuery("#next").click(function () {
+            var form = jQuery("#registrationForm");
+
+            if (form.valid()) {
+                current = jQuery("#personalInfo");
+                next = jQuery("#companyInfo");
+                next.show();
+                current.hide();
+            }
+        });
+
+        jQuery("#previous").click(function () {
+            current = jQuery("#companyInfo");
+            previous = jQuery("#personalInfo");
+            previous.show();
+            current.hide();
+        });
+
+        jQuery("#CompanyPhone").mask("(000)000-0000");
+        jQuery("#CompanyMobile").mask("(000)000-0000");
+    </script>
+}

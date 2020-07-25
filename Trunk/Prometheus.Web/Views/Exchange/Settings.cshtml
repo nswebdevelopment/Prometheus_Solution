@@ -1,0 +1,18 @@
+﻿@using Prometheus.Model.Models.ExchangesModel
+
+@model List<BasicInfoModel>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>Settings</h4>
+            </div>
+            <div class="card-body">
+                @foreach (var exchange in Model)
+                {
+                    @Html.Partial("Exchange/_ExchangeSettings", exchange)
+                }
+            </div>
+        </div>
+    </div>
+</div>

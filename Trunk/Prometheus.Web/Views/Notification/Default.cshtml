@@ -1,0 +1,112 @@
+﻿@using Prometheus.BL.Interfaces
+
+@inject INotificationService _notificationService
+
+@{
+    long notificationCount = _notificationService.GetNotificationCount(User.Identity.GetUserProfileId() ?? default(long));
+}
+
+<script src="~/lib/signalr/signalr.js"></script>
+<div class="dropdown for-notification">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="notification" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        @if (notificationCount > 0)
+        {
+            <i class="noti fa fa-bell"><span class="count bg-danger">@notificationCount</span></i>
+        }
+        else
+        {
+            <i class="noti fa fa-bell"><span class="count bg-danger" style="display:none"></span></i>
+
+        }
+        <div class="noti-content dropdown-menu show" aria-labelledby="notification" x-placement="bottom-start" style="display:none">
+            <ul id="notiContent"></ul>
+        </div>
+    </button>
+</div>
+<script>
+    jQuery(function () {
+
+        function getLocalDateTime(dateTime) {
+            var dt = new Date(dateTime)
+            var localDate = dt.toLocaleDateString();
+            var localTime = dt.toLocaleTimeString();
+
+            return localDate + " " + localTime;
+        }
+
+        //hide notification
+        jQuery('html').click(function () {
+            jQuery('.noti-content').hide();
+        })
+
+        //update notification
+        function getNotification() {
+            jQuery('.noti-content').toggle();
+            jQuery('span.count.bg-danger').empty().hide();
+            jQuery.ajax({
+                type: 'GET',
+                url: '/Notification/GetNotifications',
+                success: function (response) {
+                    jQuery('#notiContent').empty();
+                    if (response.length == 0) {
+                        jQuery("#notiContent").append(jQuery('<li class="dropdown-item media bg-flat-color-3"> <i class="fa fa-frown-o"></i><p>Nothing new right now</p></li>'));
+                    }
+
+                    jQuery.each(response, function (index, value) {
+                        if (value.message == "Your job is done") {
+                            if (value.statusId == 4) {
+                                jQuery("#notiContent").append(jQuery('<li class="dropdown-item media bg-flat-color-5"> <i class="fa fa-check"></i><p>' + value.message + ' at ' + getLocalDateTime(value.createdAt) + '</p></li>'));
+                            }
+                            else {
+                                jQuery("#notiContent").append(jQuery('<li class="dropdown-item media bg-flat-color-9"> <i class="fa fa-check"></i><p>' + value.message + ' at ' + getLocalDateTime(value.createdAt) + '</p></li>'));
+                            }
+                        }
+                        else if (value.message == "Job execution started") {
+                            if (value.statusId == 4) {
+                                jQuery("#notiContent").append(jQuery('<li class="dropdown-item media bg-flat-color-1"> <i class="fa fa-clock-o"></i><p>' + value.message + ' at ' + getLocalDateTime(value.createdAt) + ' </p></li>'));
+                            }
+                            else {
+                                jQuery("#notiContent").append(jQuery('<li class="dropdown-item media bg-flat-color-9"> <i class="fa fa-clock-o"></i><p>' + value.message + ' at ' + getLocalDateTime(value.createdAt) + ' </p></li>'));
+
+                            }
+                        }
+                        else {
+                            if (value.statusId == 4) {
+                                jQuery("#notiContent").append(jQuery('<li class="dropdown-item media bg-flat-color-4"> <i class="fa fa-warning"></i><p>' + value.message + ' at ' + getLocalDateTime(value.createdAt) + '</p></li>'));
+                            }
+                            else {
+                                jQuery("#notiContent").append(jQuery('<li class="dropdown-item media bg-flat-color-9"> <i class="fa fa-warning"></i><p>' + value.message + ' at ' + getLocalDateTime(value.createdAt) + '</p></li>'));
+                            }
+                        }
+                    });
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            })
+        }
+
+        //count notifications
+        function updateNotificationCount() {
+            var count = 0;
+            count = parseInt(jQuery('span.count.bg-danger').html()) || 0;
+            count++;
+            jQuery('span.count.bg-danger').html(count).show();
+        }
+
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl("/notificationHub")
+            .build();
+
+        connection.on("ReceiveNotification", (message) => {
+            updateNotificationCount();
+        })
+
+        connection.start().catch(err => console.error(err.toString()));
+
+        jQuery("#notification").click(function (e) {
+            e.stopPropagation();
+            getNotification();
+        })
+    })
+</script>

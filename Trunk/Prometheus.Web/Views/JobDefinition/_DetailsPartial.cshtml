@@ -1,0 +1,87 @@
+﻿@model JobDefinitionModel
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Job Definition Details</h4>
+            <button type="button" class="close" onclick="closeJobDetailsModal()">&times;</button>
+        </div>
+
+        <div class="modal-body">
+
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.From)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Adapters.FirstOrDefault(a => a.Id == model.From).Name)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.To)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Adapters.FirstOrDefault(a => a.Id == model.To).Name)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.NumberOfRetry)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.NumberOfRetry)
+                </dd>
+
+                @foreach (var property in Model.PropertiesGet)
+                {
+                    <dt>@property.Name</dt>
+
+                    if (property.Value != String.Empty)
+                    {
+                        <dd>@property.Value</dd>
+                    }
+                    else
+                    {
+                        <dd>-</dd>
+                    }
+
+                }
+            </dl>
+
+        </div>
+        <div class="modal-footer">
+            <div class="form-group col-md-12">
+                <button type="button" class="btn btn-primary btn-sm" onclick="editJobFromDetails(@Model.Id)" id="btnEditJob" title="Edit job definition">
+                    <i class="fa fa-edit fa-lg"></i> Edit
+                </button>
+
+                <button type="button" class="btn btn-primary btn-sm" onclick="closeJobDetailsModal()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function closeJobDetailsModal() {
+        jQuery("#jobDetailsModal").modal("hide");
+        jQuery("#jobeDetailsContainer").html("");
+    }
+
+    function editJobFromDetails(Id) {
+        closeJobDetailsModal();
+        editJobDefinition(Id);
+    }
+</script>
+
+
+

@@ -1,0 +1,113 @@
+﻿@model JobDefinitionModel
+
+<div id="modalEdit" class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Edit Job Definition</h4>
+            <button type="button" class="close" onclick="closeEditJobModal()">&times;</button>
+        </div>
+
+        <div class="modal-body">
+            <form class="form-horizontal" id="formEditJob">
+                <input asp-for="Id" type="hidden" />
+                <div class="form-horizontal">
+
+                    <div class="row form-group">
+                        <label for="text-input" class="control-label col-md-2">Name</label>
+                        <div class="col-md-10">
+                            <input type="text" id="name" asp-for="Name" name="Name" class="form-control">
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <label for="select" class="control-label col-md-2">From</label>
+                        <div class="col-md-10">
+                            <select name="From" id="From" class="form-control" asp-for="From" asp-items="@(new SelectList(Model.Adapters, "Id", "Name"))" disabled></select>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <label for="select" class="control-label col-md-2">To</label>
+                        <div class="col-md-10">
+                            <select name="To" id="To" class="form-control" asp-for="To" asp-items="@(new SelectList(Model.Adapters, "Id", "Name"))" disabled></select>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+
+                        <label for="text-input" class="control-label col-md-2">Retry</label>
+
+                        <div class="col-md-10">
+                            <label class="switch switch-text switch-primary">
+                                <input id="retry" type="checkbox" asp-for="Retry" class="switch-input" name="Retry" onchange="checkedRetry()">
+                                <span data-on="On" data-off="Off" class="switch-label"></span>
+                                <span class="switch-handle">
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="numberOfRetryDiv" class="row form-group" style="display:none">
+                        <label for="text-input" class="control-label col-md-2">Number of retry</label>
+                        <div class="col-md-10">
+                            <input type="number" id="numberOfRetry" asp-for="NumberOfRetry" name="NumberOfRetry" class="form-control" min="1" max="10">
+                            <span asp-validation-for="NumberOfRetry" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div id="propertiesDiv"></div>
+        </div>
+
+        <div class="modal-footer">
+            <div class="form-group col-md-12">
+
+                <button type="button" class="btn btn-primary btn-sm mr-1" onclick="editValidation()">
+                    <i class="fa fa-dot-circle-o"></i> Submit
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="closeEditJobModal()">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@await Html.PartialAsync("_ValidationScriptsPartial");
+
+<script>
+    var propertiesGet = @Html.Raw(Json.Serialize(Model.PropertiesGet));
+
+    jQuery(document).ready(function () {
+        getProperties();
+    })
+    
+    function getProperties() {
+        htmlCode = "<form id=\"propertiesForm\">";
+
+        propertiesGet.forEach(function (element) {
+
+            var type = "text";
+            if (element.propertyType == 2) {
+                type = "number";
+            } else if (element.propertyType == 3) {
+                type = "datetime-local";
+            }
+
+            htmlCode += `
+                    <div class=\"row form-group\">
+                        <label class=\"control-label offset-md-2 col-md-3\">${element.name}</label>
+                        <div class=\"col-md-7\">
+                            <input type=\"${type}\" id=\"${element.name}\" name=\"${element.name}\" class=\"form-control\" value=\"${element.value}\">
+                        </div>
+                    </div>`;
+        });
+        jQuery("#propertiesDiv").html(htmlCode + "</form>");
+    }
+
+    function closeEditJobModal() {
+        jQuery("#editJobModal").modal("hide");
+        jQuery("#editJobContainer").html("");
+    }
+</script>

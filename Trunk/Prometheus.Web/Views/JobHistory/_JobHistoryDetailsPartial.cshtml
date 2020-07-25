@@ -1,0 +1,33 @@
+﻿@model List<JobModel>
+
+<table id="jobHistoryTable" class="table">
+    <thead>
+        <tr role="row">
+            <th>Updated At</th>
+            <th>Job Status</th>
+            <th>Message</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr role="row">
+                <td class="formatLocalDateTime">@item.UpdateTime.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")</td>
+                <td>@item.JobStatus</td>
+                <td width="50%">@item.Message</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script>
+    var datesUTC = document.getElementsByClassName("formatLocalDateTime");
+    for (var i = 0; i < datesUTC.length; i++) {
+        var dateUTC = datesUTC[i].innerText;
+        datesUTC[i].innerText = new Date(dateUTC).toLocaleString();
+    }
+
+    jQuery(".formatLocalDateTime").removeClass("formatLocalDateTime");
+    
+</script>
+

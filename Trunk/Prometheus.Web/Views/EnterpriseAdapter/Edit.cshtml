@@ -1,0 +1,538 @@
+﻿@using Prometheus.Model.Models.EnterpriseAdapterModel
+
+@model EnterpriseAdapterModel
+
+<div class="col-lg-8 offset-lg-2">
+    <div class="card">
+        <div class="card-header">
+            <strong>Edit Enterprise Adapter</strong>
+        </div>
+        <form asp-controller="EnterpriseAdapter" asp-action="Edit" method="post" id="myform" class="form-horizontal">
+            <div asp-validation-summary="ModelOnly"></div>
+            <div class="card-body card-block">
+                @Html.HiddenFor(model => Model.Direction)
+
+                <div class="row form-group">
+                    <div class="col col-md-3">
+                        <label for="Direction" class="form-control-label">Direction</label>
+                    </div>
+                    <div class="col-12 col-md-9" id="directionRadioBtn">
+                        @switch (Model.Direction)
+                        {
+                            case DirectionEnum.Source:
+                                <input disabled type="radio" name="direction" value="1" id="source" checked><span>&nbsp; Source &nbsp; &nbsp;</span>
+                                <input disabled type="radio" name="direction" value="2" id="destination"><span>&nbsp; Destination</span>
+                                break;
+                            case DirectionEnum.Destination:
+                                <input disabled type="radio" name="direction" value="1" id="source"><span>&nbsp; Source &nbsp; &nbsp;</span>
+                                <input disabled type="radio" name="direction" value="2" id="destination" checked><span>&nbsp; Destination</span>
+                                break;
+                        }
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col col-md-3">
+                        <label for="Name" class="form-control-label">Name</label>
+                    </div>
+                    <div class="col-12 col-md-9">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @title = "Enter name for this adapter" } })
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col col-md-3">
+                        <label for="EnterpriseAdapter" class="form-control-label">Enterprise Adapter</label>
+                    </div>
+                    <div class="col-12 col-md-9">
+                        <select disabled asp-for="EnterpriseAdapter" asp-items="Html.GetEnumSelectList<EnterpriseAdapterType>()" class="form-control col-md-12"></select>
+                        <span asp-validation-for="EnterpriseAdapter" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+                <div class="row form-group">
+                    <div class="col col-md-3">
+                        <label for="ServerIP" class="form-control-label">ServerIP</label>
+                    </div>
+                    <div class="col-12 col-md-9">
+                        @Html.EditorFor(model => model.ServerIP, new { htmlAttributes = new { @class = "form-control", @title = "Enter IP Address or host of your server" } })
+                        <span asp-validation-for="ServerIP" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col col-md-3">
+                        <label for="Port" class="form-control-label">Port</label>
+                    </div>
+                    <div class="col-12 col-md-9">
+                        @Html.EditorFor(model => model.Port, new { htmlAttributes = new { @class = "form-control", @title = "Enter port of your server" } })
+                        <span asp-validation-for="Port" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+                <div class="row form-group">
+                    <div class="col col-md-3">
+                        <label for="Username" class="form-control-label">Username</label>
+                    </div>
+                    <div class="col-12 col-md-9">
+                        @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control", @title = "Enter your username" } })
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col col-md-3">
+                        <label for="Password" class="form-control-label">Password</label>
+                    </div>
+                    <div class="col-12 col-md-9">
+                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @title = "Enter your password" } })
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col col-md-3">
+                        <label for="DatabaseName" class="form-control-label">Database Name</label>
+                    </div>
+                    <div class="col-12 col-md-9">
+                        @Html.EditorFor(model => model.DatabaseName, new { htmlAttributes = new { @class = "form-control", @title = "Enter database name" } })
+                        <span asp-validation-for="DatabaseName" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <br />
+                <br />
+
+                <div id="Relational">
+                    <div class="row form-group" id="0">
+                        <div class="col col-md-3">
+                            <label for="ParentTable" class="form-control-label">Table Name</label>
+                        </div>
+                        <div class="col-12 col-md-9">
+                            @Html.EditorFor(model => model.ParentTable, new { htmlAttributes = new { @class = "form-control col-md-11", @title = "Enter table name", @style = "float:left" } })
+                            <input type="button" class="btn btn-success col-md-1" value="+" title="Click to add Column" />
+                            <span asp-validation-for="ParentTable" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    @if (Model.Columns != null)
+                    {
+                        var j = 10;
+                        var i = 1;
+
+                        @foreach (var item in Model.Columns.Where(x => x.ParentId == null))
+                        {
+                            var className = "removal" + i;
+                            <ol id="0">
+                                <li class="3">
+                                    <div class="row form-group" id="0">
+                                        <div class="col col-md-3">
+                                            <label class="form-control-label">Column Name:</label>
+                                        </div>
+                                        <div class="col-12 col-md-9" id=@i>
+                                            @Html.EditorFor(model => item.ColumnName, new { htmlAttributes = new { @class = "form-control col-md-11 column columnName", @id = $"{i}", @style = "float:left" } })
+                                            <input type="button" class="btn btn-danger col-md-1" value="-" title="Remove Column" />
+                                            @Html.EditorFor(model => item.IsPrimaryKey, new { htmlAttributes = new { @id = $"Primary{i}", @class = "primary" } }) IsPrimaryKey
+                                            @Html.EditorFor(model => item.IsForeignKey, new { htmlAttributes = new { @id = $"Foreign{i}", @onclick = $"Checked({i})", @class = "foreign" } }) IsForeignKey
+                                            @if (item.PropertyNameId != null)
+                                            {
+                                                @Html.DropDownListFor(model => item.PropertyNameId, new List<SelectListItem>
+                                                    {
+                                                    new SelectListItem { Text = "Select Column Type"},
+                                                    new SelectListItem { Text = "TransactionId", Value = "1"},
+                                                    new SelectListItem { Text = "TransactionAccount", Value = "2"},
+                                                    new SelectListItem { Text = "TransactionAmount", Value = "3"},
+                                                    new SelectListItem {Text  = "TransactionType",Value="4"},
+                                                    }, new { @class = "ColumnType mt-1", @id = "" + i + i })
+                                            }
+
+
+                                            @if (item.RelatedTableName != null)
+                                            {
+                                                <div>
+                                                    <ol>
+                                                        <li>
+                                                            <span>Related Table:</span>
+                                                            <input type="text" value="@item.RelatedTableName" class="form-control related" />
+                                                        </li>
+                                                    </ol>
+                                                </div>
+                                            }
+                                            @Html.Raw(RenderTree(item, j))
+                                        </div>
+                                    </div>
+                                </li>
+                            </ol>
+                            i++;
+                            j += 10;
+                        }
+                    }
+
+                </div>
+
+                @{
+                    string RenderTree(EnterpriseAdapterTableColumnModel enterpriseAdapter, int j)
+                    {
+
+                        var html = "";
+                        if (enterpriseAdapter.Children != null)
+                        {
+                            var y = j + 1;
+                            html += "<ol id='0'><li class='3'><div id='" + y + y + y + "'>";
+                            foreach (var item in enterpriseAdapter.Children)
+                            {
+
+
+                                if (item.IsPrimaryKey)
+                                {
+                                    html += "<span>Primary Key:</span>";
+                                    html += "<input class='form-control column primaryColumn' type='text' id='" + j + j + "' value='" + item.ColumnName + "' />";
+                                }
+                                else
+                                {
+                                    html += "<span>Column Name:</span>";
+                                    html += "<input class='form-control column columnName colForeign' id='" + j + j + j + "' type='text' value='" + item.ColumnName + "' />";
+                                }
+
+                                if (!item.IsPrimaryKey && item.IsForeignKey)
+                                {
+                                    html += "<input type='checkbox' id='Foreign" + j + "' onclick='Checked(" + j + ")' class='foreign' checked /> <span>IsForeignKey</span>";
+                                }
+                                if (!item.IsPrimaryKey && !item.IsForeignKey)
+                                {
+                                    html += "<input type='checkbox' id='Foreign" + j + "' onclick='Checked(" + j + ")' class='foreign' /> <span>IsForeignKey</span> ";
+                                }
+                                if (item.RelatedTableName != null)
+                                {
+                                    html += "<div><ol><li><span>Related Table:</span><input class='form-control related' type='text' value='" + item.RelatedTableName + "' /></li></ol></div>";
+                                }
+                                if ((int?)item.PropertyNameId == 1)
+                                {
+                                    html += "<select class='ColumnType mt-1' name=item.PropertyNameId>" +
+                                                "<option>Select Column Type</option>" +
+                                                "<option selected value='1'>TransactionId</option>" +
+                                                "<option value='2'>TransactionAccount</option>" +
+                                                "<option value='3'>TransactionAmount</option>" +
+                                                "<option value='4'>TransactionType</option>" +
+                                            "</select>";
+                                }
+                                if ((int?)item.PropertyNameId == 2)
+                                {
+                                    html += "<select class='ColumnType mt-1' name=item.PropertyNameId>" +
+                                                "<option>Select Column Type</option>" +
+                                                "<option value='1'>TransactionId</option>" +
+                                                "<option selected value='2'>TransactionAccount</option>" +
+                                                "<option value='3'>TransactionAmount</option>" +
+                                                "<option value='4'>TransactionType</option>" +
+                                            "</select>";
+                                }
+                                if ((int?)item.PropertyNameId == 3)
+                                {
+                                    html += "<select class='ColumnType mt-1' name=item.PropertyNameId>" +
+                                                "<option>Select Column Type</option>" +
+                                                "<option value='1'>TransactionId</option>" +
+                                                "<option value='2'>TransactionAccount</option>" +
+                                                "<option selected value='3'>TransactionAmount</option>" +
+                                                "<option value='4'>TransactionType</option>" +
+                                            "</select>";
+                                }
+                                if ((int?)item.PropertyNameId == 4)
+                                {
+                                    html += "<select class='ColumnType mt-1' name=item.PropertyNameId>" +
+                                                "<option>Select Column Type</option>" +
+                                                "<option value='1'>TransactionId</option>" +
+                                                "<option value='2'>TransactionAccount</option>" +
+                                                "<option value='3'>TransactionAmount</option>" +
+                                                "<option selected value='4'>TransactionType</option>" +
+                                            "</select>";
+                                }
+                                j++;
+                                html += RenderTree(item, j);
+                            }
+                        }
+                        html += "</div></li></ol>";
+
+                        return html;
+                    }
+                }
+
+                <div id="PropertySection">
+
+                </div>
+
+            </div>
+            <div class="card-footer">
+                <button type="button" onclick="update()" class="btn btn-primary">
+                    <i class="fa fa-dot-circle-o"></i> Submit
+                </button>
+                <button type="button" onclick="back()" class="btn btn-primary">Back</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<style>
+    ul, ol {
+        display: block;
+    }
+
+    ol {
+        list-style-type: none;
+    }
+
+    li {
+        display: list-item;
+    }
+
+    ul ul, ol ul {
+        list-style-type: none;
+        margin-left: 60px;
+    }
+
+    ol ol, ul ol {
+        list-style-type: none;
+        margin-left: 60px;
+    }
+</style>
+
+@section Scripts{
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script>
+
+        var prop = @Html.Raw(Json.Serialize(Model.Properties[0]));
+
+        direction = jQuery("input[name = 'direction']:checked").val();
+        jQuery("#PropertySection").html("");
+
+        switch (direction) {
+            case "1":
+                for (var item = 0; item < prop.sourceProperties.length; item++) {
+                    jQuery("#PropertySection").append(generateProperty(prop.sourceProperties[item].name, prop.sourceProperties[item].value));
+                }
+                break;
+            case "2":
+                for (var item = 0; item < prop.destinationProperties.length; item++) {
+                    jQuery("#PropertySection").append(generateProperty(prop.destinationProperties[item].name, prop.destinationProperties[item].value));
+                }
+                break;
+        }
+
+        function generateProperty(name, value) {
+
+            var property = `
+                <div class="row form-group">
+                    <div class="col col-md-3">
+                        <label class="form-control-label" for="text-input">${name}</label>
+                    </div>
+                    <div class="col-12 col-md-9">
+                        <input name="${name}" class="form-control" id="${name}" type="text" value="${value}">
+                        <span class="text-danger field-validation-valid" data-valmsg-replace="true" data-valmsg-for="${name}"></span>
+                    </div>
+                </div>`;
+
+            return property;
+        }
+
+        jQuery(document).on('focus', 'select.ColumnType', function () {
+            jQuery('select.ColumnType').find('option').prop('disabled', false);
+            jQuery('select.ColumnType').each(function () {
+                jQuery('select.ColumnType').not(this).find('option[value="' + this.value + '"]').prop('disabled', true);
+            });
+        });
+
+        jQuery(document).ready(function () {
+            if (jQuery("input[name='direction']:checked").val() == 1 && jQuery("#EnterpriseAdapter").val() < 4) {
+                jQuery("#Relational").show();
+            }
+            else {
+                jQuery("#Relational").hide();
+            }
+
+            var i = 1;
+            jQuery('body').on('click', 'input.btn-success', function () {
+                var element = jQuery('<ol id="0">' +
+                    '<li class="3">' +
+                    '<div class="row form-group" id="0">' +
+                    '<div class="col col-md-3">' +
+                    '<label class="form-control-label">Column Name:</label>' +
+                    '</div>' +
+                    '<div class="col-12 col-md-9" id="' + 1 + i+'">' +
+                    '<input type="text" class="form-control col-md-11 column columnName" style="float:left" id="'+1+i+'"/>' +
+                    '<input type="button" class="btn btn-danger col-md-1"  value="-" title="Remove Column"/>' +
+                    '<input type="checkbox" class="primary"/> IsPrimaryKey ' +
+                    '<input type="checkbox" onclick="Checked(123' + i + ')" class="foreign" /> IsForeignKey ' +
+                    '<select class="ColumnType mt-1"> ' +
+                    '<option value="0">--Select Column Type--</option> ' +
+                    '<option value="1" title="Required">TransactionId</option> ' +
+                    '<option value="2" title="Required">TransactionAccount</option> ' +
+                    '<option value="3" title="Required">TransactionAmount</option> ' +
+                    '<option value="4" title="Optional">TransactionType</option> ' +
+                    '</select>' +
+                    '</div>' +
+                    '</div>' +
+                    '</li >' +
+                    '</ol > ');
+
+                element.find('input.foreign').attr("id", "Foreign123" + i);
+                jQuery(this).parent().parent().parent().append(element);
+                i++;
+            });
+            jQuery('body').on('click', 'ol li input.btn-danger', function () {
+                jQuery(this).closest('ol').empty();
+
+            });
+        });
+
+        function Checked(Id) {
+
+            var isChecked = jQuery("#Foreign" + Id).prop('checked');
+
+            if (isChecked) {
+                var foreign = jQuery('<div><ol  id="' + Id + 2 + '"> ' +
+                    '<li class="removal' + Id + '" id="'+Id+2+'">' +
+                    'Related Table:<input type="text" class="form-control related" />' +
+                    '<span>Primary Key:</span>' +
+                    '<input type="text" class="form-control column primaryColumn" id="' + Id + 1 + '"/>' +
+                    '<span>Column Name:</span>' +
+                    '<input type="text" class="form-control column columnName colForeign" id="' + Id + 2 + '"/>' +
+                    '<input type="checkbox" onclick="Checked(' + Id + '' + 1 + ')" class="foreign" id="Foreign' + Id + '' + 1 + '"/> IsForeignKey ' +
+                    '</li>' +
+                    '</ol></div>');
+
+                jQuery("#Foreign" + Id).parent().append(foreign);
+                jQuery("#Foreign" + Id).siblings('select').appendTo('.removal' + Id);
+            }
+            else {
+                var prvi = jQuery("#Foreign" + Id).closest('div');
+                jQuery("#Foreign" + Id).closest('div').find('select').appendTo(prvi);
+                jQuery("#Foreign" + Id).siblings('ol').remove();
+                jQuery("#Foreign" + Id).siblings('div').remove();
+
+            }
+        }
+
+        function back() {
+            window.history.back();
+        }
+
+        function update() {
+            var valid = jQuery("#myform").valid();
+
+            if (!valid) {
+                return;
+            }
+            else {
+                var list = [];
+
+                switch (direction) {
+                    case "1":
+                        jQuery('ol input.column').each(function () {
+                            if (jQuery(this).siblings('input.foreign').prop('checked') == true && jQuery(this).hasClass("columnName")) {
+                                var related = jQuery(this).siblings('div').children().children().children("input.related").val();
+                            }
+                            else {
+                                var related = null;
+                            }
+                            if (jQuery(this).siblings('select').length) {
+                                if (jQuery(this).siblings('select').val() != 0 && jQuery(this).hasClass("columnName"))
+                                    var selected = jQuery(this).siblings('select').val();
+                                else {
+                                    var selected = null;
+                                }
+                            }
+                            else {
+                                var selected = null;
+                            }
+                            if (jQuery(this).hasClass("primaryColumn")) {
+                                var primary = true;
+                            }
+                            else {
+                                if (jQuery(this).siblings('input.primary').length) {
+                                    var primary = jQuery(this).siblings('input.primary').prop('checked');
+                                }
+                                else {
+                                    var primary = false;
+                                }
+                            }
+                            if (jQuery(this).hasClass("colForeign")) {
+                                var foreign = jQuery(this).siblings('input.foreign').prop('checked');
+                            }
+                            else {
+                                if (jQuery(this).siblings('input.foreign').length && !jQuery(this).hasClass('primaryColumn')) {
+                                    var foreign = jQuery(this).siblings('input.foreign').prop('checked');
+                                }
+                                else {
+                                    var foreign = false;
+                                }
+                            }
+                            list.push({
+                                Id: jQuery(this).attr('id'),
+                                ColumnName: jQuery(this).val(),
+                                RelatedTableName: related,
+                                IsForeignKey: foreign,
+                                IsPrimaryKey: primary,
+                                ParentId: jQuery(this).parent().parent().parent().parent().attr('id'),
+                                PropertyNameId: selected
+                            });
+                        });
+
+                        for (var item = 0; item < prop.sourceProperties.length; item++) {
+                            prop.sourceProperties[item].value = jQuery("#" + prop.sourceProperties[item].name).val();
+                        }
+                        break;
+                    case "2":
+                        for (var item = 0; item < prop.destinationProperties.length; item++) {
+                            prop.destinationProperties[item].value = jQuery("#" + prop.destinationProperties[item].name).val();
+                        }
+                        break;
+                }
+
+                var Data = {
+                    Direction: jQuery("input[name = 'direction']:checked").val(),
+                    EnterpriseAdapter: jQuery('#EnterpriseAdapter').val(),
+                    Name: jQuery('#Name').val(),
+                    ServerIP: jQuery('#ServerIP').val(),
+                    DatabaseName: jQuery('#DatabaseName').val(),
+                    Port: jQuery('#Port').val(),
+                    Username: jQuery('#Username').val(),
+                    Password: jQuery('#Password').val(),
+                    ParentTable: jQuery("#ParentTable").val(),
+                    Columns: list,
+                    Properties: []
+                }
+
+                Data.Properties.push(prop);
+
+                var dialog = bootbox.dialog({
+                    message: '<div class="text-center"><i class="fa fa-spin fa-spinner"></i> Loading ...</div>',
+                    closeButton: false
+                })
+                setTimeout(function () {
+                    jQuery.ajax({
+                        url: '@Url.Action("Edit", "EnterpriseAdapter")',
+                        datatype: 'json',
+                        type: 'post',
+                        data: Data,
+                        success: function (result) {
+                            dialog.modal('hide');
+                            bootbox.alert(result.message, function () {
+                                if (result.status == 0) {
+                                    window.location.replace('@Url.Action("Index", "EnterpriseAdapter")')
+                                }
+                            })
+                        },
+                        error: function () {
+                            bootbox.alert("Something went wrong.")
+                        }
+                    })
+                }, 1000);
+            }
+        }
+
+    </script>
+}

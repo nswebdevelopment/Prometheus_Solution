@@ -1,0 +1,247 @@
+﻿@model JobDefinitionModel
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Add Job Definition</h4>
+            <button type="button" class="close" onclick="closeCreateJobModal()">&times;</button>
+        </div>
+
+        <div class="modal-body">
+            <form class="form-horizontal" id="formCreateJob">
+                <div class="form-horizontal">
+                    <div class="row form-group">
+                        <label for="text-input" class="control-label col-md-2">Name</label>
+                        <div class="col-md-10">
+                            <input type="text" id="name" asp-for="Name" name="Name" class="form-control">
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <label for="select" class="control-label col-md-2">From</label>
+                        <div class="col-md-10">
+                            <select class="form-control" single id="selectFrom" onchange="getAdaptersAndProperties()">
+                                <option value="" id="chooseOptFrom">Choose</option>
+                                <optgroup label="@AdapterType.Enterprise" id="groupEnterpriseFrom" value="enterprise"></optgroup>
+                                <optgroup label="@AdapterType.Crypto" id="groupCryptoFrom" value="crypto"></optgroup>
+                                <optgroup label="@AdapterType.Business" id="groupBusinessFrom" value="business"></optgroup>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <label for="select" class="control-label col-md-2">To</label>
+                        <div class="col-md-10">
+                            <select class="form-control" single id="selectTo" onchange="getToProperties()">
+                                <option value="" id="chooseOptTo">Choose</option>
+                                <optgroup label="@AdapterType.Enterprise" id="groupEnterpriseTo"></optgroup>
+                                <optgroup label="@AdapterType.Crypto" id="groupCryptoTo"></optgroup>
+                                <optgroup label="@AdapterType.Business" id="groupBusinessTo"></optgroup>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display:none;">
+                        <select name="EnterpriseAdapterId" id="EnterpriseAdapterId" class="form-control" asp-for="EnterpriseAdapterId" asp-items="@(new SelectList(Model.EnterpriseAdapters, "Id", "Name"))"></select>
+                        <select name="CryptoAdapterId" id="CryptoAdapterId" class="form-control" asp-for="CryptoAdapterId" asp-items="@(new SelectList(Model.CryptoAdapters, "Id", "Name"))"></select>
+                        <select name="BusinessAdapterId" id="BusinessAdapterId" class="form-control" asp-for="BusinessAdapterId" asp-items="@(new SelectList(Model.BusinessAdapters, "Id", "Name"))"></select>
+                    </div>
+
+                    <div class="row form-group">
+
+                        <label for="text-input" class="control-label col-md-2">Retry</label>
+
+                        <div class="col-md-10">
+                            <label class="switch switch-text switch-primary">
+                                <input id="retry" type="checkbox" asp-for="Retry" class="switch-input" name="Retry" onchange="checkedRetry()">
+                                <span data-on="On" data-off="Off" class="switch-label"></span>
+                                <span class="switch-handle">
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="numberOfRetryDiv" class="row form-group" style="display:none">
+                        <label for="text-input" class="control-label col-md-2">Number of retry</label>
+                        <div class="col-md-10">
+                            <input type="number" id="numberOfRetry" asp-for="NumberOfRetry" name="NumberOfRetry" class="form-control" value="1" min="1" max="10">
+                            <span asp-validation-for="NumberOfRetry" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div id="fromPropertiesDiv"></div>
+            <div class="mt-md-4" id="toPropertiesDiv"></div>
+        </div>
+
+        <div class="modal-footer">
+            <div class="form-group col-md-12">
+
+                <button type="button" class="btn btn-primary btn-sm mr-1" onclick="createValidation()">
+                    <i class="fa fa-dot-circle-o"></i> Submit
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="closeCreateJobModal()">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@await Html.PartialAsync("_ValidationScriptsPartial");
+
+<script>
+    var properties = @Html.Raw(Json.Serialize(Model.Properties));
+
+    jQuery(document).ready(function () {
+        getFromSelectList();
+    });
+
+
+    //mapping
+    function getFromSelectList() {
+
+        for (j = 1; j < 4; j++) {
+
+            var type = "";
+            if (j == 1) {
+                type = "Enterprise";
+            } else if (j == 2) {
+                   type = "Crypto";
+            } else if (j == 3) {
+                type = "Business";
+            }
+            var adapters = jQuery("#" + type + "AdapterId")[0].innerHTML;
+
+            if (adapters == "") {
+                jQuery("#group" + type + "From").append(jQuery("<option></option>").attr("disabled", "disabled").text("No adapters defined"));
+            }
+            else {
+                var adapterList = jQuery("#" + type + "AdapterId")[0].children;
+                var optionElements = "";
+
+                for (i = 0; i < adapterList.length; i++) {
+                    name = adapterList[i].text;
+                    adapterList[i].className = name.slice(name.lastIndexOf('/') + 1);
+                    adapterList[i].text = name.substr(0, name.lastIndexOf('/'));
+
+                    optionElements = optionElements + adapterList[i].outerHTML;
+                };
+                jQuery("#group" + type + "From")[0].innerHTML = optionElements
+            }
+        }
+    };
+    
+    function getAdaptersAndProperties() {
+
+        jQuery("#chooseOptFrom").remove();
+        jQuery("#chooseOptTo").show();
+
+        jQuery("#fromPropertiesDiv").html("");
+        jQuery("#toPropertiesDiv").html("");
+
+        var adapter = jQuery("#selectFrom").val();
+
+        jQuery.ajax({
+            type: 'GET',
+            url: '@Url.Action("CheckAdapterMapping", "JobDefinition")',
+            data: { adapterId: adapter },
+            success: function (adapters) {
+
+                var adapterCollection = [{ adapter: adapters.enterpriseAdapters }, { adapter: adapters.cryptoAdapters }, { adapter: adapters.businessAdapters }];
+
+                for (a = 0; a < adapterCollection.length; a++) {
+
+                    var type;
+                    if (a == 0) {
+                        type = "Enterprise";
+                    } else if (a == 1) {
+                        type = "Crypto";
+                    } else if (a == 2) {
+                        type = "Business";
+                    }
+
+                    var adapterList = adapterCollection[a].adapter;
+
+                    jQuery("#group" + type + "To")[0].innerHTML = "";
+
+                    if (adapterList == "") {
+                        jQuery("#group" + type + "To").append(jQuery("<option></option>").attr("disabled", "disabled").text("No adapters"));
+                    }
+                    else {
+                        adapterList.forEach(function (element) {
+                            jQuery("#group" + type + "To").append(jQuery("<option></option>").attr("value", element.id).addClass((element.name).slice((element.name).lastIndexOf('/') + 1)).text((element.name).substr(0, (element.name).lastIndexOf('/'))));
+                        });
+                    }
+                };
+
+                getFromProperties();
+            }
+        });
+    }
+
+    //properties
+    function getFromProperties() {
+        var htmlCode = "";
+        htmlCode = "<form id=\"fromPropertiesForm\">";
+        properties.forEach(function (element) {
+
+            if (element.adapterTypeItem.toString() == jQuery("#selectFrom option:selected")[0].className) {
+
+                element.fromProperties.forEach(function (element) {
+
+                    htmlCode += generateHTMLElement(element);
+                });
+            }
+        });
+        jQuery("#fromPropertiesDiv").html(htmlCode + "</form>");
+    }
+
+    function getToProperties() {
+        jQuery("#chooseOptTo").hide();
+
+        var htmlCode = "";
+        htmlCode = "<form id=\"toPropertiesForm\">";
+
+        properties.forEach(function (element) {
+
+            if (element.adapterTypeItem.toString() == jQuery("#selectTo option:selected")[0].className) {
+
+                element.toProperties.forEach(function (element) {
+
+                    htmlCode += generateHTMLElement(element);
+                });
+            }
+        });
+        jQuery("#toPropertiesDiv").html(htmlCode + "</form>");
+    }
+    
+    function generateHTMLElement(element) {
+
+        var type = "text";
+        if (element.propertyType == 2) {
+            type = "number";
+        }
+        else if (element.propertyType == 3) {
+            type = "datetime-local";
+        }
+
+        var html = `
+            <div class=\"row form-group\">
+                 <label class=\"control-label offset-md-2 col-md-3\"> ${element.name} </label>
+                 <div class=\"col-md-7\">
+                      <input type=\"${type}\" id=\"${element.name}\" name=\"${element.name}\" class=\"form-control\">
+                 </div>
+            </div>`;
+
+        return html;
+    }
+    
+    function closeCreateJobModal() {
+        jQuery("#createJobModal").modal("hide");
+        jQuery("#createJobContainer").html("");
+    };
+</script>

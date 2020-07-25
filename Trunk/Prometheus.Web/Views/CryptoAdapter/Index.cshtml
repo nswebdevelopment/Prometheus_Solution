@@ -1,0 +1,317 @@
+﻿@model IEnumerable<CryptoAdapterModel>
+@{
+    int counter = 0;
+}
+
+@section Styles{
+
+    <link href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+}
+
+<div class="content mt-3">
+    <div class="animated fadeIn">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <strong class="card-title">Crypto Adapter</strong>
+                        &nbsp;
+                        <a href="#" onclick="createCryptoAdapter()" title="Add crypto adapter">
+                            <i class="fa fa-plus-square fa-lg"></i>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div style="overflow-x:auto;">
+                            <table id="CryptoAdapterTable" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr role="row">
+                                        <th style="text-align:center">#</th>
+                                        <th>Name</th>
+                                        <th>Adapter Type</th>
+                                        <th>Direction</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr role="row" class="odd">
+                                            <td class="sorting_1" style="text-align:center">@(counter += 1)</td>
+                                            <td>
+                                                <a href="#" onclick="cryptoAdapterDetails(@item.Id)" title="Details">
+                                                    @item.Name
+                                                </a>
+                                            </td>
+
+                                            <td>@item.NodeType</td>
+                                            <td>@item.Direction.ToString()</td>
+                                            <td>
+                                                <a href="#" onclick="cryptoAdapterDetails(@item.Id)" title="Details">
+                                                    <i class="fa fa-info-circle fa-lg"></i>
+                                                </a>
+                                                &nbsp;
+                                                <a href="#" onclick="editCryptoAdapter(@item.Id)" title="Edit">
+                                                    <i class="fa fa-pencil fa-lg"></i>
+                                                </a>
+                                                &nbsp;
+                                                <a href="#" onclick="confirmDelete(@item.Id)" title="Delete">
+                                                    <i class="fa fa-trash fa-lg"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div><!-- .animated -->
+</div><!-- .content -->
+
+<div class="modal fade" id="createCryptoAdapterModal" tabindex="-1" role="dialog" aria-labelledby="createCryptoAdapterModal" aria-hidden="true" data-backdrop="static">
+    <div id="createCryptoAdapterContainer">
+    </div>
+</div>
+
+<div class="modal fade" id="editCryptoAdapterModal" tabindex="-1" role="dialog" aria-labelledby="editCryptoAdapterModal" aria-hidden="true" data-backdrop="static">
+    <div id="editCryptoAdapterContainer">
+    </div>
+</div>
+
+<div class="modal fade" id="cryptoAdapterDetailsModal" tabindex="-1" role="dialog" aria-labelledby="cryptoAdapterDetailsModal" aria-hidden="true" data-backdrop="static">
+    <div id="cryptoAdapterDetailsContainer">
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+
+        //create
+        function createCryptoAdapter() {
+
+            jQuery.get('@Url.Action("Create", "CryptoAdapter")', function (data) {
+                jQuery('#createCryptoAdapterContainer').html(data);
+                jQuery('#createCryptoAdapterModal').modal("show");
+            })
+        }
+
+        function createValidation() {
+
+            jQuery("#connection").text("");
+
+            var valid = jQuery("#form").valid();
+
+            if (!valid) {
+                return;
+            }
+            else {
+                var model = {
+                    Direction: jQuery("input[name = 'direction']:checked").val(),
+                    Name: jQuery("#Name").val(),
+                    RpcAddr: jQuery("#RpcAddr").val(),
+                    RpcPort: jQuery("#RpcPort").val(),
+                    NodeType: jQuery("#NodeType").val(),
+                    Properties : []
+                };
+
+                jQuery(':button[type="button"]').prop('disabled', true);
+                jQuery("#form :input").prop("disabled", true);
+                jQuery('#loader').show();
+
+                //var nodeType = jQuery("#NodeType").val();
+
+                //var direction = jQuery("input[name = 'direction']:checked").val();
+
+                console.log("NodeType: ", nodeType);
+                console.log("Direction: ", direction);
+
+                var prop = jQuery.grep(properties, function (obj) { return obj.nodeType == nodeType; })[0];
+
+                switch (direction) {
+                    case "1":
+                        for (var item = 0; item < prop.sourceProperties.length; item++) {
+                            prop.sourceProperties[item].value = jQuery("#" + prop.sourceProperties[item].name).val();
+                        }
+                        break;
+                    case "2":
+                        for (var item = 0; item < prop.destinationProperties.length; item++) {
+                            prop.destinationProperties[item].value = jQuery("#" + prop.destinationProperties[item].name).val();
+                        }
+                        break;
+                }
+
+                model.Properties.push(prop);
+
+                jQuery.ajax({
+                    url: '@Url.Action("Create", "CryptoAdapter")',
+                    datatype: 'json',
+                    type: 'post',
+                    data: model,
+                    success: function (response) {
+
+                        if (response.status == 0) {
+                            jQuery('#createCryptoAdapterModal').modal('hide');
+                            jQuery('#createCryptoAdapterContainer').html("");
+                            bootbox.alert(response.message, function () {
+                                window.location.replace('@Url.Action("Index", "CryptoAdapter")');
+                        })
+                        }
+                        else {
+                            jQuery("#connection").text(response.message);
+                        }
+
+                    },
+                    error: function () {
+                        bootbox.alert("Something went wrong. Please try again.");
+                    },
+                    complete: function () {
+                        jQuery(':button[type="button"]').prop('disabled', false);
+                        jQuery("#form :input").prop("disabled", false);
+                        jQuery('#loader').hide();
+                    }
+                })
+            }
+        }
+
+        //edit
+        function editCryptoAdapter(Id) {
+
+            jQuery.ajax({
+                type: "GET",
+                url: '@Url.Action("Edit", "CryptoAdapter")',
+                data: { Id: Id },
+                success: function (model) {
+
+                    jQuery('#editCryptoAdapterContainer').html(model);
+                    jQuery('#editCryptoAdapterModal').modal("show");
+
+                }
+            })
+        }
+
+        function editValidation() {
+            var valid = jQuery("#formEditCryptoAdapter").valid();
+
+            if (!valid) {
+                return;
+            }
+
+            else {
+
+                var model = {
+                    Id: jQuery("#Id").val(),
+                    Direction: jQuery("input[name = 'direction']:checked").val(),
+                    Name: jQuery("#Name").val(),
+                    RpcAddr: jQuery("#RpcAddr").val(),
+                    RpcPort: jQuery("#RpcPort").val(),
+                    NodeType: jQuery("#NodeType").val(),
+                    Properties: []
+                }
+                jQuery(':button[type="button"]').prop('disabled', true);
+                jQuery("#form :input").prop("disabled", true);
+                jQuery('#loader').show();
+
+                switch (direction) {
+                    case "1":
+                        for (var item = 0; item < prop.sourceProperties.length; item++) {
+                            prop.sourceProperties[item].value = jQuery("#" + prop.sourceProperties[item].name).val();
+                        }
+                        break;
+                    case "2":
+                        for (var item = 0; item < prop.destinationProperties.length; item++) {
+                            prop.destinationProperties[item].value = jQuery("#" + prop.destinationProperties[item].name).val();
+                        }
+                        break;
+                }
+
+                model.Properties.push(prop);
+
+                jQuery.ajax({
+                    url: '@Url.Action("Edit", "CryptoAdapter")',
+                    datatype: 'json',
+                    type: 'post',
+                    data: model,
+                    success: function (response) {
+                        if (response.status == 0) {
+                            jQuery('#editCryptoAdapterModal').modal('hide');
+                            jQuery('#editCryptoAdapterContainer').html("");
+                            bootbox.alert(response.message, function () {
+                                window.location.replace('@Url.Action("Index", "CryptoAdapter")');
+                            })
+                        }
+                        else {
+                            jQuery("#connection").text(response.message);
+                        }
+                    },
+                    error: function () {
+                        bootbox.alert("Something went wrong. Please try again.");
+                    },
+                    complete: function () {
+                        jQuery(':button[type="button"]').prop('disabled', false);
+                        jQuery("#form :input").prop("disabled", false);
+                        jQuery('#loader').hide();
+                    }
+                })
+            }
+        }
+
+        //details
+        function cryptoAdapterDetails(Id) {
+
+            jQuery.ajax({
+                type: "GET",
+                url: '@Url.Action("Details", "CryptoAdapter")',
+                data: { Id: Id },
+                success: function (data) {
+                    jQuery('#cryptoAdapterDetailsContainer').html(data);
+                    jQuery('#cryptoAdapterDetailsModal').modal("show");
+                }
+            })
+        }
+
+        //delete
+        function confirmDelete(cryAdapterId) {
+
+            var confirmedBootbox = bootbox.confirm("Are you sure you want to delete this crypto adapter?", function (result) {
+                if (result) {
+                    var id = cryAdapterId;
+
+                    jQuery.ajax({
+                        type: "POST",
+                        url: '@Url.Action("Delete", "CryptoAdapter")',
+                        data: { cryptoAdapterId: id },
+                        dataType: 'json',
+                        success: function (response) {
+
+                            if (response.message != null) {
+                                bootbox.alert(response.message);
+                            } else {
+                                window.location.replace('@Url.Action("Index", "CryptoAdapter")');
+                            }
+                        },
+                        error: function () {
+                            bootbox.alert("Something went wrong. Please try again later.")
+                        }
+                    })
+                }
+            })
+        }
+
+        //data tables
+        jQuery(document).ready(function () {
+            jQuery("#CryptoAdapterTable").dataTable({
+                "ordering": false
+            })
+        })
+
+    </script>
+}

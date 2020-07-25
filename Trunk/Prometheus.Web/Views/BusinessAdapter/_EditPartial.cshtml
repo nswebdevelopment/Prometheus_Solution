@@ -1,0 +1,84 @@
+﻿@model BusinessAdapterModel
+
+<div id="modalEdit" class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Edit Business Adapter</h4>
+            <button type="button" class="close" onclick="closeEditBusinessAdapterModal()">&times;</button>
+        </div>
+
+        <div class="modal-body">
+            <form method="post" class="form-horizontal" id="formEditBusinessAdapter">
+                <div class="card-body card-block">
+
+                    <input asp-for="Id" type="hidden" />
+
+                    <div class="row form-group">
+                        <div class="col col-md-4">
+                            <label for="Direction" class="form-control-label">Direction</label>
+                        </div>
+                        <div class="col-12 col-md-8" id="directionRadioBtn">
+                            <input type="radio" name="direction" value="1" id="source" disabled>&nbsp;Source &nbsp;&nbsp;
+                            <input type="radio" name="direction" value="2" id="destination" checked>&nbsp;Destination
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col col-md-3">
+                            <label for="NodeType" class="form-control-label">Adapter type</label>
+                        </div>
+                        <div class="col-12 col-md-8">
+                            <select asp-for="BusinessAdapterType" asp-items="Html.GetEnumSelectList<BusinessAdapterType>()" class="form-control col-md-12" disabled></select>
+                            <span asp-validation-for="BusinessAdapterType" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col col-md-4">
+                            <label for="text-input" class=" form-control-label">Name</label>
+                        </div>
+                        <div class="col-12 col-md-8">
+                            <input type="text" id="Name" asp-for="Name" name="Name" class="form-control">
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col col-md-4">
+                            <label asp-for="FileName" class="form-control-label"></label>
+                        </div>
+                        <div class="col-12 col-md-8">
+                            <input type="text" id="FileName" asp-for="FileName" name="FileName" class="form-control">
+                            <span asp-validation-for="FileName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div id="connection" class="text-danger mt-2"></div>
+
+                </div>
+            </form>
+        </div>
+
+        <div class="modal-footer">
+            <div class="form-group col-md-12">
+
+                <button type="button" class="btn btn-primary btn-sm mr-1" onclick="editValidation()">
+                    <i class="fa fa-dot-circle-o"></i> Submit
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="closeEditBusinessAdapterModal()">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@await Html.PartialAsync("_ValidationScriptsPartial");
+
+<script>
+    function closeEditBusinessAdapterModal() {
+        jQuery("#editBusinessAdapterModal").modal("hide");
+        jQuery("#editBusinessAdapterContainer").html("");
+
+    }
+</script>

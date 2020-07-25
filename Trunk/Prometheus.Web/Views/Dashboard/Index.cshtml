@@ -1,0 +1,150 @@
+﻿@model DashboardModel;
+@{
+    var counter = 0;
+}
+
+<div class="col-12 mb-4">
+    <div class="card-group">
+        <div class="card col-md-6 no-padding ">
+            <div class="card-body">
+                <div class="h1 text-muted text-right mb-4">
+                    <i class="fa fa-clock-o"></i>
+                </div>
+                <div class="h4 mb-0">
+                    <span class="count">@Model.PendingJobsCount</span>
+                </div>
+                <small class="text-muted text-uppercase font-weight-bold">PENDING JOBS</small>
+                <div class="progress progress-xs mt-3 mb-0" style="width: 40%; height: 5px; background-color:rgba(54, 162, 235, 0.6)"></div>
+            </div>
+        </div>
+        <div class="card col-md-6 no-padding ">
+            <div class="card-body">
+                <div class="h1 text-muted text-right mb-4">
+                    <i class="fa fa-spinner"></i>
+                </div>
+                <div class="h4 mb-0">
+                    <span class="count">@Model.ExecutingJobsCount</span>
+                </div>
+                <small class="text-muted text-uppercase font-weight-bold">EXECUTING JOBS</small>
+                <div class="progress progress-xs mt-3 mb-0 " style="width: 40%; height: 5px;  background-color:rgba(75, 192, 192, 0.6)"></div>
+            </div>
+        </div>
+        <div class="card col-md-6 no-padding">
+            <div class="card-body">
+                <div class="h1 text-muted text-right mb-4">
+                    <i class="fa fa-check"></i>
+                </div>
+                <div class="h4 mb-0">
+                    <span class="count">@Model.DoneJobsCount</span>
+                </div>
+                <small class="text-muted text-uppercase font-weight-bold">FINISHED JOBS THIS MONTH</small>
+                <div class="progress progress-xs mt-3 mb-0" style="width: 40%; height: 5px;  background-color:rgba(255, 159, 64, 0.6)"></div>
+            </div>
+        </div>
+        <div class="card col-md-6 no-padding ">
+            <div class="card-body">
+                <div class="h1 text-muted text-right mb-4">
+                    <i class="fa fa-tasks"></i>
+                </div>
+                <div class="h4 mb-0">
+                    <span class="count">@Model.TransactionsCount</span>
+                </div>
+                <small class="text-muted text-uppercase font-weight-bold">TOTAL NUMBER OF TRANSACTIONS THIS MONTH</small>
+                <div class="progress progress-xs mt-3 mb-0" style="width: 40%; height: 5px; background-color:rgba(255, 206, 86, 0.6)"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid col-lg-7">
+    <div class="card col-lg-12 mb-1">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-10">
+                    <h4 class="card-title mb-3">Total number of finished jobs per month</h4>
+                </div>
+            </div>
+            <canvas id="jobsChart" height="60"></canvas>
+
+        </div>
+    </div>
+
+    <div class="card col-lg-12">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-10">
+                    <h4 class="card-title mb-3">Total number of transactions per month</h4>
+                </div>
+
+            </div>
+            <canvas id="transactionsChart" height="60"></canvas>
+
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid col-lg-5">
+
+    <div class="card col-lg-12 p-0">
+        <div class="card-body">
+            <h4 class="mb-3">Recent jobs</h4>
+            <div style="overflow-x:auto;">
+                <table class="table">
+                    <thead style="background-color:rgba(75, 192, 192, 0.2);">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Job definition</th>
+                            <th scope="col">Start time</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var job in Model.RecentJobs)
+                        {
+                            <tr>
+                                <th scope="row">@(counter += 1)</th>
+                                <td>@job.ScheduleTitle</td>
+                                <td>@job.JobDefinitionName</td>
+                                <td class="formatLocalDateTime">@job.StartTime.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")</td>
+                                <td>@job.JobStatus</td>
+                            </tr>
+                        }
+
+                        @if (Model.RecentJobs.Count == 0)
+                        {
+                            <tr style="background-color:#f1f2f7;">
+                                <td align="center" colspan="5">
+                                    No recent jobs found
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/assets/js/chartjs.min.js"></script>
+
+    <script>
+
+        var transactionsChartData = @Html.Raw(Json.Serialize(Model.TransactionsChartData));
+        var jobsChartData = @Html.Raw(Json.Serialize(Model.JobsChartData));
+
+        formatLocalDateTime();
+        handleDashboardCharts(transactionsChartData, jobsChartData);
+
+        function formatLocalDateTime() {
+            var datesUTC = document.getElementsByClassName("formatLocalDateTime");
+            for (var i = 0; i < datesUTC.length; i++) {
+                var dateUTC = datesUTC[i].innerText;
+                datesUTC[i].innerText = new Date(dateUTC).toLocaleString();
+            }
+        }
+    </script>
+}

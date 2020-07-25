@@ -1,0 +1,133 @@
+﻿@model CryptoAdapterModel
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Crypto Adapter Details</h4>
+            <button type="button" class="close" onclick="closeCryptoAdapterModal()">&times;</button>
+        </div>
+
+        <div class="modal-body">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.NodeType)
+                </dt>
+
+                <dd id="nodeType">
+                    @Html.DisplayFor(model => model.NodeType)
+                </dd>
+
+                <dt id="rpcAddress">
+                    @Html.DisplayNameFor(model => model.RpcAddr)
+                </dt>
+
+                <dd class="rpcAddress" id="rpcAddrId">
+                    @Html.DisplayFor(model => model.RpcAddr)
+                </dd>
+
+                <dt id="rpcPort">
+                    @Html.DisplayNameFor(model => model.RpcPort)
+                </dt>
+
+                <dd class="rpcPort" id="rpcPortId">
+                    @Html.DisplayFor(model => model.RpcPort)
+                </dd>
+
+                @switch (Model.Direction)
+                {
+                    case DirectionEnum.Source:
+                        @foreach (var item in Model.Properties.First().SourceProperties)
+                        {
+                            <dt>
+                                @Html.DisplayFor(model => item.Name)
+                            </dt>
+
+                            @if (item.PropertyType == PropertyTypeEnum.Password)
+                            {
+                                @Html.Raw("\u2022\u2022\u2022\u2022\u2022")
+                            }
+                            else
+                            {
+                                if (item.Value == String.Empty)
+                                {
+                                    <dd>
+                                        &nbsp;
+                                    </dd>
+                                }
+                                else
+                                {
+                                    <dd>
+                                        @Html.DisplayFor(model => item.Value)
+                                    </dd>
+                                }
+                            }
+                        }
+
+                        break;
+                    case DirectionEnum.Destination:
+                        @foreach (var item in Model.Properties.First().DestinationProperties)
+                        {
+                            <dt>
+                                @Html.DisplayFor(model => item.Name)
+                            </dt>
+
+                            @if (item.PropertyType == PropertyTypeEnum.Password)
+                            {
+                                @Html.Raw("\u2022\u2022\u2022\u2022\u2022")
+                            }
+                            else
+                            {
+                                if (item.Value == String.Empty)
+                                {
+                                    <dd>
+                                        &nbsp;
+                                    </dd>
+                                }
+                                else
+                                {
+                                    <dd>
+                                        @Html.DisplayFor(model => item.Value)
+                                    </dd>
+                                }
+                            }
+                        }
+                        break;
+                }
+
+            </dl>
+
+        </div>
+        <div class="modal-footer">
+            <div class="form-group col-md-12">
+                <button type="button" class="btn btn-primary btn-sm" onclick="editCryptoAdapterFromDetails(@Model.Id)" title="Edit crypto adapter">
+                    <i class="fa fa-edit fa-lg"></i> Edit
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="closeCryptoAdapterModal()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function closeCryptoAdapterModal() {
+        jQuery("#cryptoAdapterDetailsModal").modal("hide");
+        jQuery("#cryptoAdapterDetailsContainer").html("");
+    }
+
+    //body class="modal-open" dissapear after closing cryptoAdapterDetailsModal (refactor!)
+    function editCryptoAdapterFromDetails(Id) {
+        closeCryptoAdapterModal();
+        editCryptoAdapter(Id);
+    }
+
+</script>
+

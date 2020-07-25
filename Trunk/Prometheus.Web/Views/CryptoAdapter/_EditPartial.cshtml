@@ -1,0 +1,164 @@
+﻿@model CryptoAdapterModel
+
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title">Edit Crypto Adapter</h4>
+            <button type="button" class="close" onclick="closeEditCryptoAdapterModal()">&times;</button>
+        </div>
+
+        <div class="modal-body">
+            <form method="post" class="form-horizontal" id="formEditCryptoAdapter">
+                <div class="card-body card-block">
+
+                    <input asp-for="Id" type="hidden" />
+                    @*<input asp-for="NodeType" type="hidden" />*@
+
+                    <div class="row form-group">
+                        <div class="col col-md-4">
+                            <label for="Direction" class="form-control-label">Direction</label>
+                        </div>
+                        <div class="col-12 col-md-8" id="directionRadioBtn">
+                            @switch (Model.Direction)
+                            {
+                                case DirectionEnum.Source:
+                                    <input disabled type="radio" name="direction" value="1" id="source" checked><span>&nbsp; Source &nbsp; &nbsp;</span>
+                                    <input disabled type="radio" name="direction" value="2" id="destination"><span>&nbsp; Destination</span>
+                                    break;
+                                case DirectionEnum.Destination:
+                                    <input disabled type="radio" name="direction" value="1" id="source"><span>&nbsp; Source &nbsp; &nbsp;</span>
+                                    <input disabled type="radio" name="direction" value="2" id="destination" checked><span>&nbsp; Destination</span>
+                                    break;
+                            }
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col col-md-4">
+                            <label for="NodeType" class="form-control-label">Node type</label>
+                        </div>
+                        <div class="col-12 col-md-8">
+                            <select disabled asp-for="NodeType" asp-items="Html.GetEnumSelectList<CryptoAdapterType>()" class="form-control col-md-12"></select>
+                            <span asp-validation-for="NodeType" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col col-md-4">
+                            <label for="text-input" class=" form-control-label">Name</label>
+                        </div>
+                        <div class="col-12 col-md-8">
+                            <input type="text" id="Name" asp-for="Name" name="Name" class="form-control">
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row form-group" id="RpcAddrDiv">
+                        <div class="col col-md-4  pr-0">
+                            <label for="text-input" class=" form-control-label">Rpc Address</label>
+                        </div>
+                        <div class="col-12 col-md-8">
+                            <input type="text" id="RpcAddr" asp-for="RpcAddr" name="RpcAddr" class="form-control">
+                            <span asp-validation-for="RpcAddr" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row form-group" id="RpcPortDiv">
+                        <div class="col col-md-4">
+                            <label for="text-input" class=" form-control-label">Rpc Port</label>
+                        </div>
+                        <div class="col-12 col-md-8">
+                            <input type="text" id="RpcPort" asp-for="RpcPort" name="RpcPort" class="form-control">
+                            <span asp-validation-for="RpcPort" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div id="PropertySection">
+
+                    </div>
+
+                    <div id="loader" class="text-secondary text-center mb-2" style="display:none"><i class="fa fa-spin fa-spinner"></i> Please wait...</div>
+
+                    <div id="connection" class="text-danger mt-2"></div>
+
+                </div>
+            </form>
+        </div>
+
+        <div class="modal-footer">
+            <div class="form-group col-md-12">
+
+                <button type="button" class="btn btn-primary btn-sm mr-1" onclick="editValidation()">
+                    <i class="fa fa-dot-circle-o"></i> Submit
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="closeEditCryptoAdapterModal()">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@await Html.PartialAsync("_ValidationScriptsPartial");
+
+<script>
+
+    var prop = @Html.Raw(Json.Serialize(Model.Properties[0]));
+
+    var passwordType = @Html.Raw(Json.Serialize(PropertyTypeEnum.Password));
+
+    console.log(prop)
+
+    console.log(passwordType)
+
+    nodeType = prop.nodeType;
+
+    direction = jQuery("input[name = 'direction']:checked").val();
+
+    jQuery("#PropertySection").html("");
+
+    switch (direction) {
+        case "1":
+            for (var item = 0; item < prop.sourceProperties.length; item++) {
+                jQuery("#PropertySection").append(generateProperty(prop.sourceProperties[item].name, prop.sourceProperties[item].propertyType, prop.sourceProperties[item].value));
+            }
+
+            break;
+        case "2":
+            for (var item = 0; item < prop.destinationProperties.length; item++) {
+                jQuery("#PropertySection").append(generateProperty(prop.destinationProperties[item].name, prop.destinationProperties[item].propertyType, prop.destinationProperties[item].value));
+            }
+            break;
+    }
+
+    function generateProperty(name, propertyType, value) {
+
+        switch (propertyType) {
+            case passwordType:
+                type = "password";
+                value = "     ";
+                break;
+            default:
+                type = "text";
+        }
+
+        var property = `
+            <div class="row form-group">
+                <div class="col col-md-4 pr-0">
+                    <label class="form-control-label" for="text-input">${name}</label>
+                </div>
+                <div class="col-12 col-md-8">
+                    <input name="${name}" class="form-control" id="${name}" type="${type}" value="${value}">
+                    <span class="text-danger field-validation-valid" data-valmsg-replace="true" data-valmsg-for="${name}"></span>
+                </div>
+            </div>`;
+
+        return property;
+    }
+
+    function closeEditCryptoAdapterModal() {
+        jQuery("#editCryptoAdapterModal").modal("hide");
+        jQuery("#editCryptoAdapterContainer").html("");
+
+    }
+</script>

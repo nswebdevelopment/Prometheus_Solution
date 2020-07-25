@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="519e0a894a414c5c8c04d2a30249ef89" Name="Diagram1" ZoomLevel="74">
+        <EntityTypeShape EntityType="Prometheus_EntityModel.Account" Width="1.5" PointX="7.5" PointY="23.5" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.Adapter" Width="1.5" PointX="3" PointY="18" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.AdapterMapping" Width="1.5" PointX="3" PointY="23.375" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.AdapterType" Width="1.5" PointX="1.5" PointY="26.5" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.AdapterTypeItem" Width="1.5" PointX="0.75" PointY="22" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.AdapterTypeItemProperty" Width="1.5" PointX="12.5" PointY="12.625" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.Block" Width="1.5" PointX="18" PointY="21.5" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.BlockTransaction" Width="1.5" PointX="20.25" PointY="21.875" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.BusinessAdapter" Width="1.5" PointX="5.25" PointY="22.375" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.BusinessFile" Width="1.5" PointX="18" PointY="24.625" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.Company" Width="1.5" PointX="1.5" PointY="35.625" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.CryptoAdapter" Width="1.5" PointX="5.25" PointY="29" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.CryptoAdapterProperty" Width="1.5" PointX="7.5" PointY="29.25" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.DataType" Width="1.5" PointX="7.5" PointY="6.125" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.Direction" Width="1.5" PointX="0.75" PointY="15.25" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.EnterpriseAdapter" Width="1.5" PointX="5.25" PointY="14.5" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.EnterpriseAdapterProperty" Width="1.5" PointX="7.5" PointY="12.125" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.EnterpriseAdapterTable" Width="1.5" PointX="7.5" PointY="14.75" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.EnterpriseAdapterTableColumn" Width="1.5" PointX="9.75" PointY="14" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.Exchange" Width="1.5" PointX="3" PointY="31.5" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.JobDefinition" Width="1.5" PointX="8.25" PointY="19.25" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.JobDefinitionAdapterTypeItemProperty" Width="1.5" PointX="10.5" PointY="9.625" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.JobDefinitionProperty" Width="1.5" PointX="10.5" PointY="18.875" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.JobHistory" Width="1.5" PointX="18" PointY="17.75" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.JobStatus" Width="1.5" PointX="13.5" PointY="16" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.JobTimeline" Width="1.5" PointX="15.75" PointY="19.25" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.Market" Width="1.5" PointX="5.25" PointY="25.375" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.Notification" Width="1.5" PointX="6" PointY="18.5" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.Property" Width="1.5" PointX="5.25" PointY="10.625" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.PropertyName" Width="1.5" PointX="7.5" PointY="8.875" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.PropertyType" Width="1.5" PointX="3" PointY="11.125" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.Schedule" Width="1.5" PointX="13.5" PointY="19.25" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.Status" Width="1.5" PointX="0.75" PointY="18.75" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.Symbol" Width="1.5" PointX="10.5" PointY="22.125" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.Transaction" Width="1.5" PointX="9.75" PointY="25.125" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.TransactionStatus" Width="1.5" PointX="7.5" PointY="32.875" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.TransactionType" Width="1.5" PointX="7.5" PointY="35.25" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.TransactionTypeAlias" Width="1.5" PointX="9.75" PointY="35.125" />
+        <EntityTypeShape EntityType="Prometheus_EntityModel.UserProfile" Width="1.5" PointX="0.75" PointY="29.5" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_Account_CryptoAdapter" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_Account_EnterpriseAdapter" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_Transaction_Account" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK__Adapter__Adapter__1699586C" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_Adapter_Direction" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_Adapter_Status" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_Adapter_UserProfile" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_BusinessAdapter_Adapter" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_CryptoAdapter_Adapter" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_EnterpriseAdapter_Adapter" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_JobDefinition_Adapter" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_JobDefinition_Adapter1" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_AdapterMapping_AdapterTypeItem" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_AdapterMapping_AdapterTypeItem1" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_AdapterTypeItem_AdapterType" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_AdapterTypeItemProperty_AdapterTypeItem" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_JobDefinitionAdapterTypeItemProperty_AdapterTypeItem" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_AdapterTypeItemProperty_Direction" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_AdapterTypeItemProperty_Property" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_Block_JobTimeline" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_BlockTransaction_Block" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_BusinessFile_JobTimeline" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_UserProfile_Company" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_CryptoAdapterProperty_CryptoAdapter" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_CryptoAdapterProperty_Property" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_EnterpriseAdapterTableColumn_DataType" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_JobDefinitionAdapterTypeItemProperty_Direction" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_EnterpriseAdapterProperty_EnterpriseAdapter" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_EnterpriseAdapterTable_EnterpriseAdapter" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_EnterpriseAdapterProperty_Property" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_EnterpriseAdapterTableColumn_EnterpriseAdapterTable" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_EnterpriseAdapterTableColumn_EnterpriseAdapterTableColumn" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_EnterpriseAdapterTableColumn_PropertyName" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_Exchange_Status" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_Market_Exchange" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_JobDefinition_UserProfile" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_JobDefinitionProperty_JobDefinition" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_Schedule_JobDefinition" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_JobDefinitionAdapterTypeItemProperty_Property" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_JobDefinitionProperty_Property" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_JobHistory_JobStatus" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_JobHistory_JobTimeline" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_JobTimeline_JobStatus" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_JobTimeline_Schedule" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_Transaction_JobTimeline" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_Market_Status" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_Symbol_Market" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_Notification_Status" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_Notification_UserProfile" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_Property_PropertyType" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_Schedule_UserProfile" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_Symbol_Status" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_Transaction_TransactionStatus" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_Transaction_TransactionType" />
+        <AssociationConnector Association="Prometheus_EntityModel.FK_TransactionTypeAlias_TransactionType" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
