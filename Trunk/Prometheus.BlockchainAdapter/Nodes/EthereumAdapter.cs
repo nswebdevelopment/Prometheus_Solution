@@ -1,24 +1,22 @@
 ﻿using Nethereum.Hex.HexTypes;
-using Nethereum.JsonRpc.IpcClient;
 using Nethereum.RPC.Eth.DTOs;
 using Nethereum.Web3;
-using Prometheus.Model.Models;
+using Prometheus.BlockchainAdapter.Models;
+using Prometheus.Common;
 using Prometheus.Common.Enums;
+using Prometheus.Model.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Numerics;
-using Prometheus.Common;
-using System.Configuration;
-using Prometheus.BlockchainAdapter.Models;
-using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Linq;
+using System.Numerics;
+using System.Threading.Tasks;
 
 namespace Prometheus.BlockchainAdapter.Nodes
 {
+    /// <summary>
+    /// Class for manipulating data from Ethereum network
+    /// </summary>
     public class EthereumAdapter
     {
         private readonly Serilog.ILogger _logger;
@@ -36,28 +34,41 @@ namespace Prometheus.BlockchainAdapter.Nodes
             }
         }
 
+        /// <summary>
+        /// Sends transaction to the blockchain network
+        /// </summary>
+        /// <param name="transaction">Information about transaction that will be sent</param>
+        /// <param name="cryptoAdapter">Information about Ethereum network</param>
+        /// <returns>Transaction results</returns>
         public async Task<TransactionResponse<BlockchainTransactionModel>> SendTransaction(BlockchainTransactionModel transaction, CryptoAdapterModel cryptoAdapter)
         {
             var response = new TransactionResponse<BlockchainTransactionModel>();
 
+            // url to the appropriate node
             var web3 = InstantiateWeb3(cryptoAdapter);
 
+            // credentials for platform for buying/selling digital currency (f.i. coinbase.com)
             var coinbase = cryptoAdapter.Properties.FirstOrDefault().DestinationProperties.FirstOrDefault(dp => dp.Id == (long)PropertyEnum.Coinbase).Value;
             var password = cryptoAdapter.Properties.FirstOrDefault().DestinationProperties.FirstOrDefault(dp => dp.Id == (long)PropertyEnum.CoinbasePassword).Value;
 
             try
             {
+                // if coinbase is unknown, get the coinbase (address to which mining rewards will go) from Ethereum blockchain
                 if (String.IsNullOrEmpty(coinbase))
                 {
                     coinbase = await web3.Eth.CoinBase.SendRequestAsync();
                 }
 
+                // signs data using a specific account
+                // Sending your account password over an unsecured HTTP RPC connection is highly unsecure ***
                 var unlockAccount = await web3.Personal.UnlockAccount.SendRequestAsync(coinbase, password, 0);
 
+                // credit or debit
                 var statement = transaction.Statement;
 
                 var address = String.Empty;
 
+                // takes Credit or Debit address from given transaction
                 switch (statement)
                 {
                     case Statement.Credit:
@@ -70,11 +81,14 @@ namespace Prometheus.BlockchainAdapter.Nodes
                         break;
                 }
 
+                // takes transaction value from the given transaction
                 var value = transaction.Value;
 
+                // converts transaction value to Wei (= base unit of ether)
                 var weiValue = Web3.Convert.ToWei(value, Nethereum.Util.UnitConversion.EthUnit.Ether);
                 var hexValue = new HexBigInteger(weiValue);
 
+                // gas refers to the cost necessary to perform a transaction on the network
                 var gasPrice = await web3.Eth.GasPrice.SendRequestAsync();
 
                 CallInput callInput = new CallInput
@@ -84,11 +98,13 @@ namespace Prometheus.BlockchainAdapter.Nodes
                     Value = hexValue
                 };
 
+                // the used gas for the simulated call/transaction
                 var gas = await web3.Eth.Transactions.EstimateGas.SendRequestAsync(callInput);
 
                 web3.TransactionManager.DefaultGasPrice = gasPrice;
                 web3.TransactionManager.DefaultGas = gas;
 
+                // transaction to be sent
                 TransactionInput transactionInput = new TransactionInput
                 {
                     From = coinbase,
@@ -96,9 +112,10 @@ namespace Prometheus.BlockchainAdapter.Nodes
                     Value = hexValue
                 };
 
+                // Sends a transaction to the network
                 var transactionHash = await web3.Eth.Transactions.SendTransaction.SendRequestAsync(transactionInput);
 
-                response.Succeeded = true;
+                response.Succeeded = true; // it will always be true, unless we get an exception
                 response.Result = new BlockchainTransactionModel
                 {
                     Account = new AccountModel
@@ -109,10 +126,10 @@ namespace Prometheus.BlockchainAdapter.Nodes
                     Id = transaction.Id,
                     Value = transaction.Value,
                     Statement = transaction.Statement,
-                    TxHash = transactionHash
+                    TxHash = transactionHash // WHAT ABOUT TxStatus ???
                 };
 
-
+                // locks the given account, which was previously unlocked
                 var lockAccount = await web3.Personal.LockAccount.SendRequestAsync(coinbase);
             }
             catch (Exception ex)
@@ -126,8 +143,15 @@ namespace Prometheus.BlockchainAdapter.Nodes
             return response;
         }
 
+        /// <summary>
+        /// Sends multiple transactions to the blockchain network
+        /// </summary>
+        /// <param name="transactions">Information about transactions that will be sent</param>
+        /// <param name="cryptoAdapter">Information about Ethereum network</param>
+        /// <returns>List of transaction results</returns>
         public async Task<Response<List<TransactionResponse<BlockchainTransactionModel>>>> SendTransactions(List<BlockchainTransactionModel> transactions, CryptoAdapterModel cryptoAdapter)
         {
+            // url to the appropriate node
             var web3 = InstantiateWeb3(cryptoAdapter);
 
             var response = new Response<List<TransactionResponse<BlockchainTransactionModel>>>
@@ -135,11 +159,13 @@ namespace Prometheus.BlockchainAdapter.Nodes
                 Value = new List<TransactionResponse<BlockchainTransactionModel>>()
             };
 
+            // credentials for coinbase.com (platform for buying/selling digital currency) ?
             var coinbase = cryptoAdapter.Properties.FirstOrDefault().DestinationProperties.FirstOrDefault(dp => dp.Id == (long)PropertyEnum.Coinbase).Value;
             var password = cryptoAdapter.Properties.FirstOrDefault().DestinationProperties.FirstOrDefault(dp => dp.Id == (long)PropertyEnum.CoinbasePassword).Value;
 
             try
             {
+                // signs data using a specific account
                 var unlockAccount = await web3.Personal.UnlockAccount.SendRequestAsync(coinbase, password, 0);
 
                 foreach (var transaction in transactions)
@@ -148,9 +174,12 @@ namespace Prometheus.BlockchainAdapter.Nodes
 
                     try
                     {
+                        // credit or debit
                         var statement = transaction.Statement;
 
                         var address = String.Empty;
+
+                        // takes Credit or Debit address from given transaction
                         switch (statement)
                         {
                             case Statement.Credit:
@@ -161,11 +190,14 @@ namespace Prometheus.BlockchainAdapter.Nodes
                                 break;
                         }
 
+                        // takes transaction value from the given transaction
                         var value = transaction.Value;
 
+                        // converts transaction value to Wei (= base unit of ether)
                         var weiValue = Web3.Convert.ToWei(value, Nethereum.Util.UnitConversion.EthUnit.Ether);
                         var hexValue = new HexBigInteger(weiValue);
 
+                        // gas refers to the cost necessary to perform a transaction on the network
                         var gasPrice = await web3.Eth.GasPrice.SendRequestAsync();
 
                         CallInput callInput = new CallInput
@@ -175,11 +207,13 @@ namespace Prometheus.BlockchainAdapter.Nodes
                             Value = hexValue
                         };
 
+                        // the used gas for the simulated call/transaction
                         var gas = await web3.Eth.Transactions.EstimateGas.SendRequestAsync(callInput);
 
                         web3.TransactionManager.DefaultGas = gas;
                         web3.TransactionManager.DefaultGasPrice = gasPrice;
 
+                        // transaction to be sent
                         TransactionInput transactionInput = new TransactionInput
                         {
                             From = coinbase,
@@ -187,6 +221,7 @@ namespace Prometheus.BlockchainAdapter.Nodes
                             Value = hexValue
                         };
 
+                        // Sends a transaction to the network
                         var transactionHash = await web3.Eth.Transactions.SendTransaction.SendRequestAsync(transactionInput);
 
                         responseItem.Succeeded = true;
@@ -215,6 +250,7 @@ namespace Prometheus.BlockchainAdapter.Nodes
                     response.Value.Add(responseItem);
                 }
 
+                // locks the given account, which was previously unlocked
                 var lockAccount = await web3.Personal.LockAccount.SendRequestAsync(coinbase);
             }
             catch (Exception ex)
@@ -237,6 +273,12 @@ namespace Prometheus.BlockchainAdapter.Nodes
             return response;
         }
 
+        /// <summary>
+        /// Gets the most recent result for transaction status
+        /// </summary>
+        /// <param name="transaction">Transaction information</param>
+        /// <param name="cryptoAdapter">Information about Ethereum network</param>
+        /// <returns>Transaction information with updated transaction status</returns>
         public async Task<TransactionResponse<BlockchainTransactionModel>> GetTransactionStatus(BlockchainTransactionModel transaction, CryptoAdapterModel cryptoAdapter)
         {
 
@@ -246,8 +288,10 @@ namespace Prometheus.BlockchainAdapter.Nodes
 
             try
             {
+                // the receipt of a transaction by transaction hash (or null if no receipt was found)
                 var transactionReceipt = await web3.Eth.Transactions.GetTransactionReceipt.SendRequestAsync(transaction.TxHash);
 
+                // gets the status of the transaction
                 var transactionStatus = transactionReceipt.Status?.Value;
 
                 response.Succeeded = true;
@@ -277,6 +321,12 @@ namespace Prometheus.BlockchainAdapter.Nodes
             return response;
         }
 
+        /// <summary>
+        /// Gets the most recent result for status of all transactions in the list
+        /// </summary>
+        /// <param name="transactions">Transactions information</param>
+        /// <param name="cryptoAdapter">Information about Ethereum network</param>
+        /// <returns>Transaction information with updated status value for each transaction in the list</returns>
         public async Task<List<TransactionResponse<BlockchainTransactionModel>>> GetTransactionsStatus(List<BlockchainTransactionModel> transactions, CryptoAdapterModel cryptoAdapter)
         {
             var web3 = InstantiateWeb3(cryptoAdapter);
@@ -289,8 +339,10 @@ namespace Prometheus.BlockchainAdapter.Nodes
 
                 try
                 {
+                    // the receipt of a transaction by transaction hash (or null if no receipt was found)
                     var transactionReceipt = await web3.Eth.Transactions.GetTransactionReceipt.SendRequestAsync(transaction.TxHash);
 
+                    // gets the status of the transaction
                     var transactionStatus = transactionReceipt.Status?.Value;
 
                     responseItem.Succeeded = true;
@@ -322,6 +374,12 @@ namespace Prometheus.BlockchainAdapter.Nodes
             return response;
         }
 
+        /// <summary>
+        /// Creates a new account in the Ethereum network
+        /// </summary>
+        /// <param name="cryptoAdapter">Information about Ethereum network</param>
+        /// <param name="newAccountPassword">The password to encrypt new account with</param>
+        /// <returns>New account</returns>
         public async Task<Response<AccountModel>> NewAccount(CryptoAdapterModel cryptoAdapter, string newAccountPassword)
         {
             var web3 = InstantiateWeb3(cryptoAdapter);
@@ -330,6 +388,7 @@ namespace Prometheus.BlockchainAdapter.Nodes
 
             try
             {
+                // gets addresses of newly created accounts
                 var newDebitAccount = await web3.Personal.NewAccount.SendRequestAsync(newAccountPassword);
                 var newCreditAccount = await web3.Personal.NewAccount.SendRequestAsync(newAccountPassword);
 
@@ -352,6 +411,11 @@ namespace Prometheus.BlockchainAdapter.Nodes
             return response;
         }
 
+        /// <summary>
+        /// Tests the connection with the provided credentials in the cryptoAdapter
+        /// </summary>
+        /// <param name="cryptoAdapter">Information about Ethereum network</param>
+        /// <returns>Information about test connection to destination</returns>
         public async Task<Response<NoValue>> TestConnectionDestination(CryptoAdapterModel cryptoAdapter)
         {
             var response = new Response<NoValue>();
@@ -364,10 +428,12 @@ namespace Prometheus.BlockchainAdapter.Nodes
 
             try
             {
+                // WHY there is no LockAccount anywhere afterwards ???
                 var unlockAccount = await web3.Personal.UnlockAccount.SendRequestAsync(coinbase, password, 1);
 
                 response.Status = StatusEnum.Success;
             }
+            // WHERE to find all possible exceptions ?
             catch (Exception ex)
             {
                 _logger.Information($"EthereumAdapter.TestConnection(Ip: {cryptoAdapter.RpcAddr}, Port: {cryptoAdapter.RpcPort}, Coinbase: {coinbase}, Password: {password})");
@@ -416,14 +482,22 @@ namespace Prometheus.BlockchainAdapter.Nodes
             return response;
         }
 
+        /// <summary>
+        /// Tests the connection to the source
+        /// </summary>
+        /// <param name="cryptoAdapter">Information about Ethereum network</param>
+        /// <returns>Information about test connection to source</returns>
         public async Task<Response<NoValue>> TestConnectionSource(CryptoAdapterModel cryptoAdapter)
         {
+            // WHAT is source?
+
             var response = new Response<NoValue>();
 
             var web3 = InstantiateWeb3(cryptoAdapter);
 
             try
             {
+                // get the current block number
                 var blockNumber = await web3.Eth.Blocks.GetBlockNumber.SendRequestAsync();
 
                 response.Status = StatusEnum.Success;
@@ -439,6 +513,14 @@ namespace Prometheus.BlockchainAdapter.Nodes
             return response;
         }
 
+        /// <summary>
+        /// Gets the Ethereum blocks in the specified range
+        /// </summary>
+        /// <param name="cryptoAdapter">Information about Ethereum network</param>
+        /// <param name="fromBlock">First block to get</param>
+        /// <param name="toBlock">Last block to get</param>
+        /// <param name="address">Address to filter transactions ???</param>
+        /// <returns>List of Ethereum blocks</returns>
         public async Task<Response<List<EthereumBlockModel>>> GetBlocksWithTransactions(CryptoAdapterModel cryptoAdapter, int fromBlock, int toBlock, string address)
         {
             var response = new Response<List<EthereumBlockModel>>()
@@ -462,8 +544,10 @@ namespace Prometheus.BlockchainAdapter.Nodes
 
                 for (int i = fromBlock; i <= toBlock; i++)
                 {
+                    // returns a block matching the block number
                     var block = await web3.Eth.Blocks.GetBlockWithTransactionsByNumber.SendRequestAsync(new HexBigInteger(i));
 
+                    // block information of importance
                     var blockModel = new EthereumBlockModel
                     {
                         BlockNumber = (int)block.Number.Value,
@@ -471,12 +555,13 @@ namespace Prometheus.BlockchainAdapter.Nodes
                         BlockTransactions = new List<EthereumBlockTransactionModel>()
                     };
 
+                    // transaction information of importance in the current block
                     foreach (var transaction in block.Transactions)
                     {
                         var blockTransactionModel = new EthereumBlockTransactionModel
                         {
                             Hash = transaction.TransactionHash,
-                            Value = Web3.Convert.FromWei(transaction.Value),
+                            Value = Web3.Convert.FromWei(transaction.Value), // converts transaction value from Wei (= base unit of ether)
                             From = transaction.From,
                             To = transaction.To
                         };
@@ -485,6 +570,7 @@ namespace Prometheus.BlockchainAdapter.Nodes
 
                         if (address == String.Empty || (String.Equals(transaction.From.ToLower(), address) || String.Equals(transaction.To?.ToLower(), address)))
                         {
+                            // gets the receipt of a transaction by transaction hash
                             var transactionReceipt = await web3.Eth.Transactions.GetTransactionReceipt.SendRequestAsync(transaction.TransactionHash);
                             var status = transactionReceipt.Status?.Value;
 
@@ -512,6 +598,11 @@ namespace Prometheus.BlockchainAdapter.Nodes
             return response;
         }
 
+        /// <summary>
+        /// Gets current block number
+        /// </summary>
+        /// <param name="cryptoAdapter">Information about Ethereum network</param>
+        /// <returns>Current block number</returns>
         public async Task<Response<int>> GetCurrentBlockNumber(CryptoAdapterModel cryptoAdapter)
         {
             var response = new Response<int>();
@@ -520,6 +611,7 @@ namespace Prometheus.BlockchainAdapter.Nodes
 
             try
             {
+                // get the current block number
                 var blockNumber = await web3.Eth.Blocks.GetBlockNumber.SendRequestAsync();
 
                 response.Value = (int)(blockNumber.Value);
@@ -548,6 +640,11 @@ namespace Prometheus.BlockchainAdapter.Nodes
 
         #region Helpers
 
+        /// <summary>
+        /// Provides a simple interaction wrapper to access the RPC methods provided by the Ethereum
+        /// </summary>
+        /// <param name="cryptoAdapter">Information about Ethereum network</param>
+        /// <returns>Web3 instance for provided crypto adapter</returns>
         private static Web3 InstantiateWeb3(CryptoAdapterModel cryptoAdapter)
         {
             Web3 web3;
@@ -557,6 +654,11 @@ namespace Prometheus.BlockchainAdapter.Nodes
             return web3;
         }
 
+        /// <summary>
+        /// Converts BigInteger value to the enum TxStatus value
+        /// </summary>
+        /// <param name="txStatus">Transaction status represented as BigInteger</param>
+        /// <returns>Corresponding TxStatus enum value</returns>
         private static TxStatus ConvertStatus(BigInteger? txStatus)
         {
             var status = TxStatus.None;
@@ -584,15 +686,21 @@ namespace Prometheus.BlockchainAdapter.Nodes
             }
         }
 
+        /// <summary>
+        /// Converts UnixTimeStamp to DateTime form
+        /// The unix time stamp is a way to track time as a running total of seconds
+        /// </summary>
+        /// <param name="unixTimeStamp">UnixTimeStamp to be converted</param>
+        /// <returns>DateTime value</returns>
         private static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
         {
             // Unix timestamp is seconds past epoch
-            DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc); // count starts at the Unix Epoch on January 1st, 1970 at UTC
             dtDateTime = dtDateTime.AddSeconds(unixTimeStamp);
             return dtDateTime;
         }
 
         #endregion
-        
+
     }
 }
