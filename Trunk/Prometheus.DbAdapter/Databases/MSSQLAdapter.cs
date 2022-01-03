@@ -126,6 +126,7 @@ namespace Prometheus.DbAdapter.Databases
         public Response<NoValue> TestConnectivity(string connString, string parentTableName = default(String))
         {
             var response = new Response<NoValue>();
+            connString = "Data Source=NSWD-LT054\\SQLEXPRESS;Initial Catalog=Retail_Bank_Dev;Integrated Security=True";
             using (var conn = new SqlConnection(connString))
             {
                 try

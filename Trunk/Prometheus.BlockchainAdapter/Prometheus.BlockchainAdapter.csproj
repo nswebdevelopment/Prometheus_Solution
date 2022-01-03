@@ -146,6 +146,7 @@
     <Compile Include="Nodes\EthereumAdapter.cs" />
     <Compile Include="Nodes\LitecoinAdapter.cs" />
     <Compile Include="Nodes\NEOAdapter.cs" />
+    <Compile Include="Nodes\SolanaAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

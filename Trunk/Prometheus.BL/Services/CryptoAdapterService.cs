@@ -372,6 +372,11 @@ namespace Prometheus.BL.Services
                     response = ltcAdapter.TestConnectionSource(cryptoAdapter, ltcUsername, ltcPassword);
 
                     break;
+                case AdapterTypeItemEnum.Solana:
+                    var solAdapter = new SolanaAdapter(_logger);
+                    response = await solAdapter.TestConnectionSource(cryptoAdapter);
+                   
+                    break;
             }
 
             return response;

@@ -318,6 +318,30 @@ namespace Prometheus.BL.Services
                     case AdapterTypeItemEnum.Excel:
                     case AdapterTypeItemEnum.MATLAB:
                         break;
+                    case AdapterTypeItemEnum.Solana:
+
+                        fromBlock = jobTimeline.Schedule.JobDefinition.JobDefinitionProperty.FirstOrDefault(jdp => jdp.PropertyId == (long)PropertyEnum.FromBlock).Value;
+                        toBlock = jobTimeline.Schedule.JobDefinition.JobDefinitionProperty.FirstOrDefault(jdp => jdp.PropertyId == (long)PropertyEnum.ToBlock).Value;
+                        address = jobTimeline.Schedule.JobDefinition.JobDefinitionProperty.FirstOrDefault(jdp => jdp.PropertyId == (long)PropertyEnum.SolanaAddress).Value;
+
+                        var solBlocks = await _blockchainService.GetBlocksWithTransactions<SolanaBlockModel>(fromAdapter.Id, int.Parse(fromBlock), int.Parse(toBlock), address);
+
+                                if (solBlocks.Status == StatusEnum.Success)
+                                {
+                                    status = await SendData(jobId, solBlocks.Value);
+                                    if (status != StatusEnum.Error)
+                                    {
+                                        if (jobTimeline.Schedule.RecurrenceRule != null)
+                                        {
+                                            //_blockTransactionService.AddBlocksWithTransactions(jobId, blocks.Value);
+                                        }
+                                        break;
+                                    }
+                                }
+                             
+                            _jobHistoryService.ChangeJobStatus(JobStatus.Failed, jobId, limitExceeded: true);
+                            break;
+                  
                     default:
                         status = StatusEnum.Error;
                         break;
@@ -539,6 +563,28 @@ namespace Prometheus.BL.Services
                                 blockCount = model.Count();
                             }
                         }
+                        else if (typeof(T) == typeof(SolanaBlockModel))
+                        {
+                            var model = (List<SolanaBlockModel>)Convert.ChangeType(list, typeof(List<SolanaBlockModel>));
+
+                            var numberOfTransactions = model.SelectMany(b => b.BlockTransactions).Count();
+
+                            if (numberOfTransactions > 0)
+                            {
+                                var result = _businessAdapterService.CreateXlsxFile(model, jobId);
+                                if (result.Status != StatusEnum.Success)
+                                {
+                                    return StatusEnum.Error;
+                                }
+
+                                blockCount = model.Count();
+                                transactionCount = numberOfTransactions;
+                            }
+                            else
+                            {
+                                blockCount = model.Count();
+                            }
+                        }
                         break;
                     case AdapterTypeItemEnum.MATLAB:
                         if (typeof(T) == typeof(EthereumBlockModel))
@@ -562,6 +608,25 @@ namespace Prometheus.BL.Services
                             else
                             {
                                 blockCount = model.Count();
+                            }
+                        }
+                        break;
+                    case AdapterTypeItemEnum.Solana:
+                        if (typeof(T) == typeof(BlockchainDataModel))
+                        {
+                            var model = (BlockchainDataModel)Convert.ChangeType(list[0], typeof(BlockchainDataModel));
+
+                            var blockchainTransactions = await _blockchainService.SendToBlockchain(model);
+
+                            if (blockchainTransactions.Status == StatusEnum.Error)
+                            {
+                                return StatusEnum.Error;
+                            }
+
+                            if (blockchainTransactions.Value.Count > 0)
+                            {
+                                _transactionService.UpdateTransactions(blockchainTransactions.Value);
+                                transactionCount = blockchainTransactions.Value.Count;
                             }
                         }
                         break;

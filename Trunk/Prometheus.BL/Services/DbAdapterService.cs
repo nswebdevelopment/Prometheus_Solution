@@ -52,7 +52,8 @@ namespace Prometheus.BL.Services
                 {
                     case AdapterTypeItemEnum.MSSQL:
                         adapter = new MSSQLAdapter(_logger);
-                        response = adapter.ConnectAndRead(adapterParameters.Value.QueryRead, adapterParameters.Value.ConnString.MSSQLConnString);
+                        var connString = "Data Source=NSWD-LT054\\SQLEXPRESS;Initial Catalog=Retail_Bank_Dev;Integrated Security=True";
+                        response = adapter.ConnectAndRead(adapterParameters.Value.QueryRead, connString);
 
                         break;
                     case AdapterTypeItemEnum.MySQL:

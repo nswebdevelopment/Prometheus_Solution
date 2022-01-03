@@ -656,5 +656,75 @@ namespace Prometheus.BL.Services
 
             return response;
         }
+        public IResponse<NoValue> CreateXlsxFile(List<SolanaBlockModel> list, long jobId)
+        {
+            var response = new Response<NoValue>();
+
+            try
+            {
+                using (var excel = new ExcelPackage())
+                {
+                    var stopwatch = Stopwatch.StartNew();
+
+                    excel.Workbook.Worksheets.Add("Prometheus");
+
+                    var headerRow = new List<string[]>()
+                    {
+                        new string[]{"BlockNumber", "TimeStamp", "Hash", "From", "To", "Value", "Status"}
+                    };
+
+                    var headerRange = "A1:" + Char.ConvertFromUtf32(headerRow[0].Length + 64) + "1";
+
+                    var worksheet = excel.Workbook.Worksheets["Prometheus"];
+
+                    worksheet.Cells[headerRange].LoadFromArrays(headerRow);
+                    worksheet.Cells[headerRange].Style.Font.Bold = true;
+
+                    var cellData = list.SelectMany(b => b.BlockTransactions,
+                                                        (b, t) => new ExcelEthereumBlockModel
+                                                        {
+                                                            BlockNumber = b.BlockNumber,
+                                                            TimeStamp = b.TimeStamp,
+                                                            Hash = t.Hash,
+                                                            From = t.From,
+                                                            To = t.To,
+                                                            Value = t.Value,
+                                                            Status = t.Status.ToString()
+                                                        });
+
+                    var type = typeof(ExcelEthereumBlockModel);
+                    var numberOfColumns = type.GetProperties().Length;
+
+                    var cellDataRange = "A2:" + Char.ConvertFromUtf32(numberOfColumns + 64) + $"{cellData.Count() + 1}";
+
+                    worksheet.Cells[cellDataRange].LoadFromCollection(cellData);
+                    worksheet.Cells["B2:B" + $"{cellData.Count() + 1}"].Style.Numberformat.Format = "yyyy-mm-dd hh:mm:ss";
+                    worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+
+                    var excelFileByteContent = excel.GetAsByteArray();
+
+                    var businessFile = new BusinessFile
+                    {
+                        File = excelFileByteContent,
+                        JobTimelineId = jobId
+                    };
+
+                    _entity.BusinessFile.Add(businessFile);
+                    _entity.SaveChanges();
+
+                    stopwatch.Stop();
+                    _logger.Information($"BusinessAdapterService.CreateXlsxFile(list: {list.Count}, jobId: {jobId}). Time elapsed: {stopwatch.Elapsed.TotalSeconds} seconds.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Information($"BusinessAdapterService.CreateXlsxFile(list: {list.Count}, jobId: {jobId}");
+                _logger.Error(ex.Message);
+                response.Status = StatusEnum.Error;
+                response.Message = ex.Message;
+            }
+
+            return response;
+        }
     }
 }

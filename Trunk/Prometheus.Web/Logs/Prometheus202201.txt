@@ -1,0 +1,35 @@
+2022-01-02 20:55:34.291 +01:00 [INF] CryptoAdapterService.CreateCryptoAdapter(model: Prometheus.Model.Models.CryptoAdapterModel, userProfileId: 2)
+2022-01-02 20:55:34.330 +01:00 [ERR] An error occurred while updating the entries. See the inner exception for details.
+2022-01-02 20:55:50.000 +01:00 [INF] CryptoAdapterService.CreateCryptoAdapter(model: Prometheus.Model.Models.CryptoAdapterModel, userProfileId: 2)
+2022-01-02 20:55:50.000 +01:00 [ERR] An error occurred while updating the entries. See the inner exception for details.
+2022-01-02 23:38:05.715 +01:00 [INF] SolanaAdapter.GetBlocksWithTransactions(cryptoAdapter: 5, fromBlock: 114530087, toBlock: 114530088, address: http://localhost:5208
+2022-01-02 23:38:05.746 +01:00 [ERR] One or more errors occurred.
+2022-01-02 23:56:14.996 +01:00 [INF] SolanaAdapter.GetBlocksWithTransactions(cryptoAdapter: 5, fromBlock: 105143866, toBlock: 105143867, address: http://localhost:5208
+2022-01-02 23:56:15.022 +01:00 [ERR] One or more errors occurred.
+2022-01-03 01:35:25.852 +01:00 [INF] BusinessAdapterService.CreateXlsxFile(list: 2, jobId: 30). Time elapsed: 0.5397932 seconds.
+2022-01-03 14:19:22.426 +01:00 [INF] BlockchainService.NewAccount(cryptoAdapterId: 6)
+2022-01-03 14:19:22.458 +01:00 [ERR] Exception of type 'System.Exception' was thrown.
+2022-01-03 14:19:22.477 +01:00 [INF] BlockchainService.NewAccount(cryptoAdapterId: 6)
+2022-01-03 14:19:22.477 +01:00 [ERR] Exception of type 'System.Exception' was thrown.
+2022-01-03 14:19:22.495 +01:00 [INF] BlockchainService.NewAccount(cryptoAdapterId: 6)
+2022-01-03 14:19:22.495 +01:00 [ERR] Exception of type 'System.Exception' was thrown.
+2022-01-03 14:19:22.514 +01:00 [INF] BlockchainService.NewAccount(cryptoAdapterId: 6)
+2022-01-03 14:19:22.514 +01:00 [ERR] Exception of type 'System.Exception' was thrown.
+2022-01-03 14:19:25.806 +01:00 [INF] TransactionService.AddToTransaction(model: Prometheus.Model.Models.TransactionDataModel)
+2022-01-03 14:19:25.806 +01:00 [ERR] An error occurred while updating the entries. See the inner exception for details.
+2022-01-03 14:23:54.912 +01:00 [INF] BlockchainService.NewAccount(cryptoAdapterId: 6)
+2022-01-03 14:23:54.935 +01:00 [ERR] Exception of type 'System.Exception' was thrown.
+2022-01-03 14:24:19.079 +01:00 [INF] BlockchainService.NewAccount(cryptoAdapterId: 6)
+2022-01-03 14:24:19.079 +01:00 [ERR] Exception of type 'System.Exception' was thrown.
+2022-01-03 14:24:28.553 +01:00 [INF] BlockchainService.NewAccount(cryptoAdapterId: 6)
+2022-01-03 14:24:28.553 +01:00 [ERR] Exception of type 'System.Exception' was thrown.
+2022-01-03 14:24:28.568 +01:00 [INF] BlockchainService.NewAccount(cryptoAdapterId: 6)
+2022-01-03 14:24:28.568 +01:00 [ERR] Exception of type 'System.Exception' was thrown.
+2022-01-03 14:28:05.533 +01:00 [INF] BlockchainService.NewAccount(cryptoAdapterId: 6)
+2022-01-03 14:28:05.556 +01:00 [ERR] Exception of type 'System.Exception' was thrown.
+2022-01-03 14:35:46.876 +01:00 [INF] BlockchainService.NewAccount(cryptoAdapterId: 6)
+2022-01-03 14:35:46.899 +01:00 [ERR] Exception of type 'System.Exception' was thrown.
+2022-01-03 14:37:00.182 +01:00 [INF] BlockchainService.NewAccount(cryptoAdapterId: 6)
+2022-01-03 14:37:00.206 +01:00 [ERR] Exception of type 'System.Exception' was thrown.
+2022-01-03 14:38:08.125 +01:00 [INF] TransactionService.AddToTransaction(model: Prometheus.Model.Models.TransactionDataModel)
+2022-01-03 14:38:08.157 +01:00 [ERR] An error occurred while updating the entries. See the inner exception for details.

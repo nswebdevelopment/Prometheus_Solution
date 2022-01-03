@@ -53,12 +53,13 @@ namespace Prometheus.BL.Services
                     foreach (var transaction in newTransactionsResponse.Value)
                     {
                         var transactionTypeResponse = GetTransactionType(transaction);
-                        var accountsResponse = await _accountService.GetAccount(transaction.TransactionAccount, fromAdapter.EnterpriseAdapter.FirstOrDefault().Id, toAdapter.CryptoAdapter.FirstOrDefault().Id);
+                        //var accountsResponse = await _accountService.GetAccount(transaction.TransactionAccount, fromAdapter.EnterpriseAdapter.FirstOrDefault().Id, toAdapter.CryptoAdapter.FirstOrDefault().Id);
+                        
 
                         transactions.Add(new Transaction
                         {
                             TransactionId = transaction.TransactionId,
-                            AccountId = accountsResponse.Value.Id,
+                            AccountId = 1,
                             TransactionAmount = Math.Abs(Convert.ToDecimal(transaction.TransactionAmount)),
                             CreatedAt = DateTime.UtcNow,
                             UpdatedAt = DateTime.UtcNow,
@@ -94,8 +95,8 @@ namespace Prometheus.BL.Services
                 {
                     var accountModel = new AccountModel()
                     {
-                        CreditAddress = transaction.Account.CreditAddress,
-                        DebitAddress = transaction.Account.DebitAddress
+                        CreditAddress = "ox4",
+                        DebitAddress = "ox5"
                     };
 
                     var blockchainTransaction = new BlockchainTransactionModel()

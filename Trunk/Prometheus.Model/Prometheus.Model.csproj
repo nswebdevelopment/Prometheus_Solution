@@ -122,6 +122,7 @@
     <Compile Include="Models\LitecoinBlockModel\LitecoinBlockTransactionModel.cs" />
     <Compile Include="Models\LitecoinBlockModel\LitecoinTransactionInModel.cs" />
     <Compile Include="Models\LitecoinBlockModel\LitecoinTransactionOutModel.cs" />
+    <Compile Include="Models\SolanaBlockModel.cs" />
     <Compile Include="Models\ValidationAttributeModel\IpAddressAttribute.cs" />
     <Compile Include="MappingEntity.cs" />
     <Compile Include="Models\AccountModel.cs" />

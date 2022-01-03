@@ -75,6 +75,12 @@ namespace Prometheus.BL.Services
                         var btcAdapter = new BitcoinAdapter(_logger);
 
                         break;
+
+                    case AdapterTypeItemEnum.Solana:
+                        var solAdapter = new SolanaAdapter(_logger);
+
+                        response = await solAdapter.SendTransactions(blockchainDataModel.Transactions, cryptoAdapter.Value);
+                        break;
                 }
             }
             catch (Exception ex)
@@ -340,6 +346,19 @@ namespace Prometheus.BL.Services
                     neoResponse = await adapter.GetBlocksWithTransactions(cryptoAdapterModel, fromBlock, toBlock, address);
 
                     response = (Response<List<T>>)Convert.ChangeType(neoResponse, typeof(Response<List<T>>));
+                }
+                else if (typeof(T) == typeof(SolanaBlockModel))
+                {
+                    var solanaResponse = new Response<List<SolanaBlockModel>>()
+                    {
+                        Value = new List<SolanaBlockModel>()
+                    };
+
+                    var adapter = new SolanaAdapter(_logger);
+
+                    solanaResponse = await adapter.GetBlocksWithTransactions(cryptoAdapterModel, fromBlock, toBlock, address);
+
+                    response = (Response<List<T>>)Convert.ChangeType(solanaResponse, typeof(Response<List<T>>));
                 }
             }
             catch (Exception ex)

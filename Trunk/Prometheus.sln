@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32002.185
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prometheus.DbAdapter", "Prometheus.DbAdapter\Prometheus.DbAdapter.csproj", "{20C84017-AF49-4FA1-8BDA-8E6F0035B73F}"
 EndProject
@@ -27,6 +27,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prometheus.ExchangesApi", "Prometheus.ExchangesApi\Prometheus.ExchangesApi.csproj", "{6139F759-FBE2-4CF2-B2EF-7C26653B402B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prometheus.BlockchainAdapter", "Prometheus.BlockchainAdapter\Prometheus.BlockchainAdapter.csproj", "{59F84108-7853-47B3-ABB5-F6470BD4606D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prometheus.SolanaAPI", "SolanaAPI\Prometheus.SolanaAPI.csproj", "{B53B50EB-CCF7-4E03-9BF7-2BCDAEA3A9C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,50 +80,15 @@ Global
 		{59F84108-7853-47B3-ABB5-F6470BD4606D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59F84108-7853-47B3-ABB5-F6470BD4606D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59F84108-7853-47B3-ABB5-F6470BD4606D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B53B50EB-CCF7-4E03-9BF7-2BCDAEA3A9C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B53B50EB-CCF7-4E03-9BF7-2BCDAEA3A9C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B53B50EB-CCF7-4E03-9BF7-2BCDAEA3A9C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B53B50EB-CCF7-4E03-9BF7-2BCDAEA3A9C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D0CFCFC1-DC05-4A29-92F2-BFAC14D6E767}
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 12
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://nsdevelopment.visualstudio.com/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = Prometheus.Authorization\\Prometheus.Authorization.csproj
-		SccProjectName1 = Prometheus.Authorization
-		SccLocalPath1 = Prometheus.Authorization
-		SccProjectUniqueName2 = Prometheus.BL\\Prometheus.BL.csproj
-		SccProjectName2 = Prometheus.BL
-		SccLocalPath2 = Prometheus.BL
-		SccProjectUniqueName3 = Prometheus.BlockchainAdapter\\Prometheus.BlockchainAdapter.csproj
-		SccProjectName3 = Prometheus.BlockchainAdapter
-		SccLocalPath3 = Prometheus.BlockchainAdapter
-		SccProjectUniqueName4 = Prometheus.Common\\Prometheus.Common.csproj
-		SccProjectName4 = Prometheus.Common
-		SccLocalPath4 = Prometheus.Common
-		SccProjectUniqueName5 = Prometheus.Dal\\Prometheus.Dal.csproj
-		SccProjectName5 = Prometheus.Dal
-		SccLocalPath5 = Prometheus.Dal
-		SccProjectUniqueName6 = Prometheus.DbAdapter\\Prometheus.DbAdapter.csproj
-		SccProjectName6 = Prometheus.DbAdapter
-		SccLocalPath6 = Prometheus.DbAdapter
-		SccProjectUniqueName7 = Prometheus.ExchangesApi\\Prometheus.ExchangesApi.csproj
-		SccProjectName7 = Prometheus.ExchangesApi
-		SccLocalPath7 = Prometheus.ExchangesApi
-		SccProjectUniqueName8 = Prometheus.Infrastructure\\Prometheus.Infrastructure.csproj
-		SccProjectName8 = Prometheus.Infrastructure
-		SccLocalPath8 = Prometheus.Infrastructure
-		SccProjectUniqueName9 = Prometheus.Media\\Prometheus.Media.csproj
-		SccProjectName9 = Prometheus.Media
-		SccLocalPath9 = Prometheus.Media
-		SccProjectUniqueName10 = Prometheus.Model\\Prometheus.Model.csproj
-		SccProjectName10 = Prometheus.Model
-		SccLocalPath10 = Prometheus.Model
-		SccProjectUniqueName11 = Prometheus.Web\\Prometheus.Web.csproj
-		SccProjectName11 = Prometheus.Web
-		SccLocalPath11 = Prometheus.Web
 	EndGlobalSection
 EndGlobal

@@ -61,7 +61,8 @@
         EOS,
         NEO,
         Cardano,
-        Stellar
+        Stellar,
+        Solana
     }
 
     public enum Statement
@@ -89,7 +90,8 @@
         Bitcoin = 9,
         Excel = 10,
         MATLAB = 11,
-        Litecoin = 12
+        Litecoin = 12,
+        Solana = 13
     }
 
 
@@ -109,7 +111,8 @@
         EOS = 7,
         NEO = 8,
         Bitcoin = 9,
-        Litecoin = 12
+        Litecoin = 12,
+        Solana = 13
     }
 
     public enum BusinessAdapterType
@@ -162,7 +165,8 @@
         TableNamePrefix = 10,
         BitcoinAddress = 11,
         NeoAddress = 12,
-        LitecoinAddress = 13
+        LitecoinAddress = 13,
+        SolanaAddress = 14
     }
 
     public enum InsertQueryType

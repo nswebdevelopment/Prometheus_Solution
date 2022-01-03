@@ -19,6 +19,7 @@ namespace Prometheus.BL.Interfaces
         IResponse<NoValue> CreateXlsxFile(List<BitcoinBlockModel> list, long jobId);
         IResponse<NoValue> CreateXlsxFile(List<NeoBlockModel> list, long jobId);
         IResponse<NoValue> CreateXlsxFile(List<LitecoinBlockModel> list, long jobId);
+        IResponse<NoValue> CreateXlsxFile(List<SolanaBlockModel> list, long jobId);
         IResponse<BusinessFileModel> GetExcelFile(long jobId);
         IResponse<NoValue> CreateCsvFile(List<EthereumBlockModel> list, long jobId);
     }
