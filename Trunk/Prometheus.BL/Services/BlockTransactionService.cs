@@ -229,6 +229,58 @@ namespace Prometheus.BL.Services
             return response;
         }
 
+        public IResponse<NoValue> AddBlocksWithTransactions(long jobId, List<SolanaBlockModel> blocks)
+        {
+            var response = new Response<NoValue>();
+
+            try
+            {
+                var stopwatch = Stopwatch.StartNew();
+
+                foreach (var block in blocks)
+                {
+                    Block blockDb = new Block
+                    {
+                        BlockNumber = block.BlockNumber,
+                        JobTimelineId = jobId,
+                        BlockTime = block.TimeStamp,
+                        CreatedAt = DateTime.UtcNow
+                    };
+
+                    _entity.Block.Add(blockDb);
+
+                    var transactions = new List<BlockTransaction>();
+
+                    foreach (var transaction in block.BlockTransactions)
+                    {
+                        transactions.Add(new BlockTransaction
+                        {
+                            Block = blockDb,
+                            TxHash = transaction.Hash
+                        });
+                    }
+
+                    _entity.BlockTransaction.AddRange(transactions);
+                }
+
+                _entity.SaveChanges();
+
+                stopwatch.Stop();
+                _logger.Information($"BlockTransactionService.AddBlocksWithTransactions(jobId: {jobId}). Time elapsed: {stopwatch.Elapsed.TotalSeconds} seconds.");
+
+                response.Status = Common.Enums.StatusEnum.Success;
+            }
+            catch (Exception ex)
+            {
+                _logger.Information($"BlockTransactionService.AddBlocksWithTransactions(jobId: {jobId})");
+                _logger.Error(ex.Message);
+                response.Status = Common.Enums.StatusEnum.Error;
+                response.Message = ex.Message;
+            }
+
+            return response;
+        }
+
         public IResponse<List<EthereumBlockModel>> GetBlocksWithTransactions(long jobId, int maxBlockNumber)
         {
             var response = new Response<List<EthereumBlockModel>>

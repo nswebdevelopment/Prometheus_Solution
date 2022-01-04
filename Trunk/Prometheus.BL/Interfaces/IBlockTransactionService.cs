@@ -15,6 +15,7 @@ namespace Prometheus.BL.Interfaces
     {
         IResponse<int> GetMaxBlockNumber(long jobId);
         IResponse<NoValue> AddBlocksWithTransactions(long jobId, List<EthereumBlockModel> blocks);
+        IResponse<NoValue> AddBlocksWithTransactions(long jobId, List<SolanaBlockModel> blocks);
         IResponse<NoValue> AddBlocksWithTransactions(long jobId, List<BitcoinBlockModel> blocks);
         IResponse<NoValue> AddBlocksWithTransactions(long jobId, List<NeoBlockModel> blocks);
         IResponse<NoValue> AddBlocksWithTransactions(long jobId, List<LitecoinBlockModel> blocks);

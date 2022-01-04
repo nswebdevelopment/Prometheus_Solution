@@ -333,7 +333,7 @@ namespace Prometheus.BL.Services
                                     {
                                         if (jobTimeline.Schedule.RecurrenceRule != null)
                                         {
-                                            //_blockTransactionService.AddBlocksWithTransactions(jobId, blocks.Value);
+                                            _blockTransactionService.AddBlocksWithTransactions(jobId, solBlocks.Value);
                                         }
                                         break;
                                     }

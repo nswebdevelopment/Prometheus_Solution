@@ -70,7 +70,7 @@ namespace Prometheus.BlockchainAdapter.Nodes
             try
             {
                 HttpClient httpClient = new HttpClient();
-                var result = httpClient.GetAsync("https://localhost:7208/Solana/TestConnection").Result.Content.ReadAsStringAsync().Result;
+                var result = httpClient.GetAsync("http://localhost:5208/Solana/TestConnection").Result.Content.ReadAsStringAsync().Result;
                 if (result.Equals("OK"))
                 {
                     response.Status = StatusEnum.Success;
@@ -98,7 +98,7 @@ namespace Prometheus.BlockchainAdapter.Nodes
             try
             {
                 HttpClient httpClient = new HttpClient();
-                var result = httpClient.GetAsync("https://localhost:7208/Solana/GetBlocksWithTransactions/" + fromBlock + "/" + toBlock).Result.Content.ReadAsStringAsync().Result;
+                var result = httpClient.GetAsync("http://localhost:5208/Solana/GetBlocksWithTransactions/" + fromBlock + "/" + toBlock).Result.Content.ReadAsStringAsync().Result;
 
                 response.Status = StatusEnum.Success;
                 response.Value = JsonConvert.DeserializeObject<List<SolanaBlockModel>>(result);
