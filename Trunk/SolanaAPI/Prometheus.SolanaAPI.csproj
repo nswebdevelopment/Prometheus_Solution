@@ -10,11 +10,19 @@
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
     <PackageReference Include="MongoDB.Bson" Version="2.14.1" />
+    <PackageReference Include="Serilog" Version="2.10.0" />
     <PackageReference Include="Solnet.KeyStore" Version="0.4.17" />
     <PackageReference Include="Solnet.Programs" Version="0.4.17" />
     <PackageReference Include="Solnet.Rpc" Version="0.4.17" />
     <PackageReference Include="Solnet.Wallet" Version="0.4.17" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Prometheus.BlockchainAdapter\Prometheus.BlockchainAdapter.csproj" />
+    <ProjectReference Include="..\Prometheus.Common\Prometheus.Common.csproj" />
+    <ProjectReference Include="..\Prometheus.Model\Prometheus.Model.csproj" />
   </ItemGroup>
 
 </Project>

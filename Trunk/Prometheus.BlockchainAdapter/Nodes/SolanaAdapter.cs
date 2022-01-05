@@ -5,11 +5,7 @@ using Prometheus.Common.Enums;
 using Prometheus.Model.Models;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Prometheus.BlockchainAdapter.Nodes
@@ -27,23 +23,22 @@ namespace Prometheus.BlockchainAdapter.Nodes
         /// Sends multiple transactions to the blockchain network
         /// </summary>
         /// <param name="transactions">Information about transactions that will be sent</param>
-        /// <param name="cryptoAdapter">Information about Ethereum network</param>
+        /// <param name="cryptoAdapter">Information about Solana network</param>
         /// <returns>List of transaction results</returns>
         public async Task<Response<List<TransactionResponse<BlockchainTransactionModel>>>> SendTransactions(List<BlockchainTransactionModel> transactions, CryptoAdapterModel cryptoAdapter)
         {
-            
-
             var response = new Response<List<TransactionResponse<BlockchainTransactionModel>>>
             {
                 Value = new List<TransactionResponse<BlockchainTransactionModel>>()
             };
 
-            
-
             try
             {
-                
+                HttpClient httpClient = new HttpClient();
+                var result = httpClient.GetAsync("http://localhost:5208/Solana/SendTransactions").Result.Content.ReadAsStringAsync().Result;
 
+                response.Status = StatusEnum.Success;
+                response.Value = JsonConvert.DeserializeObject<List<TransactionResponse<BlockchainTransactionModel>>>(result);
             }
             catch (Exception ex)
             {
@@ -52,7 +47,7 @@ namespace Prometheus.BlockchainAdapter.Nodes
                 _logger.Information($"SolanaAdapter.SendTransactions(TransactionId:, CryptoAdapterId: {cryptoAdapter.Id})");
                 _logger.Error(ex.Message);
             }
-            return null;
+            return response;
         }
 
         /// <summary>

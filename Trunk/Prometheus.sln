@@ -28,7 +28,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prometheus.ExchangesApi", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prometheus.BlockchainAdapter", "Prometheus.BlockchainAdapter\Prometheus.BlockchainAdapter.csproj", "{59F84108-7853-47B3-ABB5-F6470BD4606D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prometheus.SolanaAPI", "SolanaAPI\Prometheus.SolanaAPI.csproj", "{B53B50EB-CCF7-4E03-9BF7-2BCDAEA3A9C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prometheus.SolanaAPI", "SolanaAPI\Prometheus.SolanaAPI.csproj", "{B53B50EB-CCF7-4E03-9BF7-2BCDAEA3A9C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
