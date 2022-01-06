@@ -10,6 +10,9 @@ using System.Data.SqlClient;
 
 namespace Prometheus.SolanaAPI.Helpers
 {
+    /// <summary>
+    /// Helper responsible for db and transactions manipulation used by Solana 
+    /// </summary>
     public static class SolanaHelper
     {
         public static List<GenericModel> ConnectAndRead()
