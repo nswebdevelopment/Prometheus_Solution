@@ -15,6 +15,10 @@ namespace Prometheus.SolanaAPI.Helpers
     /// </summary>
     public static class SolanaHelper
     {
+        /// <summary>
+        /// Connects to database and reads data from required table
+        /// </summary>
+        /// <returns>List of table entities</returns>
         public static List<GenericModel> ConnectAndRead()
         {
 
@@ -47,7 +51,11 @@ namespace Prometheus.SolanaAPI.Helpers
 
             return response.Value;
         }
-
+        /// <summary>
+        /// Extracts data from table to required model
+        /// </summary>
+        /// <param name="dataTable">Table with neccessary data</param>
+        /// <param name="response">Response containing a list of objects in which the extraxted data will be stored</param>
         public static void ToModel(DataTable dataTable, Response<List<GenericModel>> response)
         {
             foreach (DataRow row in dataTable.Rows)
@@ -76,12 +84,24 @@ namespace Prometheus.SolanaAPI.Helpers
                 response.Value.Add(model);
             }
         }
-
+        /// <summary>
+        /// Compares two string values 
+        /// </summary>
+        /// <param name="str1">First string value used for comparrison</param>
+        /// <param name="str2">Second string value used for comparisson</param>
+        /// <returns>True if equal, false if not</returns>
         static private bool StringCompare(string str1, string str2)
         {
             return String.Compare(str1.Trim(), str2.Trim(), true) == 0 ? true : false;
         }
 
+        /// <summary>
+        /// Sends Solana transaction 
+        /// </summary>
+        /// <param name="wallet">Wallet of the sender</param>
+        /// <param name="rpcClient">Used for getting the block hash</param>
+        /// <param name="amount">Amount to send</param>
+        /// <returns>RequestResult containing information about transaction</returns>
         public static RequestResult<string> SendTransaction(Wallet wallet, IRpcClient rpcClient, ulong amount)
         {
             // Get the source account

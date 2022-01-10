@@ -2,6 +2,9 @@
 {
     public class Enums
     {
+        /// <summary>
+        /// Represents status of the transaction
+        /// </summary>
         public enum TxStatus
         {
             Fail = 0,

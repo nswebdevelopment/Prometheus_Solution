@@ -20,7 +20,12 @@ namespace SolanaAPI.Controllers
         {
             _logger = logger;
         }
-
+        /// <summary>
+        /// Gets the blocks in the given range
+        /// </summary>
+        /// <param name="fromBlock">Starting block</param>
+        /// <param name="toBlock">Ending block</param>
+        /// <returns>List of the blocks in the desired range</returns>
         [HttpGet("GetBlocksWithTransactions/{fromBlock}/{toBlock}")]
         public List<Prometheus.SolanaAPI.Models.SolanaBlockModel> GetBlocksWithTransactions(int fromBlock, int toBlock)
         {
@@ -57,6 +62,10 @@ namespace SolanaAPI.Controllers
             return response;
         }
 
+        /// <summary>
+        /// Sends Solana transactions
+        /// </summary>
+        /// <returns>List of the TransactionResponse containing information about the transactions</returns>
         [HttpGet("SendTransactions")]
         public List<TransactionResponse<BlockchainTransactionModel>> SendTransactions()
         {
@@ -94,6 +103,10 @@ namespace SolanaAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Tests the DevNet Solana connection 
+        /// </summary>
+        /// <returns>Data about the success of the connection("OK" if the connection was made, "Error" if not)</returns>
         [HttpGet("TestConnection")]
         public string TestConnection()
         {
@@ -109,6 +122,11 @@ namespace SolanaAPI.Controllers
                 return "Error";
             }
         }
+        /// <summary>
+        /// Converts unix time stamp to required date time format
+        /// </summary>
+        /// <param name="unixTimeStamp">unix representation of the date time</param>
+        /// <returns>Required date time format</returns>
         private static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
         {
             // Unix timestamp is seconds past epoch
@@ -117,6 +135,11 @@ namespace SolanaAPI.Controllers
             return dtDateTime;
         }
 
+        /// <summary>
+        /// Sets the status of transaction
+        /// </summary>
+        /// <param name="error">Object that indicates weather the transaction succeeded or failed</param>
+        /// <returns>Status of transaction</returns>
         private static TxStatus ConvertStatus(object error)
         {
             var status = TxStatus.None;
