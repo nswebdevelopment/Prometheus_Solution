@@ -670,7 +670,7 @@ namespace Prometheus.BL.Services
 
                     var headerRow = new List<string[]>()
                     {
-                        new string[]{"BlockNumber", "TimeStamp", "Hash", "From", "To", "Value", "Status"}
+                        new string[]{"BlockNumber", "TimeStamp", "Hash", "Value", "Status"}
                     };
 
                     var headerRange = "A1:" + Char.ConvertFromUtf32(headerRow[0].Length + 64) + "1";
@@ -681,18 +681,16 @@ namespace Prometheus.BL.Services
                     worksheet.Cells[headerRange].Style.Font.Bold = true;
 
                     var cellData = list.SelectMany(b => b.BlockTransactions,
-                                                        (b, t) => new ExcelEthereumBlockModel
+                                                        (b, t) => new ExcelSolanaBlockModel
                                                         {
                                                             BlockNumber = b.BlockNumber,
                                                             TimeStamp = b.TimeStamp,
                                                             Hash = t.Hash,
-                                                            From = t.From,
-                                                            To = t.To,
                                                             Value = t.Value,
                                                             Status = t.Status.ToString()
                                                         });
 
-                    var type = typeof(ExcelEthereumBlockModel);
+                    var type = typeof(ExcelSolanaBlockModel);
                     var numberOfColumns = type.GetProperties().Length;
 
                     var cellDataRange = "A2:" + Char.ConvertFromUtf32(numberOfColumns + 64) + $"{cellData.Count() + 1}";

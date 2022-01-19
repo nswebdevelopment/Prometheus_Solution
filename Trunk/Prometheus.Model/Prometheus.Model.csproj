@@ -118,6 +118,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\ExcelSolanaBlockModel.cs" />
     <Compile Include="Models\LitecoinBlockModel\LitecoinBlockModel.cs" />
     <Compile Include="Models\LitecoinBlockModel\LitecoinBlockTransactionModel.cs" />
     <Compile Include="Models\LitecoinBlockModel\LitecoinTransactionInModel.cs" />

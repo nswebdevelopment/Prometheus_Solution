@@ -14,12 +14,12 @@ namespace SolanaAPI.Controllers
     public class SolanaController : ControllerBase
     {
 
-        private readonly Serilog.ILogger _logger;
+        //private readonly Serilog.ILogger _logger;
 
-        public SolanaController(Serilog.ILogger logger)
+        public SolanaController()
         {
-            _logger = logger;
         }
+
         /// <summary>
         /// Gets the blocks in the given range
         /// </summary>
@@ -98,7 +98,7 @@ namespace SolanaAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Error($"Error in {SendTransactions} method: ",ex.Message);
+                //_logger.Error($"Error in {SendTransactions} method: ", ex.Message);
                 return null;
             }
         }
